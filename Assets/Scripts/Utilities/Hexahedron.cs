@@ -2,7 +2,7 @@
 
 [ExecuteInEditMode]
 [RequireComponent (typeof(MeshFilter))]
-public class Trapezoid : MonoBehaviour
+public class Hexahedron : MonoBehaviour
 {
 	protected MeshFilter meshFilter;
 

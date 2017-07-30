@@ -51,7 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Utilities\Trapezoid.cs" />
+     <Compile Include="Assets\Scripts\Utilities\Hexahedron.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
      <None Include="Assets\Plugins\DOTween\DOTween50.xml" />
      <None Include="Assets\Plugins\DOTween\readme.txt" />
