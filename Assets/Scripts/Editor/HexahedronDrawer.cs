@@ -6,6 +6,8 @@ using UnityEngine;
 public class HexahedronDrawer : Editor
 {
 	public Hexahedron hexahedron;
+	public int selectedIndex = -1;
+	public bool canEditMesh;
 
 	void OnEnable ()
 	{
@@ -13,69 +15,79 @@ public class HexahedronDrawer : Editor
 		if (hexahedron.Mesh == null || hexahedron.Mesh.vertexCount != 24) {
 			CreateMesh ();
 		}
-//		Undo.undoRedoPerformed += UndoRedoPerformed;
+		Undo.undoRedoPerformed += CreateMesh;
 	}
 
 	void OnDisable ()
 	{
-//		Undo.undoRedoPerformed -= UndoRedoPerformed;
+		Undo.undoRedoPerformed -= CreateMesh;
 	}
 
 	public override void OnInspectorGUI ()
 	{
-		if (hexahedron.Mesh == null) {
-			return;
+		if (hexahedron.Mesh == null || hexahedron.MultipleVertices == null) {
+			CreateMesh ();
 		}
 
-		DrawDefaultInspector ();
-//		var isDirty = false;
-//		var vertices = hexahedron.Mesh.vertices;
-//		for (int i = 0; i < vertices.Length; i++) {
-//			EditorGUI.BeginChangeCheck ();
-//			var point = EditorGUILayout.Vector3Field ("Point " + i, hexahedron.transform.TransformPoint (vertices [i]));
-//			if (EditorGUI.EndChangeCheck ()) {
-//				Undo.RecordObject (hexahedron.Mesh, "Move Point");
-//				vertices [i] = hexahedron.transform.InverseTransformPoint (point); 
-//				EditorUtility.SetDirty (hexahedron);
-//				isDirty = true;
-//			}
-//		}
-//		if (isDirty) {
-//			hexahedron.Mesh.vertices = vertices;
-//		}
+		EditorGUILayout.BeginHorizontal ();
+		canEditMesh = GUILayout.Toggle (canEditMesh, "Edit Mesh");
+		if (!canEditMesh) {
+			selectedIndex = -1;
+		}
 		if (GUILayout.Button ("Reset To Default")) {
 			ResetToDefault ();
 		}
-	}
+		EditorGUILayout.EndHorizontal ();
 
-	void OnSceneGUI ()
-	{
-		if (hexahedron.Mesh == null) {
-			return;
-		}
-		
 		for (int i = 0; i < hexahedron.Vertices.Length; i++) {
-			var pos = hexahedron.transform.TransformPoint (hexahedron.Vertices [i]);
-			Handles.Label (pos, "Point " + i);
 			EditorGUI.BeginChangeCheck ();
-			var point = Handles.DoPositionHandle (pos, hexahedron.transform.rotation);
+			var point = EditorGUILayout.Vector3Field ("Point " + i, hexahedron.Vertices [i]);
 			if (EditorGUI.EndChangeCheck ()) {
-				Undo.RecordObject (hexahedron.Mesh, "Move Point");
-				var vertex = hexahedron.transform.InverseTransformPoint (point); 
+				Undo.RecordObject (hexahedron, "Move Point");
+				hexahedron.Vertices [i] = point;
 				var vertices = hexahedron.Mesh.vertices;
-				foreach (var index in hexahedron.MultipleVertices[i]) {
-					vertices [index] = vertex;
+				foreach (var index in hexahedron.MultipleVertices[selectedIndex]) {
+					vertices [index] = hexahedron.Vertices [i];
 				}
-				hexahedron.Vertices [i] = vertex;
 				hexahedron.Mesh.vertices = vertices;
 				EditorUtility.SetDirty (hexahedron);
 			}
 		}
 	}
 
-	void UndoRedoPerformed ()
+	void OnSceneGUI ()
 	{
-//		hexahedron.Mesh.vertices = hexahedron.Mesh.vertices;
+		if (hexahedron.Mesh == null || hexahedron.MultipleVertices == null) {
+			CreateMesh ();
+		}
+
+		if (canEditMesh) {
+			for (int i = 0; i < hexahedron.Vertices.Length; i++) {
+				var pos = hexahedron.transform.TransformPoint (hexahedron.Vertices [i]);
+				var size = 0.05f * HandleUtility.GetHandleSize (pos);
+				var pickSize = 2 * size;
+				if (Handles.Button (pos, hexahedron.transform.rotation, size, pickSize, Handles.DotHandleCap)) {
+					selectedIndex = i;
+				}
+			}
+
+			if (selectedIndex >= 0 && selectedIndex < hexahedron.Vertices.Length) {
+				var pos = hexahedron.transform.TransformPoint (hexahedron.Vertices [selectedIndex]);
+				Handles.Label (pos, "Point " + selectedIndex);
+				EditorGUI.BeginChangeCheck ();
+				var point = Handles.DoPositionHandle (pos, hexahedron.transform.rotation);
+				if (EditorGUI.EndChangeCheck ()) {
+					Undo.RecordObject (hexahedron, "Move Point");
+					hexahedron.Vertices [selectedIndex] = hexahedron.transform.InverseTransformPoint (point); 
+					var vertices = hexahedron.Mesh.vertices;
+					foreach (var index in hexahedron.MultipleVertices[selectedIndex]) {
+						vertices [index] = hexahedron.Vertices [selectedIndex];
+					}
+					hexahedron.Mesh.vertices = vertices;
+					EditorUtility.SetDirty (hexahedron);
+				}
+			}
+		}
 	}
 
 	Vector3[] GetVertices ()
