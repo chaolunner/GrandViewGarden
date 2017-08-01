@@ -1,13 +1,21 @@
 ﻿using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 [CustomEditor (typeof(Hexahedron))]
 public class HexahedronDrawer : Editor
 {
 	public Hexahedron hexahedron;
-	public int selectedIndex = -1;
-	public bool canEditMesh;
+	public bool showPosition = true;
+	public List<int> selectedIndexs = new List<int> ();
+
+	public bool editingHexahedron {
+		get {
+			return EditMode.editMode == EditMode.SceneViewEditMode.Collider && EditMode.IsOwner (this);
+		}
+	}
 
 	void OnEnable ()
 	{
@@ -29,30 +37,39 @@ public class HexahedronDrawer : Editor
 			CreateMesh ();
 		}
 
-		EditorGUILayout.BeginHorizontal ();
-		canEditMesh = GUILayout.Toggle (canEditMesh, "Edit Mesh");
-		if (!canEditMesh) {
-			selectedIndex = -1;
+		EditMode.DoEditModeInspectorModeButton (EditMode.SceneViewEditMode.Collider, "Edit Point", EditorGUIUtility.IconContent ("EditCollider"), hexahedron.Mesh.bounds, this);
+		if (!editingHexahedron) {
+			selectedIndexs.Clear ();
 		}
-		if (GUILayout.Button ("Reset To Default")) {
+
+		showPosition = EditorGUILayout.Foldout (showPosition, "Edit Point", true);
+		EditorGUI.indentLevel++;
+		if (showPosition) {
+			for (int i = 0; i < hexahedron.Vertices.Length; i++) {
+				EditorGUI.BeginChangeCheck ();
+				var point = EditorGUILayout.Vector3Field ("Point " + i, hexahedron.Vertices [i]);
+				if (EditorGUI.EndChangeCheck ()) {
+					Undo.RecordObject (hexahedron, "Move Point");
+					hexahedron.Vertices [i] = point;
+					var vertices = hexahedron.Mesh.vertices;
+					foreach (var index in hexahedron.MultipleVertices[i]) {
+						vertices [index] = hexahedron.Vertices [i];
+					}
+					hexahedron.Mesh.vertices = vertices;
+					EditorUtility.SetDirty (hexahedron);
+				}
+			}
+		}
+		EditorGUI.indentLevel--;
+
+		var content = EditorGUIUtility.IconContent ("Refresh");
+		content.text = " Reset To Default";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.Space ();
+		if (GUILayout.Button (content)) {
 			ResetToDefault ();
 		}
 		EditorGUILayout.EndHorizontal ();
-
-		for (int i = 0; i < hexahedron.Vertices.Length; i++) {
-			EditorGUI.BeginChangeCheck ();
-			var point = EditorGUILayout.Vector3Field ("Point " + i, hexahedron.Vertices [i]);
-			if (EditorGUI.EndChangeCheck ()) {
-				Undo.RecordObject (hexahedron, "Move Point");
-				hexahedron.Vertices [i] = point;
-				var vertices = hexahedron.Mesh.vertices;
-				foreach (var index in hexahedron.MultipleVertices[selectedIndex]) {
-					vertices [index] = hexahedron.Vertices [i];
-				}
-				hexahedron.Mesh.vertices = vertices;
-				EditorUtility.SetDirty (hexahedron);
-			}
-		}
 	}
 
 	void OnSceneGUI ()
@@ -61,29 +78,48 @@ public class HexahedronDrawer : Editor
 			CreateMesh ();
 		}
 
-		if (canEditMesh) {
+		if (editingHexahedron) {
 			for (int i = 0; i < hexahedron.Vertices.Length; i++) {
 				var pos = hexahedron.transform.TransformPoint (hexahedron.Vertices [i]);
-				var size = 0.05f * HandleUtility.GetHandleSize (pos);
+				var size = 0.025f * HandleUtility.GetHandleSize (pos);
 				var pickSize = 2 * size;
+				var color = Color.white;
+
+				if (selectedIndexs.Contains (i)) {
+					color = Color.yellow;
+					size = 1.5f * size;
+				}
+
+				Handles.color = color;
 				if (Handles.Button (pos, hexahedron.transform.rotation, size, pickSize, Handles.DotHandleCap)) {
-					selectedIndex = i;
+					if (!Event.current.control) {
+						selectedIndexs.Clear ();
+					}
+					if (selectedIndexs.Contains (i)) {
+						selectedIndexs.Remove (i);
+					} else {
+						selectedIndexs.Add (i);
+					}
 				}
 			}
-
-			if (selectedIndex >= 0 && selectedIndex < hexahedron.Vertices.Length) {
+				
+			if (selectedIndexs.Count > 0) {
+				var selectedIndex = selectedIndexs.Last ();
 				var pos = hexahedron.transform.TransformPoint (hexahedron.Vertices [selectedIndex]);
 				Handles.Label (pos, "Point " + selectedIndex);
 				EditorGUI.BeginChangeCheck ();
 				var point = Handles.DoPositionHandle (pos, hexahedron.transform.rotation);
 				if (EditorGUI.EndChangeCheck ()) {
 					Undo.RecordObject (hexahedron, "Move Point");
-					hexahedron.Vertices [selectedIndex] = hexahedron.transform.InverseTransformPoint (point); 
-					var vertices = hexahedron.Mesh.vertices;
-					foreach (var index in hexahedron.MultipleVertices[selectedIndex]) {
-						vertices [index] = hexahedron.Vertices [selectedIndex];
+					var delta = hexahedron.transform.InverseTransformPoint (point) - hexahedron.Vertices [selectedIndex];
+					foreach (var id in selectedIndexs) {
+						var vertices = hexahedron.Mesh.vertices;
+						hexahedron.Vertices [id] += delta;
+						foreach (var index in hexahedron.MultipleVertices[id]) {
+							vertices [index] = hexahedron.Vertices [id];
+						}
+						hexahedron.Mesh.vertices = vertices;
 					}
-					hexahedron.Mesh.vertices = vertices;
 					EditorUtility.SetDirty (hexahedron);
 				}
 			}
@@ -94,6 +130,7 @@ public class HexahedronDrawer : Editor
 	{
 		if (hexahedron.Vertices == null) {
 			hexahedron.Vertices = new Vector3[8];
+			Undo.RecordObject (hexahedron, "Reset To Default");
 			hexahedron.Vertices [0] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
 			hexahedron.Vertices [1] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
 			hexahedron.Vertices [2] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
