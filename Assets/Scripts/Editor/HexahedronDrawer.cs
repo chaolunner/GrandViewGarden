@@ -9,6 +9,7 @@ public class HexahedronDrawer : Editor
 {
 	public Hexahedron hexahedron;
 	public bool showPosition = true;
+	public MeshCollider meshCollider;
 	public List<int> selectedIndexs = new List<int> ();
 
 	public bool editingHexahedron {
@@ -37,7 +38,9 @@ public class HexahedronDrawer : Editor
 			CreateMesh ();
 		}
 
-		EditMode.DoEditModeInspectorModeButton (EditMode.SceneViewEditMode.Collider, "Edit Point", EditorGUIUtility.IconContent ("EditCollider"), hexahedron.Mesh.bounds, this);
+		var icon = EditorGUIUtility.IconContent ("EditCollider");
+		icon.tooltip = "Edit Mesh Vertices\n\n- Hold Ctrl after clicking control handle to Multi-point editing";
+		EditMode.DoEditModeInspectorModeButton (EditMode.SceneViewEditMode.Collider, "Edit Point", icon, hexahedron.Mesh.bounds, this);
 		if (!editingHexahedron) {
 			selectedIndexs.Clear ();
 		}
@@ -78,6 +81,15 @@ public class HexahedronDrawer : Editor
 			CreateMesh ();
 		}
 
+		if (meshCollider == null) {
+			meshCollider = hexahedron.GetComponent<MeshCollider> ();
+			if (meshCollider == null) {
+				meshCollider = hexahedron.gameObject.AddComponent<MeshCollider> ();
+				meshCollider.hideFlags = HideFlags.HideAndDontSave;
+				meshCollider.sharedMesh = hexahedron.Mesh;
+			}
+		}
+
 		if (editingHexahedron) {
 			for (int i = 0; i < hexahedron.Vertices.Length; i++) {
 				var pos = hexahedron.transform.TransformPoint (hexahedron.Vertices [i]);
@@ -88,6 +100,18 @@ public class HexahedronDrawer : Editor
 				if (selectedIndexs.Contains (i)) {
 					color = Color.yellow;
 					size = 1.5f * size;
+				}
+
+				var sceneCamera = SceneView.currentDrawingSceneView.camera;
+				if (sceneCamera != null) {
+					var distance = pos - sceneCamera.transform.position;
+					var ray = new Ray (sceneCamera.transform.position, Vector3.Normalize (distance));
+					var hit = new RaycastHit ();
+					if (Physics.Raycast (ray, out hit, distance.magnitude)) {
+						if (Mathf.Abs (hit.distance - distance.magnitude) > 0.0001f) {
+							color = new Color (color.r, color.g, color.b, 0.25f * color.a);
+						}
+					}
 				}
 
 				Handles.color = color;
@@ -119,6 +143,8 @@ public class HexahedronDrawer : Editor
 							vertices [index] = hexahedron.Vertices [id];
 						}
 						hexahedron.Mesh.vertices = vertices;
+
+						meshCollider.sharedMesh = hexahedron.Mesh;
 					}
 					EditorUtility.SetDirty (hexahedron);
 				}

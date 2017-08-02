@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
 [RequireComponent (typeof(MeshFilter))]
 public class Hexahedron : MonoBehaviour
 {
