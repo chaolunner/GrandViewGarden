@@ -40,7 +40,8 @@ public class HexahedronDrawer : Editor
 
 		var icon = EditorGUIUtility.IconContent ("EditCollider");
 		icon.tooltip = "Edit Mesh Vertices\n\n- Hold Ctrl after clicking control handle to Multi-point editing";
-		EditMode.DoEditModeInspectorModeButton (EditMode.SceneViewEditMode.Collider, "Edit Point", icon, hexahedron.Mesh.bounds, this);
+		var bounds = new Bounds (hexahedron.transform.TransformPoint (hexahedron.Mesh.bounds.center), hexahedron.Mesh.bounds.size);
+		EditMode.DoEditModeInspectorModeButton (EditMode.SceneViewEditMode.Collider, "Edit Point", icon, bounds, this);
 		if (!editingHexahedron) {
 			selectedIndexs.Clear ();
 		}
@@ -82,12 +83,7 @@ public class HexahedronDrawer : Editor
 		}
 
 		if (meshCollider == null) {
-			meshCollider = hexahedron.GetComponent<MeshCollider> ();
-			if (meshCollider == null) {
-				meshCollider = hexahedron.gameObject.AddComponent<MeshCollider> ();
-				meshCollider.hideFlags = HideFlags.HideAndDontSave;
-				meshCollider.sharedMesh = hexahedron.Mesh;
-			}
+			CreateCollider ();
 		}
 
 		if (editingHexahedron) {
@@ -101,16 +97,13 @@ public class HexahedronDrawer : Editor
 					color = Color.yellow;
 					size = 1.5f * size;
 				}
-
-				var sceneCamera = SceneView.currentDrawingSceneView.camera;
-				if (sceneCamera != null) {
-					var distance = pos - sceneCamera.transform.position;
-					var ray = new Ray (sceneCamera.transform.position, Vector3.Normalize (distance));
-					var hit = new RaycastHit ();
-					if (Physics.Raycast (ray, out hit, distance.magnitude)) {
-						if (Mathf.Abs (hit.distance - distance.magnitude) > 0.0001f) {
-							color = new Color (color.r, color.g, color.b, 0.25f * color.a);
-						}
+				
+				var pivot = SceneView.currentDrawingSceneView.pivot - SceneView.currentDrawingSceneView.size * SceneView.currentDrawingSceneView.camera.transform.forward;
+				var hit = new RaycastHit ();
+				var ray = new Ray (pivot, Vector3.Normalize (pos - pivot));
+				if (Physics.Raycast (ray, out hit, Vector3.Distance (pos, pivot))) {
+					if (Mathf.Abs (hit.distance - Vector3.Distance (pos, pivot)) > 0.0001f) {
+						color = new Color (color.r, color.g, color.b, 0.25f * color.a);
 					}
 				}
 
@@ -232,11 +225,23 @@ public class HexahedronDrawer : Editor
 		hexahedron.Mesh.triangles = GetTriangles ();
 		hexahedron.Mesh.RecalculateBounds ();
 		hexahedron.Mesh.RecalculateNormals ();
+
+		CreateCollider ();
 	}
 
 	void ResetToDefault ()
 	{
 		hexahedron.Vertices = null;
 		CreateMesh ();
+	}
+
+	void CreateCollider ()
+	{
+		meshCollider = hexahedron.GetComponent<MeshCollider> ();
+		if (meshCollider == null) {
+			meshCollider = hexahedron.gameObject.AddComponent<MeshCollider> ();
+			meshCollider.hideFlags = HideFlags.HideAndDontSave;
+		}
+		meshCollider.sharedMesh = hexahedron.Mesh;
 	}
 }
