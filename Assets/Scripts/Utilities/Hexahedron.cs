@@ -2,9 +2,11 @@
 using UnityEngine;
 
 [RequireComponent (typeof(MeshFilter))]
+[RequireComponent (typeof(MeshRenderer))]
 public class Hexahedron : MonoBehaviour
 {
 	private MeshFilter meshFilter;
+	private MeshRenderer meshRenderer;
 	private Vector3 defaultSize = new Vector3 (1, 1, 1);
 	[SerializeField] private Vector3[] vertices;
 	public Dictionary<int, int[]> MultipleVertices;
@@ -21,6 +23,15 @@ public class Hexahedron : MonoBehaviour
 		}
 	}
 
+	public MeshRenderer MeshRenderer {
+		get {
+			if (meshRenderer == null) {
+				meshRenderer = GetComponent<MeshRenderer> () ?? gameObject.AddComponent<MeshRenderer> ();
+			}
+			return meshRenderer;
+		}
+	}
+
 	public Vector3 DefaultSize {
 		get {
 			return defaultSize;
@@ -34,6 +45,16 @@ public class Hexahedron : MonoBehaviour
 		set {
 			vertices = value;
 		}
+	}
+
+	void OnEnable ()
+	{
+		MeshRenderer.enabled = true;
+	}
+
+	void OnDisable ()
+	{
+		MeshRenderer.enabled = false;
 	}
 
 	void Start ()
