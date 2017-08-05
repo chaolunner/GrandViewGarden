@@ -34,7 +34,7 @@ public class HexahedronDrawer : Editor
 
 	public override void OnInspectorGUI ()
 	{
-		if (hexahedron.Mesh == null) {
+		if (hexahedron.Mesh == null || hexahedron.Vertices == null || hexahedron.MultipleVertices.Count != hexahedron.Mesh.vertices.Length) {
 			CreateMesh ();
 		}
 
@@ -78,7 +78,7 @@ public class HexahedronDrawer : Editor
 
 	void OnSceneGUI ()
 	{
-		if (hexahedron.Mesh == null || hexahedron.Vertices == null || hexahedron.MultipleVertices.Count != 24) {
+		if (hexahedron.Mesh == null || hexahedron.Vertices == null || hexahedron.MultipleVertices.Count != hexahedron.Mesh.vertices.Length) {
 			CreateMesh ();
 		}
 
@@ -147,59 +147,34 @@ public class HexahedronDrawer : Editor
 
 	Vector3[] GetVertices ()
 	{
-		if (hexahedron.Vertices == null) {
-			hexahedron.Vertices = new Vector3[8];
-			Undo.RecordObject (hexahedron, "Reset To Default");
-			hexahedron.Vertices [0] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
-			hexahedron.Vertices [1] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
-			hexahedron.Vertices [2] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
-			hexahedron.Vertices [3] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);    
-			hexahedron.Vertices [4] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
-			hexahedron.Vertices [5] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
-			hexahedron.Vertices [6] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
-			hexahedron.Vertices [7] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
-		}
-
-		hexahedron.MultipleVertices.Clear ();
-		hexahedron.MultipleVertices.Add (0, new int[] { 00, 06, 11, });
-		hexahedron.MultipleVertices.Add (1, new int[] { 01, 10, 19, });
-		hexahedron.MultipleVertices.Add (2, new int[] { 02, 13, 18, });
-		hexahedron.MultipleVertices.Add (3, new int[] { 03, 07, 12, });
-		hexahedron.MultipleVertices.Add (4, new int[] { 05, 08, 23, });
-		hexahedron.MultipleVertices.Add (5, new int[] { 09, 16, 22, });
-		hexahedron.MultipleVertices.Add (6, new int[] { 14, 17, 21, });
-		hexahedron.MultipleVertices.Add (7, new int[] { 04, 15, 20, });
-
-		var vertices = new Vector3[24];
-		foreach (var pair in hexahedron.MultipleVertices) {
-			foreach (var value in pair.Value) {
-				vertices [value] = hexahedron.Vertices [pair.Key];
-			}
-		}
-
+		var vertex_0 = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+		var vertex_1 = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+		var vertex_2 = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
+		var vertex_3 = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);    
+		var vertex_4 = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+		var vertex_5 = 0.5f * new Vector3 (hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+		var vertex_6 = 0.5f * new Vector3 (hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
+		var vertex_7 = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
+		var vertices = new Vector3[] {
+			vertex_0, vertex_1, vertex_2, vertex_3,
+			vertex_7, vertex_4, vertex_0, vertex_3,
+			vertex_4, vertex_5, vertex_1, vertex_0,
+			vertex_3, vertex_2, vertex_6, vertex_7,
+			vertex_5, vertex_6, vertex_2, vertex_1,
+			vertex_7, vertex_6, vertex_5, vertex_4,
+		};
 		return vertices;
 	}
 
 	Vector2[] GetUVsMap ()
 	{
-		var _00_CORDINATES = new Vector2 (0f, 0f);
-		var _10_CORDINATES = new Vector2 (1f, 0f);
-		var _01_CORDINATES = new Vector2 (0f, 1f);
-		var _11_CORDINATES = new Vector2 (1f, 1f);
-		var uvs = new Vector2[] {
-			// Bottom
-			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,
-			// Left
-			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,
-			// Front
-			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,
-			// Back
-			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,
-			// Right
-			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,
-			// Top
-			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,
-		};
+		var uvs = new Vector2[24];
+		for (int i = 0; i < 6; i++) {
+			uvs [4 * i + 0] = new Vector2 (1f, 1f);
+			uvs [4 * i + 1] = new Vector2 (0f, 1f);
+			uvs [4 * i + 2] = new Vector2 (0f, 0f);
+			uvs [4 * i + 3] = new Vector2 (1f, 0f);
+		}
 		return uvs;
 	}
 
@@ -225,6 +200,37 @@ public class HexahedronDrawer : Editor
 		hexahedron.Mesh.triangles = GetTriangles ();
 		hexahedron.Mesh.RecalculateBounds ();
 		hexahedron.Mesh.RecalculateNormals ();
+
+		if (hexahedron.Vertices == null) {
+			Undo.RecordObject (hexahedron, "Reset To Default");
+			hexahedron.Vertices = new Vector3[8];
+			hexahedron.Vertices [0] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+			hexahedron.Vertices [1] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+			hexahedron.Vertices [2] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
+			hexahedron.Vertices [3] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, -hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);    
+			hexahedron.Vertices [4] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+			hexahedron.Vertices [5] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, hexahedron.DefaultSize.z);
+			hexahedron.Vertices [6] = 0.5f * new Vector3 (hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
+			hexahedron.Vertices [7] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
+		}
+
+		hexahedron.MultipleVertices.Clear ();
+		hexahedron.MultipleVertices.Add (0, new int[] { 00, 06, 11, });
+		hexahedron.MultipleVertices.Add (1, new int[] { 01, 10, 19, });
+		hexahedron.MultipleVertices.Add (2, new int[] { 02, 13, 18, });
+		hexahedron.MultipleVertices.Add (3, new int[] { 03, 07, 12, });
+		hexahedron.MultipleVertices.Add (4, new int[] { 05, 08, 23, });
+		hexahedron.MultipleVertices.Add (5, new int[] { 09, 16, 22, });
+		hexahedron.MultipleVertices.Add (6, new int[] { 14, 17, 21, });
+		hexahedron.MultipleVertices.Add (7, new int[] { 04, 15, 20, });
+
+		var vertices = new Vector3[hexahedron.Mesh.vertices.Length];
+		foreach (var pair in hexahedron.MultipleVertices) {
+			foreach (var index in pair.Value) {
+				vertices [index] = hexahedron.Vertices [pair.Key];
+			}
+		}
+		hexahedron.Mesh.vertices = vertices;
 
 		CreateCollider ();
 	}

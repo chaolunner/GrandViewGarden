@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 136901186901408474}
   - component: {fileID: 23444895491428748}
   - component: {fileID: 114284954504117836}
-  - component: {fileID: 64139979320809220}
+  - component: {fileID: 64302892926351506}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1344100088919572}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.490063, y: -12.343566, z: -9.684}
+  m_LocalPosition: {x: 18.490063, y: -12.343566, z: -7.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -83,9 +83,9 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1344100088919572}
   m_Mesh: {fileID: 0}
---- !u!64 &64139979320809220
+--- !u!64 &64302892926351506
 MeshCollider:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 61
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1344100088919572}
@@ -113,18 +113,18 @@ MonoBehaviour:
   radius: 0.5
   thickness: 2
   vertices:
-  - {x: 0, y: 1, z: 0}
-  - {x: 0.73771286, y: 1, z: 0.15555194}
+  - {x: 0.5875912, y: 2.1509218, z: 0.10495615}
+  - {x: 1.744019, y: 1, z: 0.00000035762787}
   - {x: 0.35355335, y: 1, z: -0.3535534}
   - {x: 0.000000029802322, y: 1, z: -0.49999997}
   - {x: -0.35355335, y: 1, z: -0.35355338}
   - {x: -0.5, y: 1, z: 0.00000004371139}
   - {x: -0.35355347, y: 1, z: 0.35355335}
-  - {x: 0, y: 1, z: 0.63555145}
-  - {x: 0.35355377, y: 1, z: 1.16}
+  - {x: 0.000000029802322, y: 1, z: 0.49999997}
+  - {x: 1.5975723, y: 1, z: 0.35355377}
   - {x: -0, y: -1, z: -0}
-  - {x: 0.5, y: -1, z: 0}
-  - {x: 0.35355335, y: -1, z: -0.3535534}
+  - {x: 0.5000004, y: -1, z: -0.62276685}
+  - {x: 0.35355377, y: -1, z: -0.97632027}
   - {x: 0.000000029802322, y: -1, z: -0.49999997}
   - {x: -0.35355335, y: -1, z: -0.35355338}
   - {x: -0.5, y: -1, z: 0.00000004371139}

@@ -49,12 +49,16 @@ public class CylinderDrawer : Editor
 		}
 
 		EditorGUI.BeginChangeCheck ();
-		cylinder.direction = EditorGUILayout.IntPopup ("Direction", cylinder.direction, directions, optionValues);
-		cylinder.segments = EditorGUILayout.IntSlider ("Segments", cylinder.segments, 1, 60);
-		cylinder.radius = EditorGUILayout.FloatField ("Radius", cylinder.radius);
-		cylinder.thickness = EditorGUILayout.FloatField ("Thickness", cylinder.thickness);
+		var direction = EditorGUILayout.IntPopup ("Direction", cylinder.direction, directions, optionValues);
+		var segments = EditorGUILayout.IntSlider ("Segments", cylinder.segments, 1, 60);
+		var radius = EditorGUILayout.FloatField ("Radius", cylinder.radius);
+		var thickness = EditorGUILayout.FloatField ("Thickness", cylinder.thickness);
 		if (EditorGUI.EndChangeCheck ()) {
 			Undo.RecordObject (cylinder, "Change Cylinder");
+			cylinder.direction = direction;
+			cylinder.segments = segments;
+			cylinder.radius = radius;
+			cylinder.thickness = thickness;
 			ResetMesh ();
 			EditorUtility.SetDirty (cylinder);
 		}
