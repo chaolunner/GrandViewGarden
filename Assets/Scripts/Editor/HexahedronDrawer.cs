@@ -160,7 +160,7 @@ public class HexahedronDrawer : Editor
 			hexahedron.Vertices [7] = 0.5f * new Vector3 (-hexahedron.DefaultSize.x, hexahedron.DefaultSize.y, -hexahedron.DefaultSize.z);
 		}
 
-		hexahedron.MultipleVertices = new Dictionary<int, int[]> ();
+		hexahedron.MultipleVertices.Clear ();
 		hexahedron.MultipleVertices.Add (0, new int[] { 00, 06, 11, });
 		hexahedron.MultipleVertices.Add (1, new int[] { 01, 10, 19, });
 		hexahedron.MultipleVertices.Add (2, new int[] { 02, 13, 18, });
