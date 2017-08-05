@@ -243,6 +243,10 @@ public class HexahedronDrawer : Editor
 
 	void CreateCollider ()
 	{
+		if (PrefabUtility.GetPrefabType (target) == PrefabType.Prefab) {
+			return;
+		}
+
 		meshCollider = hexahedron.GetComponent<MeshCollider> ();
 		if (meshCollider == null) {
 			meshCollider = hexahedron.gameObject.AddComponent<MeshCollider> ();

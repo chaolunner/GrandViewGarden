@@ -287,6 +287,10 @@ public class CylinderDrawer : Editor
 
 	void CreateCollider ()
 	{
+		if (PrefabUtility.GetPrefabType (target) == PrefabType.Prefab) {
+			return;
+		}
+
 		meshCollider = cylinder.GetComponent<MeshCollider> ();
 		if (meshCollider == null) {
 			meshCollider = cylinder.gameObject.AddComponent<MeshCollider> ();

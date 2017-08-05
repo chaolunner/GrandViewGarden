@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 33916485031178948}
   - component: {fileID: 23098151466125118}
   - component: {fileID: 114903158522401212}
-  - component: {fileID: 64465078087219570}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -82,20 +81,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1402848759285598}
   m_Mesh: {fileID: 0}
---- !u!64 &64465078087219570
-MeshCollider:
-  m_ObjectHideFlags: 61
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1402848759285598}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Convex: 0
-  m_InflateMesh: 0
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 0}
 --- !u!114 &114903158522401212
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -114,5 +99,5 @@ MonoBehaviour:
   - {x: -0.5, y: -0.5, z: -0.5}
   - {x: -0.5, y: 1.8162658, z: 1.2607696}
   - {x: 0.15882921, y: 0.51984215, z: 1.5728176}
-  - {x: 0.7368288, y: 0.5, z: 0.13240337}
+  - {x: 1.0520353, y: 0.5, z: 0.13240337}
   - {x: -0.8524182, y: 0.5, z: -5.712673}
