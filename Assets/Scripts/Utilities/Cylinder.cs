@@ -8,7 +8,7 @@ public class Cylinder : MonoBehaviour
 	[HideInInspector]
 	[Tooltip ("The value can be 0, 1 or 2 corresponding to the X, Y and Z axes, respectively.")]
 	public int direction = 1;
-	[Range (1, 60)]
+	[Range (3, 60)]
 	public int segments = 20;
 	public float radius = 1f;
 	public float thickness = 1f;
@@ -26,7 +26,7 @@ public class Cylinder : MonoBehaviour
 			return meshFilter.sharedMesh;
 		}
 		set {
-			meshFilter.mesh = value;
+			meshFilter.mesh = value;  
 		}
 	}
 

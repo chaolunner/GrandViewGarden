@@ -34,7 +34,7 @@ public class HexahedronDrawer : Editor
 
 	public override void OnInspectorGUI ()
 	{
-		if (hexahedron.Mesh == null || hexahedron.MultipleVertices == null) {
+		if (hexahedron.Mesh == null) {
 			CreateMesh ();
 		}
 
@@ -71,14 +71,14 @@ public class HexahedronDrawer : Editor
 		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.Space ();
 		if (GUILayout.Button (content)) {
-			ResetToDefault ();
+			ResetMesh ();
 		}
 		EditorGUILayout.EndHorizontal ();
 	}
 
 	void OnSceneGUI ()
 	{
-		if (hexahedron.Mesh == null || hexahedron.MultipleVertices == null) {
+		if (hexahedron.Mesh == null || hexahedron.Vertices == null || hexahedron.MultipleVertices.Count != 24) {
 			CreateMesh ();
 		}
 
@@ -229,7 +229,7 @@ public class HexahedronDrawer : Editor
 		CreateCollider ();
 	}
 
-	void ResetToDefault ()
+	void ResetMesh ()
 	{
 		hexahedron.Vertices = null;
 		CreateMesh ();
