@@ -11,7 +11,10 @@ public class CylinderDrawer : Editor
 	public bool showPosition = true;
 	public MeshCollider meshCollider;
 	string[] directions = new string[] { "X-Axis", "Y-Axis", "Z-Axis" };
-	int[] optionValues = { 0, 1, 2 };
+	GUIContent[] radiusOptions = new GUIContent[] {
+		new GUIContent ("Constant"),
+		new GUIContent ("Between Two Constants"),
+	};
 	List<int> selectedIndexs = new List<int> ();
 
 	public bool editingHexahedron {
@@ -49,15 +52,48 @@ public class CylinderDrawer : Editor
 		}
 
 		EditorGUI.BeginChangeCheck ();
-		var direction = EditorGUILayout.IntPopup ("Direction", cylinder.direction, directions, optionValues);
-		var segments = EditorGUILayout.IntSlider ("Segments", cylinder.segments, 1, 60);
-		var radius = EditorGUILayout.FloatField ("Radius", cylinder.radius);
+		var direction = EditorGUILayout.Popup ("Direction", cylinder.direction, directions);
+		var segments = EditorGUILayout.IntSlider ("Segments", cylinder.segments, 3, 60);
+		var sectionRadius = cylinder.sectionRadius;
+		var bottomRadius = cylinder.bottomRadius;
+
+		var controlRect = EditorGUILayout.GetControlRect ();
+		controlRect = EditorGUI.PrefixLabel (controlRect, new GUIContent ("Radius"));
+		controlRect.xMax -= 13;
+		if (cylinder.radiusOption == 0) {
+			bottomRadius = EditorGUI.FloatField (controlRect, cylinder.bottomRadius);
+			if (sectionRadius != bottomRadius) {
+				sectionRadius = bottomRadius;
+				GUI.changed = true;
+			}
+		} else {
+			sectionRadius = EditorGUI.FloatField (new Rect (controlRect.x, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), cylinder.sectionRadius);
+			bottomRadius = EditorGUI.FloatField (new Rect (controlRect.x + 0.5f * controlRect.width + 13, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), cylinder.bottomRadius);
+		}
+
+		var popupRect = GUILayoutUtility.GetLastRect ();
+		popupRect.xMin = popupRect.xMax - 13;
+		if (EditorGUI.DropdownButton (popupRect, new GUIContent (""), FocusType.Passive, "ShurikenDropdown")) {
+			var menu = new GenericMenu ();
+			for (int i = 0; i < radiusOptions.Length; i++) {
+				var index = i;
+				menu.AddItem (radiusOptions [index], cylinder.radiusOption == index, () => {
+					cylinder.radiusOption = index;
+				});
+			}
+			menu.ShowAsContext ();
+			Event.current.Use ();
+		}
+
 		var thickness = EditorGUILayout.FloatField ("Thickness", cylinder.thickness);
 		if (EditorGUI.EndChangeCheck ()) {
 			Undo.RecordObject (cylinder, "Change Cylinder");
 			cylinder.direction = direction;
 			cylinder.segments = segments;
-			cylinder.radius = radius;
+			cylinder.sectionRadius = sectionRadius;
+			if (bottomRadius > 0) {
+				cylinder.bottomRadius = bottomRadius;
+			}
 			cylinder.thickness = thickness;
 			ResetMesh ();
 			EditorUtility.SetDirty (cylinder);
@@ -167,7 +203,8 @@ public class CylinderDrawer : Editor
 				if (j == 0) {
 					vertices [i * circleLength + j] = (i < 2 ? 0.5f : -0.5f) * cylinder.thickness * up;
 				} else {
-					vertices [i * circleLength + j] = cylinder.radius * (Quaternion.Euler ((j - 1) * angle * up) * right) + vertices [i * circleLength];
+					var radius = cylinder.radiusOption == 1 && i < 2 ? cylinder.sectionRadius : cylinder.bottomRadius;
+					vertices [i * circleLength + j] = radius * (Quaternion.Euler ((j - 1) * angle * up) * right) + vertices [i * circleLength];
 				}
 			}
 		}

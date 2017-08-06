@@ -10,7 +10,9 @@ public class Cylinder : MonoBehaviour
 	public int direction = 1;
 	[Range (3, 60)]
 	public int segments = 20;
-	public float radius = 1f;
+	public int radiusOption;
+	public float sectionRadius = 1f;
+	public float bottomRadius = 1f;
 	public float thickness = 1f;
 	private MeshFilter meshFilter;
 	private MeshRenderer meshRenderer;
