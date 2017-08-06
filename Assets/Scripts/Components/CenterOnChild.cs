@@ -68,7 +68,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler, IDragHandler,IEndD
 
 	public Transform FindClosestChild (Vector2 direction)
 	{
-		var childIndex = 0;
+		var childIndex = (scrollView.horizontal && direction.x > 0) || (scrollView.vertical && direction.y > 0) ? 0 : scrollView.content.childCount - 1;
 		var distance = Mathf.Infinity;
 
 		for (int i = 0; i < scrollView.content.childCount; i++) {
