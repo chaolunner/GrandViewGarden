@@ -4,11 +4,11 @@ using System;
 
 public class EventTriggerListener : EventTrigger
 {
-	public Action<PointerEventData> PointerClick;
-	public Action<PointerEventData> PointerDown;
 	public Action<PointerEventData> PointerEnter;
-	public Action<PointerEventData> PointerExit;
+	public Action<PointerEventData> PointerDown;
+	public Action<PointerEventData> PointerClick;
 	public Action<PointerEventData> PointerUp;
+	public Action<PointerEventData> PointerExit;
 	public Action<PointerEventData> BeginDrag;
 	public Action<PointerEventData> Drag;
 	public Action<PointerEventData> EndDrag;

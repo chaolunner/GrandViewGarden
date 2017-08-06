@@ -51,6 +51,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
+     <Compile Include="Assets\Scripts\Components\ChangePanel.cs" />
+     <Compile Include="Assets\Scripts\Components\EventTriggerListener.cs" />
+     <Compile Include="Assets\Scripts\Components\PunchButton.cs" />
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
      <Compile Include="Assets\Scripts\Utilities\Hexahedron.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />

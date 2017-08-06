@@ -9,7 +9,6 @@ public class ChangePanel : MonoBehaviour
 	[Range (0, 1)]
 	public float duration = 0.5f;
 
-
 	void Start ()
 	{
 		EventTriggerListener.Get (gameObject).PointerClick = OnPointerClick;
@@ -17,12 +16,11 @@ public class ChangePanel : MonoBehaviour
 
 	void OnPointerClick (PointerEventData eventData)
 	{
-		Tweener tweener = originPanel.DOMoveY (-Screen.height, duration).SetEase (Ease.InBack);
-		tweener.OnComplete (OnPanelExit);
-	}
-
-	void OnPanelExit ()
-	{
-		targetpanel.DOMoveY (Screen.height / 2, duration).SetEase (Ease.OutBack);
+		var originPosition = originPanel.position;
+		var tweener = originPanel.DOMove (targetpanel.position, duration);
+		tweener.SetEase (Ease.InBack);
+		tweener.OnComplete (() => {
+			targetpanel.DOMove (originPosition, duration).SetEase (Ease.OutBack);
+		});
 	}
 }
