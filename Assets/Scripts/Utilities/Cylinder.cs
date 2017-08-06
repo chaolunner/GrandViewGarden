@@ -3,11 +3,19 @@ using UnityEngine;
 
 [RequireComponent (typeof(MeshFilter))]
 [RequireComponent (typeof(MeshRenderer))]
-public class Hexahedron : MonoBehaviour
+public class Cylinder : MonoBehaviour
 {
+	[HideInInspector]
+	[Tooltip ("The value can be 0, 1 or 2 corresponding to the X, Y and Z axes, respectively.")]
+	public int direction = 1;
+	[Range (3, 60)]
+	public int segments = 20;
+	public int radiusOption;
+	public float sectionRadius = 1f;
+	public float bottomRadius = 1f;
+	public float thickness = 1f;
 	private MeshFilter meshFilter;
 	private MeshRenderer meshRenderer;
-	private Vector3 defaultSize = new Vector3 (1, 1, 1);
 	[SerializeField]
 	private Vector3[] vertices;
 	public Dictionary<int, int[]> MultipleVertices = new Dictionary<int, int[]> ();
@@ -20,7 +28,7 @@ public class Hexahedron : MonoBehaviour
 			return meshFilter.sharedMesh;
 		}
 		set {
-			meshFilter.mesh = value;
+			meshFilter.mesh = value;  
 		}
 	}
 
@@ -30,12 +38,6 @@ public class Hexahedron : MonoBehaviour
 				meshRenderer = GetComponent<MeshRenderer> () ?? gameObject.AddComponent<MeshRenderer> ();
 			}
 			return meshRenderer;
-		}
-	}
-
-	public Vector3 DefaultSize {
-		get {
-			return defaultSize;
 		}
 	}
 
