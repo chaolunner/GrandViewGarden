@@ -4,11 +4,12 @@ using UnityEngine.UI;
 using UnityEngine;
 
 [RequireComponent (typeof(ScrollRect))]
-public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
+public class CenterOnChild : MonoBehaviour,IBeginDragHandler, IDragHandler,IEndDragHandler
 {
 	public Transform center;
 	[Range (0, 20)]
 	public float centerSpeed = 9f;
+	private Vector2 delta;
 	private ScrollRect scrollView;
 	private Coroutine coroutine;
 
@@ -30,6 +31,16 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 		if (coroutine != null) {
 			StopCoroutine (coroutine);
 		}
+		if (eventData.delta != Vector2.zero) {
+			delta = eventData.delta;
+		}
+	}
+
+	public void OnDrag (PointerEventData eventData)
+	{
+		if (eventData.delta != Vector2.zero) {
+			delta = eventData.delta;
+		}
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
@@ -37,8 +48,11 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 		if (coroutine != null) {
 			StopCoroutine (coroutine);
 		}
+		if (eventData.delta != Vector2.zero) {
+			delta = eventData.delta;
+		}
 		if (center != null) {
-			var child = FindClosestChild ();
+			var child = FindClosestChild (delta);
 			var offset = child.position - scrollView.content.position;
 			coroutine = StartCoroutine (CenterAsync (offset));
 		}
@@ -52,13 +66,33 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 		}
 	}
 
-	public Transform FindClosestChild ()
+	public Transform FindClosestChild (Vector2 direction)
 	{
 		var childIndex = 0;
 		var distance = Mathf.Infinity;
 
 		for (int i = 0; i < scrollView.content.childCount; i++) {
-			var dis = Vector3.Distance (scrollView.content.GetChild (i).position, center.position);
+			var pos = scrollView.content.GetChild (i).position;
+			if (scrollView.horizontal) {
+				var dir = Vector3.Project (pos - center.position, center.right);
+				if (direction.x > 0 && dir.x > 0) {
+					continue;
+				}
+				if (direction.x < 0 && dir.x < 0) {
+					continue;
+				}
+			}
+			if (scrollView.vertical) {
+				var dir = Vector3.Project (pos - center.position, center.up);
+				if (direction.y > 0 && dir.y > 0) {
+					continue;
+				}
+				if (direction.y < 0 && dir.y < 0) {
+					continue;
+				}
+			}
+
+			var dis = Vector3.Distance (pos, center.position);
 			if (dis < distance) {
 				distance = dis;
 				childIndex = i;
