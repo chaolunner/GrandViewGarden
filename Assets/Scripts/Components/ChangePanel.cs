@@ -16,6 +16,9 @@ public class ChangePanel : MonoBehaviour
 
 	void OnPointerClick (PointerEventData eventData)
 	{
+		if (originPanel == null || targetpanel == null) {
+			return;
+		}
 		var originPosition = originPanel.position;
 		var tweener = originPanel.DOMove (targetpanel.position, duration);
 		tweener.SetEase (Ease.InBack);

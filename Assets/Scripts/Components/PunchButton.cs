@@ -5,9 +5,9 @@ using DG.Tweening;
 public class PunchButton : MonoBehaviour
 {
 	[Range (0, 2)]
-	public float scale = 2;
+	public float scale = 1.2f;
 	[Range (0, 1)]
-	public float duration = 0.5f;
+	public float duration = 0.2f;
 
 	void Start ()
 	{
