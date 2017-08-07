@@ -2,9 +2,12 @@
 using UnityEngine;
 
 [RequireComponent (typeof(ScrollRect))]
+[RequireComponent (typeof(RectTransform))]
 public class CenterAlignment : MonoBehaviour
 {
-	public Transform center;
+	[Range (0, 3)]
+	public float scale = 1.5f;
+	public RectTransform center;
 	private ScrollRect scrollView;
 	private BoxCollider2D centerCollider;
 	private GridLayoutGroup gridLayoutGroup;
@@ -12,7 +15,7 @@ public class CenterAlignment : MonoBehaviour
 	void Start ()
 	{
 		if (center == null) {
-			center = transform;
+			center = transform as RectTransform;
 		}
 		scrollView = GetComponent<ScrollRect> ();
 		gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
@@ -35,9 +38,14 @@ public class CenterAlignment : MonoBehaviour
 	void OnTriggerStay2D (Collider2D col)
 	{
 		if (col.gameObject.layer == LayerMask.NameToLayer ("UI")) {
-			var distance = Vector3.Distance (col.transform.position, centerCollider.transform.position);
-			var k = 1 - (distance / centerCollider.size.x);
-			col.transform.localScale = (1 + k * 0.5f) * Vector3.one;
+			var k = 1f;
+			var distance = Vector3.Distance (col.transform.position, center.position);
+			if (scrollView.horizontal) {
+				k -= Mathf.Clamp01 (distance / centerCollider.bounds.size.x);
+			} else {
+				k -= Mathf.Clamp01 (distance / centerCollider.bounds.size.y);
+			}
+			col.transform.localScale = (1 + k * (scale - 1)) * Vector3.one;
 		}
 	}
 

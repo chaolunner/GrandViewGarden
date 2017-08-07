@@ -562,8 +562,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 600
+    m_Right: 600
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
@@ -1205,7 +1205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9571ba0faf1761143b520f1518c727f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  center: {fileID: 0}
+  scale: 1.5
+  center: {fileID: 928950480}
 --- !u!114 &928950485
 MonoBehaviour:
   m_ObjectHideFlags: 0
