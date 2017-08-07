@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Components\CenterAlignment.cs" />
      <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
      <Compile Include="Assets\Scripts\Components\ChangePanel.cs" />
      <Compile Include="Assets\Scripts\Components\EventTriggerListener.cs" />
