@@ -961,7 +961,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1166.2462, y: 0.000070377}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &456448512
@@ -993,7 +993,7 @@ MonoBehaviour:
     m_Right: 600
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 3
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 500, y: 1080}
@@ -1320,7 +1320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 584896425}
   m_Layer: 5
-  m_Name: PlayPanel
+  m_Name: LevelPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2362,6 +2362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: 1.5
+  centerSpeed: 9
   center: {fileID: 928950480}
 --- !u!114 &928950485
 MonoBehaviour:
