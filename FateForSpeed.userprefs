@@ -1,11 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Editor\CylinderDrawer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Components\CenterAlignment.cs">
     <Files>
-      <File FileName="Assets\Scripts\Utilities\Hexahedron.cs" Line="30" Column="14" />
-      <File FileName="Assets\Scripts\Editor\HexahedronDrawer.cs" Line="253" Column="54" />
-      <File FileName="Assets\Scripts\Utilities\Cylinder.cs" Line="54" Column="3" />
-      <File FileName="Assets\Scripts\Editor\CylinderDrawer.cs" Line="300" Column="3" />
+      <File FileName="Assets\Scripts\Components\CenterOnChild.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Components\CenterAlignment.cs" Line="40" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

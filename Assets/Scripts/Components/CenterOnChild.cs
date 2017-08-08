@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
+using DG.Tweening;
 
 [RequireComponent (typeof(ScrollRect))]
 public class CenterOnChild : MonoBehaviour,IBeginDragHandler, IDragHandler,IEndDragHandler
@@ -91,7 +92,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler, IDragHandler,IEndD
 					continue;
 				}
 			}
-
+		
 			var dis = Vector3.Distance (pos, center.position);
 			if (dis < distance) {
 				distance = dis;
@@ -100,11 +101,13 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler, IDragHandler,IEndD
 		}
 
 		var centerChild = scrollView.content.GetChild (childIndex);
-
 		if (onCenter != null) {
 			onCenter (centerChild);
 		}
 
+		scrollView.content.GetChild (childIndex - 1).DOScale (1, 1);
+		scrollView.content.GetChild (childIndex + 1).DOScale (1, 1);
 		return centerChild;
 	}
+
 }
