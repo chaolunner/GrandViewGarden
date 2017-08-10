@@ -5,7 +5,7 @@ using UnityEngine;
 
 [RequireComponent (typeof(ScrollRect))]
 [RequireComponent (typeof(RectTransform))]
-public class AlignCenter : MonoBehaviour
+public class FadeInCenter : MonoBehaviour
 {
 	[Range (0, 3)]
 	public float scale = 1.5f;
@@ -13,7 +13,7 @@ public class AlignCenter : MonoBehaviour
 	private ScrollRect scrollView;
 	private BoxCollider2D centerCollider;
 	private GridLayoutGroup gridLayoutGroup;
-	private Dictionary<Transform, Image> components = new Dictionary<Transform, Image> ();
+	private Dictionary<Transform, CanvasGroup> components = new Dictionary<Transform, CanvasGroup> ();
 
 	void Start ()
 	{
@@ -31,10 +31,10 @@ public class AlignCenter : MonoBehaviour
 			var child = scrollView.content.GetChild (i) as RectTransform;
 			var col = child.gameObject.AddComponent<BoxCollider2D> ();
 			var rig = child.gameObject.AddComponent<Rigidbody2D> ();
-			var img = child.GetComponent<Image> ();
-			if (img != null) {
-				components.Add (child, img);
-				img.color = new Color (img.color.r, img.color.g, img.color.b, 0);
+			var canvasGroup = child.GetComponentInChildren<CanvasGroup> ();
+			if (canvasGroup != null) {
+				components.Add (child, canvasGroup);
+				canvasGroup.alpha = 0;
 			}
 			rig.sleepMode = RigidbodySleepMode2D.NeverSleep;
 			col.size = gridLayoutGroup.cellSize;
@@ -56,16 +56,15 @@ public class AlignCenter : MonoBehaviour
 			col.transform.localScale = (1 + k * (scale - 1)) * Vector3.one;
 
 			if (!components.ContainsKey (col.transform)) {
-				var image = col.GetComponent<Image> ();
-				if (image != null) {
-					components.Add (col.transform, image);
+				var canvasGroup = col.GetComponentInChildren<CanvasGroup> ();
+				if (canvasGroup != null) {
+					components.Add (col.transform, canvasGroup);
 				}
 			}
 			if (components.ContainsKey (col.transform)) {
-				var image = components [col.transform];
-				if (image != null) {
-					var c = image.color;
-					image.color = new Color (c.r, c.g, c.b, k);
+				var canvasGroup = components [col.transform];
+				if (canvasGroup != null) {
+					canvasGroup.alpha = k;
 				}
 			}
 		}
