@@ -1,11 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Components\EventTriggerListener.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Components\ChangePanel.cs">
     <Files>
       <File FileName="Assets\Scripts\Components\CenterOnChild.cs" Line="1" Column="1" />
       <File FileName="Assets\Animations\WheelRun.cs" Line="1" Column="1" />
-      <File FileName="Assets\NewBehaviourScript.cs" Line="4" Column="15" />
-      <File FileName="Assets\Scripts\Components\EventTriggerListener.cs" Line="4" Column="1" />
+      <File FileName="Assets\Scripts\Components\EventTriggerListener.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Components\ChangePanel.cs" Line="10" Column="31" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
