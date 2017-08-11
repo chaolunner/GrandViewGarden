@@ -1,4 +1,5 @@
-﻿using UnityEngine.EventSystems;
+﻿using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
@@ -10,8 +11,8 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 	[Range (0, 20)]
 	public float centerSpeed = 5f;
 	private ScrollRect scrollView;
-	private Coroutine centerCoroutine;
 	private GridLayoutGroup gridLayoutGroup;
+	private List<Coroutine> centerCoroutines = new List<Coroutine> ();
 
 	public delegate void OnCenterHandler (Transform centerChild);
 
@@ -24,19 +25,40 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 		}
 		scrollView = GetComponent<ScrollRect> ();
 		gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
+
+		for (int i = 0; i < scrollView.content.childCount; i++) {
+			var child = scrollView.content.GetChild (i);
+			EventTriggerListener.Get (child.gameObject).PointerClick = (eventData => {
+				if (!eventData.dragging) {
+					StopCentering ();
+					centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
+				}
+			});
+
+			EventTriggerListener.Get (child.gameObject).BeginDrag = (eventData => {
+				StopCentering ();
+				scrollView.OnBeginDrag (eventData);
+			});
+
+			EventTriggerListener.Get (child.gameObject).Drag = (eventData => {
+				scrollView.OnDrag (eventData);
+			});
+
+			EventTriggerListener.Get (child.gameObject).EndDrag = (eventData => {
+				scrollView.OnEndDrag (eventData);
+			});
+		}
 	}
 
 	public void OnBeginDrag (PointerEventData eventData)
 	{
-		if (centerCoroutine != null) {
-			StopCoroutine (centerCoroutine);
-		}
+		StopCentering ();
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
 	{
 		if (center != null) {
-			centerCoroutine = StartCoroutine (CenterAsync ());
+			centerCoroutines.Add (StartCoroutine (CenterAsync ()));
 		}
 	}
 
@@ -48,7 +70,12 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 		}
 
 		var child = FindClosestChild (scrollView.velocity.normalized);
-		var offset = child.position - scrollView.content.position;
+		centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
+	}
+
+	IEnumerator CenterAsync (Transform target)
+	{
+		var offset = target.position - scrollView.content.position;
 
 		scrollView.velocity = Vector2.zero;
 
@@ -57,6 +84,16 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 			yield return null;	
 		}
 		scrollView.content.position = center.position - offset;
+	}
+
+	void StopCentering ()
+	{
+		for (int i = 0; i < centerCoroutines.Count; i++) {
+			if (centerCoroutines [i] != null) {
+				StopCoroutine (centerCoroutines [i]);
+			}
+		}
+		centerCoroutines.Clear ();
 	}
 
 	Transform FindClosestChild (Vector2 direction)
