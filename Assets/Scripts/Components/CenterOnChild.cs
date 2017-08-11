@@ -36,8 +36,8 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 			});
 
 			EventTriggerListener.Get (child.gameObject).BeginDrag = (eventData => {
-				StopCentering ();
 				scrollView.OnBeginDrag (eventData);
+				StopCentering ();
 			});
 
 			EventTriggerListener.Get (child.gameObject).Drag = (eventData => {
@@ -46,6 +46,9 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 
 			EventTriggerListener.Get (child.gameObject).EndDrag = (eventData => {
 				scrollView.OnEndDrag (eventData);
+				if (center != null) {
+					centerCoroutines.Add (StartCoroutine (CenterAsync ()));
+				}
 			});
 		}
 	}
