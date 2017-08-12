@@ -1024,7 +1024,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: a6a7e6cb6a6817442812d6ce47035aed, type: 2}
+  - {fileID: 2100000, guid: 8fc02a0942255054b99ff8565689bccb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1196,6 +1196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 0
   sectionRadius: 0.25
   bottomRadius: 0.25
@@ -1240,6 +1241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 0
   sectionRadius: 0.25
   bottomRadius: 0.25
@@ -1284,6 +1286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 1
   sectionRadius: 0.15
   bottomRadius: 0.25
@@ -1328,6 +1331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 1
   sectionRadius: 0.15
   bottomRadius: 0.25
@@ -1372,6 +1376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 2
   segments: 6
+  uvsOption: 1
   radiusOption: 1
   sectionRadius: 0.15
   bottomRadius: 0.2
@@ -1402,6 +1407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb516e9bb0f80c648af83be640b462ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uvsOption: 1
   vertices:
   - {x: -0.5, y: -0.6, z: 0.5}
   - {x: 0.5, y: -0.6, z: 0.5}
@@ -1424,6 +1430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 0
   sectionRadius: 0.25
   bottomRadius: 0.25
@@ -1466,6 +1473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb516e9bb0f80c648af83be640b462ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uvsOption: 1
   vertices:
   - {x: -0.5, y: -0.1, z: 0.7}
   - {x: 0.5, y: -0.1, z: 0.7}
@@ -1488,6 +1496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 1
   sectionRadius: 0.15
   bottomRadius: 0.25
@@ -1530,6 +1539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb516e9bb0f80c648af83be640b462ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uvsOption: 1
   vertices:
   - {x: -0.5, y: -0.5, z: 1}
   - {x: 0.5, y: -0.5, z: 1}
@@ -1552,6 +1562,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 0
   sectionRadius: 0.25
   bottomRadius: 0.25
@@ -1596,6 +1607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   segments: 12
+  uvsOption: 1
   radiusOption: 1
   sectionRadius: 0.15
   bottomRadius: 0.25
@@ -1640,6 +1652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 2
   segments: 6
+  uvsOption: 1
   radiusOption: 1
   sectionRadius: 0.15
   bottomRadius: 0.2

@@ -11,6 +11,7 @@ public class HexahedronDrawer : Editor
 	public bool showPosition = true;
 	public MeshCollider meshCollider;
 	public List<int> selectedIndexs = new List<int> ();
+	string[] uvsOptions = new string[] { "Simple", "Sliced" };
 
 	public bool editingHexahedron {
 		get {
@@ -65,6 +66,13 @@ public class HexahedronDrawer : Editor
 			}
 		}
 		EditorGUI.indentLevel--;
+
+		EditorGUI.BeginChangeCheck ();
+		var uvsOption = EditorGUILayout.Popup ("UVs", hexahedron.uvsOption, uvsOptions);
+		if (EditorGUI.EndChangeCheck ()) {
+			Undo.RecordObject (hexahedron, "Change Hexahedron");
+			hexahedron.uvsOption = uvsOption;
+		}
 
 		var content = EditorGUIUtility.IconContent ("Refresh");
 		content.text = " Reset To Default";

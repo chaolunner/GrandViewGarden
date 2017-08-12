@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent (typeof(MeshRenderer))]
 public class Hexahedron : MonoBehaviour
 {
+	public int uvsOption;
 	private MeshFilter meshFilter;
 	private MeshRenderer meshRenderer;
 	private Vector3 defaultSize = new Vector3 (1, 1, 1);
@@ -94,7 +95,7 @@ public class Hexahedron : MonoBehaviour
 		return vertices;
 	}
 
-	Vector2[] GetUVsMap ()
+	Vector2[] GetSimpleUVsMap ()
 	{
 		var uvs = new Vector2[24];
 		for (int i = 0; i < 6; i++) {
@@ -102,6 +103,19 @@ public class Hexahedron : MonoBehaviour
 			uvs [4 * i + 1] = new Vector2 (0f, 1f);
 			uvs [4 * i + 2] = new Vector2 (0f, 0f);
 			uvs [4 * i + 3] = new Vector2 (1f, 0f);
+		}
+		return uvs;
+	}
+
+	Vector2[] GetSlicedUVsMap ()
+	{
+		var uvs = new Vector2[24];
+		for (int i = 0; i < 6; i++) {
+			var j = (float)(i / 2);
+			uvs [4 * i + 0] = new Vector2 (0.5f * (1 + i % 2), (1 + j) / 3);
+			uvs [4 * i + 1] = new Vector2 (0.5f * (i % 2), (1 + j) / 3);
+			uvs [4 * i + 2] = new Vector2 (0.5f * (i % 2), j / 3);
+			uvs [4 * i + 3] = new Vector2 (0.5f * (1 + i % 2), j / 3);
 		}
 		return uvs;
 	}
@@ -124,7 +138,7 @@ public class Hexahedron : MonoBehaviour
 	{
 		Mesh = new Mesh ();
 		Mesh.vertices = GetVertices ();
-		Mesh.uv = GetUVsMap ();
+		Mesh.uv = uvsOption == 0 ? GetSimpleUVsMap () : GetSlicedUVsMap ();
 		Mesh.triangles = GetTriangles ();
 		Mesh.RecalculateBounds ();
 		Mesh.RecalculateNormals ();
