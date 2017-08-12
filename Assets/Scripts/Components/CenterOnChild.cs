@@ -100,7 +100,15 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 
 		for (int i = 0; i < scrollView.content.childCount; i++) {
 			var child = scrollView.content.GetChild (i);
-			var pos = child.position + child.TransformVector (new Vector3 (scrollView.velocity.x, scrollView.velocity.y, 0));
+			var vector = Vector2.zero;
+			if (scrollView.inertia) {
+				var velocity = scrollView.velocity;
+				while (velocity.magnitude > 1) {
+					velocity *= Mathf.Pow (scrollView.decelerationRate, Time.unscaledDeltaTime);
+					vector += velocity * Time.unscaledDeltaTime;
+				}
+			}
+			var pos = child.position + child.TransformVector (new Vector3 (vector.x, vector.y, 0));
 			if (scrollView.horizontal) {
 				var dir = Vector3.Project (pos - Center.position, Center.right);
 				if (direction.x > 0 && dir.x > 0) {
