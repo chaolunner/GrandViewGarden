@@ -1951,7 +1951,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1196956520
+  randomSeed: -1594817190
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -1999,7 +1999,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2.7431304
+      scalar: 5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -2605,14 +2605,14 @@ ParticleSystem:
         - serializedVersion: 2
           time: 0
           value: 0
-          inSlope: 2
-          outSlope: 2
+          inSlope: 1.3066999
+          outSlope: 1.3066999
           tangentMode: 0
         - serializedVersion: 2
           time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0.3220968
+          inSlope: -0.83182967
+          outSlope: -0.83182967
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -2854,7 +2854,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.918, g: 0, b: 0.261, a: 1}
-        key1: {r: 0.20588237, g: 0, b: 0.058535174, a: 1}
+        key1: {r: 0, g: 0, b: 0, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -2862,14 +2862,14 @@ ParticleSystem:
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 65535
+        ctime1: 51272
         ctime2: 0
         ctime3: 0
         ctime4: 0
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 0
+        atime0: 43562
         atime1: 65535
         atime2: 0
         atime3: 0
@@ -5168,7 +5168,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 10bc115a50b61fb4eb40b7b04707bf53, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
