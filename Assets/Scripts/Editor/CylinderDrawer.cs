@@ -95,7 +95,7 @@ public class CylinderDrawer : Editor
 				cylinder.bottomRadius = bottomRadius;
 			}
 			cylinder.thickness = thickness;
-			ResetMesh ();
+			cylinder.ResetMesh ();
 			EditorUtility.SetDirty (cylinder);
 		}
 
@@ -189,137 +189,11 @@ public class CylinderDrawer : Editor
 		}
 	}
 
-	Vector3[] GetVertices ()
-	{
-		var circleLength = cylinder.segments + 2;
-		var length = 4 * circleLength;
-		var angle = 360 / cylinder.segments;
-		var up = cylinder.direction == 0 ? Vector3.right : cylinder.direction == 1 ? Vector3.up : Vector3.forward;
-		var right = cylinder.direction == 0 ? -Vector3.forward : Vector3.right;
-		var vertices = new Vector3[length];
-
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < circleLength; j++) {
-				if (j == 0) {
-					vertices [i * circleLength + j] = (i < 2 ? 0.5f : -0.5f) * cylinder.thickness * up;
-				} else {
-					var radius = cylinder.radiusOption == 1 && i < 2 ? cylinder.sectionRadius : cylinder.bottomRadius;
-					vertices [i * circleLength + j] = radius * (Quaternion.Euler ((j - 1) * angle * up) * right) + vertices [i * circleLength];
-				}
-			}
-		}
-		return vertices;
-	}
-
-	int[] GetTriangles ()
-	{
-		var circleLength = cylinder.segments + 2;
-		var length = 12 * cylinder.segments;
-		var triangles = new int[length];
-
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < cylinder.segments; j++) {
-				if (i == 0) {
-					triangles [3 * (i * cylinder.segments + j) + 0] = i * circleLength + j + 1;
-					triangles [3 * (i * cylinder.segments + j) + 1] = i * circleLength + j + 2;
-					triangles [3 * (i * cylinder.segments + j) + 2] = i * circleLength;
-				} else if (i == 1) {
-					triangles [3 * (i * cylinder.segments + j) + 0] = i * circleLength + j + 1;
-					triangles [3 * (i * cylinder.segments + j) + 1] = (i + 1) * circleLength + j + 1;
-					triangles [3 * (i * cylinder.segments + j) + 2] = (i + 1) * circleLength + j + 2;
-				} else if (i == 2) {
-					triangles [3 * (i * cylinder.segments + j) + 0] = i * circleLength + j + 2;
-					triangles [3 * (i * cylinder.segments + j) + 1] = (i - 1) * circleLength + j + 2;
-					triangles [3 * (i * cylinder.segments + j) + 2] = (i - 1) * circleLength + j + 1;
-				} else if (i == 3) {
-					triangles [3 * (i * cylinder.segments + j) + 0] = i * circleLength;
-					triangles [3 * (i * cylinder.segments + j) + 1] = i * circleLength + j + 2;
-					triangles [3 * (i * cylinder.segments + j) + 2] = i * circleLength + j + 1;
-				}
-			}
-		}
-		return triangles;
-	}
-
-	Vector2[] GetUVsMap ()
-	{
-		var circleLength = cylinder.segments + 2;
-		var angle = 360 / cylinder.segments;
-		var length = 4 * circleLength;
-		var uvs = new Vector2[length];
-
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < circleLength; j++) {
-				if (i == 0) {
-					if (j == 0) {
-						uvs [i * circleLength + j] = 0.5f * Vector2.one;
-					} else {
-						var radians = ((j - 1) * angle - 90) * Mathf.Deg2Rad;
-						var x = 0.5f * (1 + Mathf.Sin (radians));
-						var y = 0.5f * (1 + Mathf.Cos (radians));
-						uvs [i * circleLength + j] = new Vector2 (x, y);
-					}
-				} else if (i == 1) {
-					uvs [i * circleLength + j] = new Vector2 (1 - (float)j / circleLength, 1);
-				} else if (i == 2) {
-					uvs [i * circleLength + j] = new Vector2 (1 - (float)j / circleLength, 0);
-				} else {
-					if (j == 0) {
-						uvs [i * circleLength + j] = 0.5f * Vector2.one;
-					} else {
-						var radians = ((j - 1) * angle - 90) * Mathf.Deg2Rad;
-						var x = 0.5f * (1 + Mathf.Sin (radians));
-						var y = 0.5f * (1 + Mathf.Cos (radians));
-						uvs [i * circleLength + j] = new Vector2 (1 - x, y);
-					}
-				}
-			}
-		}
-		return uvs;
-	}
-
 	void CreateMesh ()
 	{
-		cylinder.Mesh = new Mesh ();
-		cylinder.Mesh.vertices = GetVertices ();
-		cylinder.Mesh.uv = GetUVsMap ();
-		cylinder.Mesh.triangles = GetTriangles ();
-		cylinder.Mesh.RecalculateBounds ();
-		cylinder.Mesh.RecalculateNormals ();
-
-		var vertices = new Vector3[cylinder.Mesh.vertices.Length];
-		var circleLength = cylinder.segments + 2;
-		var length = cylinder.segments + 1;
-		if (cylinder.Vertices == null || cylinder.Vertices.Length != 2 * length) {
-			cylinder.Vertices = new Vector3[2 * length];
-			for (int i = 0; i < length; i++) {
-				cylinder.Vertices [i] = cylinder.Mesh.vertices [i];
-				cylinder.Vertices [length + i] = cylinder.Mesh.vertices [2 * circleLength + i];
-			}
-		}
-		
-		cylinder.MultipleVertices.Clear ();
-		for (int i = 0; i < vertices.Length; i++) {
-			var index = i % circleLength;
-			var key = (index == length ? 1 : index) + (i / circleLength < 2 ? 0 : length);
-			if (cylinder.MultipleVertices.ContainsKey (key)) {
-				var list = cylinder.MultipleVertices [key].ToList ();
-				list.Add (i);
-				cylinder.MultipleVertices [key] = list.ToArray ();
-			} else {
-				cylinder.MultipleVertices.Add (key, new int[] { i });
-			}
-			vertices [i] = cylinder.Vertices [key];
-		}
-		cylinder.Mesh.vertices = vertices;
+		cylinder.CreateMesh ();
 
 		CreateCollider ();
-	}
-
-	void ResetMesh ()
-	{
-		cylinder.Vertices = null;
-		CreateMesh ();
 	}
 
 	void CreateCollider ()
