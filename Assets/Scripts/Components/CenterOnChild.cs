@@ -11,6 +11,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 	[Range (0, 20)]
 	public float CenterSpeed = 5f;
 	private ScrollRect scrollView;
+	private GridLayoutGroup gridLayoutGroup;
 	private List<Coroutine> centerCoroutines = new List<Coroutine> ();
 
 	public delegate void OnCenterHandler (Transform centerChild);
@@ -23,6 +24,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 			Center = transform;
 		}
 		scrollView = GetComponent<ScrollRect> ();
+		gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
 
 		for (int i = 0; i < scrollView.content.childCount; i++) {
 			var child = scrollView.content.GetChild (i);
@@ -103,12 +105,16 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 			var vector = Vector2.zero;
 			if (scrollView.inertia) {
 				var velocity = scrollView.velocity;
+				var limit = 2 * gridLayoutGroup.cellSize + gridLayoutGroup.spacing;
+				var x = Mathf.Clamp (velocity.x, -limit.x, limit.x);
+				var y = Mathf.Clamp (velocity.y, -limit.y, limit.y);
+				velocity = new Vector2 (x, y);
 				while (velocity.magnitude > 1) {
 					velocity *= Mathf.Pow (scrollView.decelerationRate, Time.unscaledDeltaTime);
 					vector += velocity * Time.unscaledDeltaTime;
 				}
 			}
-			var pos = child.position + child.TransformVector (new Vector3 (vector.x, vector.y, 0));
+			var pos = child.position + scrollView.content.TransformVector (new Vector3 (vector.x, vector.y, 0));
 			if (scrollView.horizontal) {
 				var dir = Vector3.Project (pos - Center.position, Center.right);
 				if (direction.x > 0 && dir.x > 0) {
