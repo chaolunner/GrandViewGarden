@@ -12,6 +12,7 @@ public class Cylinder : MonoBehaviour
 	public int direction = 1;
 	[Range (3, 60)]
 	public int segments = 20;
+	public int uvsOption;
 	public int radiusOption;
 	public float sectionRadius = 1f;
 	public float bottomRadius = 1f;
@@ -128,7 +129,7 @@ public class Cylinder : MonoBehaviour
 		return triangles;
 	}
 
-	Vector2[] GetUVsMap ()
+	Vector2[] GetSimpleUVsMap ()
 	{
 		var circleLength = segments + 2;
 		var angle = 360 / segments;
@@ -165,11 +166,48 @@ public class Cylinder : MonoBehaviour
 		return uvs;
 	}
 
+	Vector2[] GetSlicedUVsMap ()
+	{
+		var circleLength = segments + 2;
+		var angle = 360 / segments;
+		var length = 4 * circleLength;
+		var uvs = new Vector2[length];
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < circleLength; j++) {
+				if (i == 0) {
+					if (j == 0) {
+						uvs [i * circleLength + j] = new Vector2 (0.25f, 0.75f);
+					} else {
+						var radians = ((j - 1) * angle - 90) * Mathf.Deg2Rad;
+						var x = 0.25f * (1 + Mathf.Sin (radians));
+						var y = 0.5f + 0.25f * (1 + Mathf.Cos (radians));
+						uvs [i * circleLength + j] = new Vector2 (x, y);
+					}
+				} else if (i == 1) {
+					uvs [i * circleLength + j] = new Vector2 (1 - (float)j / circleLength, 0.5f);
+				} else if (i == 2) {
+					uvs [i * circleLength + j] = new Vector2 (1 - (float)j / circleLength, 0);
+				} else {
+					if (j == 0) {
+						uvs [i * circleLength + j] = new Vector2 (0.75f, 0.75f);
+					} else {
+						var radians = ((j - 1) * angle - 90) * Mathf.Deg2Rad;
+						var x = 0.25f * (1 + Mathf.Sin (radians));
+						var y = 0.5f + 0.25f * (1 + Mathf.Cos (radians));
+						uvs [i * circleLength + j] = new Vector2 (1 - x, y);
+					}
+				}
+			}
+		}
+		return uvs;
+	}
+
 	public void CreateMesh ()
 	{
 		Mesh = new Mesh ();
 		Mesh.vertices = GetVertices ();
-		Mesh.uv = GetUVsMap ();
+		Mesh.uv = uvsOption == 0 ? GetSimpleUVsMap () : GetSlicedUVsMap ();
 		Mesh.triangles = GetTriangles ();
 		Mesh.RecalculateBounds ();
 		Mesh.RecalculateNormals ();

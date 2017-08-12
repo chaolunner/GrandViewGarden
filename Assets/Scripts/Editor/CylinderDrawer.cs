@@ -11,6 +11,7 @@ public class CylinderDrawer : Editor
 	public bool showPosition = true;
 	public MeshCollider meshCollider;
 	string[] directions = new string[] { "X-Axis", "Y-Axis", "Z-Axis" };
+	string[] uvsOptions = new string[] { "Simple", "Sliced" };
 	GUIContent[] radiusOptions = new GUIContent[] {
 		new GUIContent ("Constant"),
 		new GUIContent ("Between Two Constants"),
@@ -53,6 +54,7 @@ public class CylinderDrawer : Editor
 
 		EditorGUI.BeginChangeCheck ();
 		var direction = EditorGUILayout.Popup ("Direction", cylinder.direction, directions);
+		var uvsOption = EditorGUILayout.Popup ("UVs", cylinder.uvsOption, uvsOptions);
 		var segments = EditorGUILayout.IntSlider ("Segments", cylinder.segments, 3, 60);
 		var sectionRadius = cylinder.sectionRadius;
 		var bottomRadius = cylinder.bottomRadius;
@@ -70,7 +72,7 @@ public class CylinderDrawer : Editor
 			sectionRadius = EditorGUI.FloatField (new Rect (controlRect.x, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), cylinder.sectionRadius);
 			bottomRadius = EditorGUI.FloatField (new Rect (controlRect.x + 0.5f * controlRect.width + 13, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), cylinder.bottomRadius);
 		}
-
+		
 		var popupRect = GUILayoutUtility.GetLastRect ();
 		popupRect.xMin = popupRect.xMax - 13;
 		if (EditorGUI.DropdownButton (popupRect, new GUIContent (""), FocusType.Passive, "ShurikenDropdown")) {
@@ -94,6 +96,7 @@ public class CylinderDrawer : Editor
 			if (bottomRadius > 0) {
 				cylinder.bottomRadius = bottomRadius;
 			}
+			cylinder.uvsOption = uvsOption;
 			cylinder.thickness = thickness;
 			cylinder.ResetMesh ();
 			EditorUtility.SetDirty (cylinder);
