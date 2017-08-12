@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114514977171838514}
   - component: {fileID: 114075927170343856}
   m_Layer: 5
-  m_Name: Diy
+  m_Name: DiyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 114807507854330352}
   - component: {fileID: 114372336051052060}
   m_Layer: 5
-  m_Name: Achievement
+  m_Name: AchievementButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 114686691213550056}
   - component: {fileID: 114099956642387964}
   m_Layer: 5
-  m_Name: Play
+  m_Name: LevelButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 114835016998474304}
   - component: {fileID: 114554455727624000}
   m_Layer: 5
-  m_Name: Setting
+  m_Name: SettingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,12 +227,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1181052295595550}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1c6e6f10f8b5b341b1cc7426796971a, type: 3}
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originPanel: {fileID: 224683683911060280}
-  targetpanel: {fileID: 0}
-  duration: 0.5
+  Origin: {fileID: 224683683911060280}
+  Target: {fileID: 0}
+  Duration: 0.5
+  Delay: 0
 --- !u!114 &114099956642387964
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -241,12 +242,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1371935814391308}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1c6e6f10f8b5b341b1cc7426796971a, type: 3}
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originPanel: {fileID: 224683683911060280}
-  targetpanel: {fileID: 0}
-  duration: 0.5
+  Origin: {fileID: 224683683911060280}
+  Target: {fileID: 0}
+  Duration: 0.5
+  Delay: 0
 --- !u!114 &114267934429052458
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -282,12 +284,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1196843412320144}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1c6e6f10f8b5b341b1cc7426796971a, type: 3}
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originPanel: {fileID: 224683683911060280}
-  targetpanel: {fileID: 0}
-  duration: 0.5
+  Origin: {fileID: 224683683911060280}
+  Target: {fileID: 0}
+  Duration: 0.5
+  Delay: 0
 --- !u!114 &114484460389376448
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -363,12 +366,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1960676287266968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1c6e6f10f8b5b341b1cc7426796971a, type: 3}
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originPanel: {fileID: 224683683911060280}
-  targetpanel: {fileID: 0}
-  duration: 0.5
+  Origin: {fileID: 224683683911060280}
+  Target: {fileID: 0}
+  Duration: 0.5
+  Delay: 0
 --- !u!114 &114658580696639552
 MonoBehaviour:
   m_ObjectHideFlags: 1

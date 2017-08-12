@@ -7,11 +7,10 @@ using UnityEngine;
 [RequireComponent (typeof(ScrollRect))]
 public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 {
-	public Transform center;
+	public Transform Center;
 	[Range (0, 20)]
-	public float centerSpeed = 5f;
+	public float CenterSpeed = 5f;
 	private ScrollRect scrollView;
-	private GridLayoutGroup gridLayoutGroup;
 	private List<Coroutine> centerCoroutines = new List<Coroutine> ();
 
 	public delegate void OnCenterHandler (Transform centerChild);
@@ -20,33 +19,32 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 
 	void Start ()
 	{
-		if (center == null) {
-			center = transform;
+		if (Center == null) {
+			Center = transform;
 		}
 		scrollView = GetComponent<ScrollRect> ();
-		gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
 
 		for (int i = 0; i < scrollView.content.childCount; i++) {
 			var child = scrollView.content.GetChild (i);
-			EventTriggerListener.Get (child.gameObject).PointerClick = (eventData => {
+			EventTriggerListener.Get (child.gameObject).PointerClick += (eventData => {
 				if (!eventData.dragging) {
 					StopCentering ();
 					centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
 				}
 			});
 
-			EventTriggerListener.Get (child.gameObject).BeginDrag = (eventData => {
+			EventTriggerListener.Get (child.gameObject).BeginDrag += (eventData => {
 				scrollView.OnBeginDrag (eventData);
 				StopCentering ();
 			});
 
-			EventTriggerListener.Get (child.gameObject).Drag = (eventData => {
+			EventTriggerListener.Get (child.gameObject).Drag += (eventData => {
 				scrollView.OnDrag (eventData);
 			});
 
-			EventTriggerListener.Get (child.gameObject).EndDrag = (eventData => {
+			EventTriggerListener.Get (child.gameObject).EndDrag += (eventData => {
 				scrollView.OnEndDrag (eventData);
-				if (center != null) {
+				if (Center != null) {
 					StartCentering ();
 				}
 			});
@@ -60,7 +58,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 
 	public void OnEndDrag (PointerEventData eventData)
 	{
-		if (center != null) {
+		if (Center != null) {
 			StartCentering ();
 		}
 	}
@@ -77,11 +75,11 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 
 		scrollView.velocity = Vector2.zero;
 
-		while (Vector3.Magnitude (scrollView.content.position + offset - center.position) > 0.01f) {
-			scrollView.content.position = Vector3.Lerp (scrollView.content.position + offset, center.position, centerSpeed * Time.deltaTime) - offset;
+		while (Vector3.Magnitude (scrollView.content.position + offset - Center.position) > 0.01f) {
+			scrollView.content.position = Vector3.Lerp (scrollView.content.position + offset, Center.position, CenterSpeed * Time.deltaTime) - offset;
 			yield return null;	
 		}
-		scrollView.content.position = center.position - offset;
+		scrollView.content.position = Center.position - offset;
 	}
 
 	void StopCentering ()
@@ -104,7 +102,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 			var child = scrollView.content.GetChild (i);
 			var pos = child.position + child.TransformVector (new Vector3 (scrollView.velocity.x, scrollView.velocity.y, 0));
 			if (scrollView.horizontal) {
-				var dir = Vector3.Project (pos - center.position, center.right);
+				var dir = Vector3.Project (pos - Center.position, Center.right);
 				if (direction.x > 0 && dir.x > 0) {
 					continue;
 				}
@@ -113,7 +111,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 				}
 			}
 			if (scrollView.vertical) {
-				var dir = Vector3.Project (pos - center.position, center.up);
+				var dir = Vector3.Project (pos - Center.position, Center.up);
 				if (direction.y > 0 && dir.y > 0) {
 					continue;
 				}
@@ -122,7 +120,7 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 				}
 			}
 
-			var dis = Vector3.Distance (pos, center.position);
+			var dis = Vector3.Distance (pos, Center.position);
 			if (dis < distance) {
 				distance = dis;
 				childIndex = i;

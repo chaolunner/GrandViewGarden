@@ -4,16 +4,16 @@ using System;
 
 public class EventTriggerListener : EventTrigger
 {
-	public Action<PointerEventData> PointerEnter;
-	public Action<PointerEventData> PointerDown;
-	public Action<PointerEventData> PointerClick;
-	public Action<PointerEventData> PointerUp;
-	public Action<PointerEventData> PointerExit;
-	public Action<PointerEventData> BeginDrag;
-	public Action<PointerEventData> Drag;
-	public Action<PointerEventData> EndDrag;
-	public Action<BaseEventData> Select;
-	public Action<BaseEventData> UpdateSelected;
+	public event Action<PointerEventData> PointerEnter;
+	public event Action<PointerEventData> PointerDown;
+	public event Action<PointerEventData> PointerClick;
+	public event Action<PointerEventData> PointerUp;
+	public event Action<PointerEventData> PointerExit;
+	public event Action<PointerEventData> BeginDrag;
+	public event Action<PointerEventData> Drag;
+	public event Action<PointerEventData> EndDrag;
+	public event Action<BaseEventData> Select;
+	public event Action<BaseEventData> UpdateSelected;
 
 	static public EventTriggerListener Get (GameObject go)
 	{

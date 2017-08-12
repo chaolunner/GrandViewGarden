@@ -8,8 +8,8 @@ using UnityEngine;
 public class FadeInCenter : MonoBehaviour
 {
 	[Range (0, 3)]
-	public float scale = 1.5f;
-	public RectTransform center;
+	public float Scale = 1.5f;
+	public RectTransform Center;
 	private ScrollRect scrollView;
 	private BoxCollider2D centerCollider;
 	private GridLayoutGroup gridLayoutGroup;
@@ -17,8 +17,8 @@ public class FadeInCenter : MonoBehaviour
 
 	void Start ()
 	{
-		if (center == null) {
-			center = transform as RectTransform;
+		if (Center == null) {
+			Center = transform as RectTransform;
 		}
 		scrollView = GetComponent<ScrollRect> ();
 		gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
@@ -47,13 +47,13 @@ public class FadeInCenter : MonoBehaviour
 	{
 		if (col.gameObject.layer == LayerMask.NameToLayer ("UI")) {
 			var k = 1f;
-			var distance = Vector3.Distance (col.transform.position, center.position);
+			var distance = Vector3.Distance (col.transform.position, Center.position);
 			if (scrollView.horizontal) {
 				k -= Mathf.Clamp01 (distance / centerCollider.bounds.size.x);
 			} else {
 				k -= Mathf.Clamp01 (distance / centerCollider.bounds.size.y);
 			}
-			col.transform.localScale = (1 + k * (scale - 1)) * Vector3.one;
+			col.transform.localScale = (1 + k * (Scale - 1)) * Vector3.one;
 
 			if (!components.ContainsKey (col.transform)) {
 				var canvasGroup = col.GetComponentInChildren<CanvasGroup> ();
