@@ -34,6 +34,7 @@ public class ExchangePosition : MonoBehaviour
 		}
 		var originPosition = Origin.position;
 		var tweener = Origin.DOMove (Target.position, Duration);
+		tweener.SetDelay (Delay);
 		tweener.SetEase (Ease.InBack);
 		tweener.OnComplete (() => {
 			Target.DOMove (originPosition, Duration).SetEase (Ease.OutBack);
