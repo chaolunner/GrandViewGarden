@@ -51,12 +51,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Editor\ChameleonShaderGUI.cs" />
      <Compile Include="Assets\Scripts\Editor\CylinderDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\HexahedronDrawer.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
      <None Include="Assets\Plugins\DOTween\DOTween50.xml" />
      <None Include="Assets\Plugins\DOTween\readme.txt" />
      <None Include="Assets\Plugins\DOTween\DOTween43.xml" />
+     <None Include="Assets\Shaders\Chameleon.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
