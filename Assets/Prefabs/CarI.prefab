@@ -863,7 +863,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 8fc02a0942255054b99ff8565689bccb, type: 2}
+  - {fileID: 2100000, guid: 933da8d2a7ff01d46b7494ab460fae12, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1023,7 +1023,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: a6a7e6cb6a6817442812d6ce47035aed, type: 2}
+  - {fileID: 2100000, guid: 933da8d2a7ff01d46b7494ab460fae12, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1548,6 +1548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uvsOption: 1
+  DefaultSize: {x: 1, y: 1, z: 1}
   vertices:
   - {x: -0.09999945, y: -0.058030106, z: 0.05860084}
   - {x: 0.10000104, y: -0.05803013, z: 0.1}
@@ -1602,6 +1603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uvsOption: 1
+  DefaultSize: {x: 1, y: 1, z: 1}
   vertices:
   - {x: -0.5, y: -0.5, z: 0.5}
   - {x: 0.5, y: -0.5, z: 0.5}
@@ -1668,6 +1670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uvsOption: 1
+  DefaultSize: {x: 1, y: 1, z: 1}
   vertices:
   - {x: -0.09999945, y: -0.058030106, z: 0.10000018}
   - {x: 0.10000104, y: -0.05803013, z: 0.058600903}
@@ -1734,6 +1737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uvsOption: 1
+  DefaultSize: {x: 1, y: 1, z: 1}
   vertices:
   - {x: -0.5, y: -0.4, z: 0.74}
   - {x: 0.5, y: -0.4, z: 0.74}
@@ -1755,6 +1759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uvsOption: 1
+  DefaultSize: {x: 1, y: 1, z: 1}
   vertices:
   - {x: -0.7132058, y: -0.046622396, z: 0.19320172}
   - {x: 0.6879565, y: -0.046622396, z: 0.1932016}

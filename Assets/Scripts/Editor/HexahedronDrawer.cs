@@ -69,9 +69,11 @@ public class HexahedronDrawer : Editor
 
 		EditorGUI.BeginChangeCheck ();
 		var uvsOption = EditorGUILayout.Popup ("UVs", hexahedron.uvsOption, uvsOptions);
+		var size = EditorGUILayout.Vector3Field ("Size", hexahedron.DefaultSize);
 		if (EditorGUI.EndChangeCheck ()) {
 			Undo.RecordObject (hexahedron, "Change Hexahedron");
 			hexahedron.uvsOption = uvsOption;
+			hexahedron.DefaultSize = size;
 		}
 
 		var content = EditorGUIUtility.IconContent ("Refresh");

@@ -7,9 +7,9 @@ using UnityEngine;
 public class Hexahedron : MonoBehaviour
 {
 	public int uvsOption;
+	public Vector3 DefaultSize = new Vector3 (1, 1, 1);
 	private MeshFilter meshFilter;
 	private MeshRenderer meshRenderer;
-	private Vector3 defaultSize = new Vector3 (1, 1, 1);
 	[SerializeField]
 	private Vector3[] vertices;
 	public Dictionary<int, int[]> MultipleVertices = new Dictionary<int, int[]> ();
@@ -32,12 +32,6 @@ public class Hexahedron : MonoBehaviour
 				meshRenderer = GetComponent<MeshRenderer> () ?? gameObject.AddComponent<MeshRenderer> ();
 			}
 			return meshRenderer;
-		}
-	}
-
-	public Vector3 DefaultSize {
-		get {
-			return defaultSize;
 		}
 	}
 
