@@ -51,13 +51,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Components\CarAnimation.cs" />
      <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
      <Compile Include="Assets\Scripts\Components\EventTriggerListener.cs" />
      <Compile Include="Assets\Scripts\Components\ExchangePosition.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInScreen.cs" />
+     <Compile Include="Assets\Scripts\Components\FreeDriving.cs" />
      <Compile Include="Assets\Scripts\Components\PunchButton.cs" />
+     <Compile Include="Assets\Scripts\Utilities\CombineMeshes.cs" />
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
      <Compile Include="Assets\Scripts\Utilities\Hexahedron.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
