@@ -1962,8 +1962,8 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 1
-  moveWithCustomTransform: {fileID: 0}
+  moveWithTransform: 2
+  moveWithCustomTransform: {fileID: 4223831885204040}
   scalingMode: 1
   randomSeed: -1949346777
   InitialModule:
@@ -2869,14 +2869,14 @@ ParticleSystem:
         serializedVersion: 2
         key0: {r: 0.918, g: 0, b: 0.261, a: 0}
         key1: {r: 0.04411763, g: 0, b: 0.012078916, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0.7254902}
+        key2: {r: 0, g: 0, b: 0, a: 0.1764706}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 49151
+        ctime1: 29491
         ctime2: 0
         ctime3: 0
         ctime4: 0
@@ -2885,7 +2885,7 @@ ParticleSystem:
         ctime7: 0
         atime0: 0
         atime1: 13107
-        atime2: 23130
+        atime2: 22937
         atime3: 65535
         atime4: 65535
         atime5: 0
