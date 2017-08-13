@@ -125,6 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4223831885204040}
   - component: {fileID: 95345248367754224}
+  - component: {fileID: 114046577362910646}
   m_Layer: 0
   m_Name: CarI
   m_TagString: Untagged
@@ -1356,6 +1357,19 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114046577362910646
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1250639038259142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2fbc4c27bfd05247bc6f20257c71fa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotation: -1
+  direction: -1
 --- !u!114 &114177625703572574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1900,7 +1914,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1953433258376052}
   serializedVersion: 5
   lengthInSec: 5
-  simulationSpeed: 1
+  simulationSpeed: 1.5
   looping: 1
   prewarm: 1
   playOnAwake: 1
@@ -1948,17 +1962,17 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 416791921
+  randomSeed: -1949346777
   InitialModule:
     serializedVersion: 3
     enabled: 1
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 4.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -2593,26 +2607,26 @@ ParticleSystem:
     m_BurstCount: 0
     m_Bursts: []
   SizeModule:
-    enabled: 0
+    enabled: 1
     curve:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 0.001
+      scalar: 6
       minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 2
           time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
+          value: 0.12097646
+          inSlope: 0.010836951
+          outSlope: 0.010836951
           tangentMode: 0
         - serializedVersion: 2
           time: 1
-          value: 0.46857116
-          inSlope: 1.1687616
-          outSlope: 1.1687616
+          value: 0.45704314
+          inSlope: -1.5251023
+          outSlope: -1.5251023
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -2854,15 +2868,15 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.918, g: 0, b: 0.261, a: 0}
-        key1: {r: 0, g: 0, b: 0, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 1}
+        key1: {r: 0.04411763, g: 0, b: 0.012078916, a: 1}
+        key2: {r: 0, g: 0, b: 0, a: 0.7254902}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 58982
+        ctime1: 49151
         ctime2: 0
         ctime3: 0
         ctime4: 0
@@ -2871,9 +2885,9 @@ ParticleSystem:
         ctime7: 0
         atime0: 0
         atime1: 13107
-        atime2: 52428
+        atime2: 23130
         atime3: 65535
-        atime4: 0
+        atime4: 65535
         atime5: 0
         atime6: 0
         atime7: 0
