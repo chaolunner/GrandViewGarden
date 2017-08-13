@@ -12,11 +12,24 @@ public class FreeDriving : MonoBehaviour
 	private Tweener rotationTweener;
 	private Tweener directionTweener;
 
-	void Start ()
+	void Awake ()
 	{
 		animator = GetComponent<Animator> ();
+	}
 
+	void OnEnable ()
+	{
 		Go ();
+	}
+
+	void OnDisable ()
+	{
+		Stop ();
+	}
+
+	void Start ()
+	{
+		
 	}
 
 	void Go ()

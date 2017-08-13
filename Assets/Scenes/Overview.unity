@@ -4702,7 +4702,7 @@ GameObject:
   m_Component:
   - component: {fileID: 966430379}
   m_Layer: 0
-  m_Name: CarIPosition
+  m_Name: CarExchangePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
