@@ -58,6 +58,7 @@
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
      <None Include="Assets\Plugins\DOTween\DOTween50.xml" />
      <None Include="Assets\Plugins\DOTween\readme.txt" />
+     <None Include="Assets\Plugins\UniRx\ReadMe.txt" />
      <None Include="Assets\Plugins\DOTween\DOTween43.xml" />
      <None Include="Assets\Shaders\Chameleon.shader" />
  <Reference Include="UnityEditor.Advertisements">
@@ -146,6 +147,8 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{85C60519-496C-7C71-D9EC-6B43E97C18E8}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{C1C7F59D-7D0B-EA0B-F6EC-31E6470A0692}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
