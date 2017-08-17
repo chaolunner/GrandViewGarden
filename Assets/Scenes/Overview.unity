@@ -440,6 +440,58 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!1 &48878912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 1371935814391308, guid: 9960b7fa11eb6d14999814ccda210975,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 48878913}
+  - component: {fileID: 48878915}
+  m_Layer: 5
+  m_Name: PopupLevelPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &48878913
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 48878912}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1842017209}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &48878915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 114099956642387964, guid: 9960b7fa11eb6d14999814ccda210975,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 48878912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsOn:
+    value: 0
+  Origins:
+  - {fileID: 1344758992}
+  - {fileID: 365254230}
+  Targets:
+  - {fileID: 584896425}
+  - {fileID: 966430379}
+  Duration: 0
+  Delay: 0
 --- !u!1 &59532858
 GameObject:
   m_ObjectHideFlags: 0
@@ -964,8 +1016,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 561562671}
-  Target: {fileID: 1344758992}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &109524949
@@ -1012,8 +1066,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 966430379}
-  Target: {fileID: 365254230}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &109524952
@@ -1622,8 +1678,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 584896425}
-  Target: {fileID: 1344758992}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &211363843
@@ -1670,8 +1728,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 966430379}
-  Target: {fileID: 365254230}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &211363846
@@ -4019,7 +4079,7 @@ RectTransform:
   - {fileID: 1344758992}
   - {fileID: 920930542}
   m_Father: {fileID: 1842017209}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6297,7 +6357,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1842017209}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1448990642
 GameObject:
@@ -7333,8 +7393,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 1845594788}
-  Target: {fileID: 1344758992}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &1690850750
@@ -7381,8 +7443,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 966430379}
-  Target: {fileID: 365254230}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &1690850753
@@ -7898,8 +7962,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 2074063489}
-  Target: {fileID: 1344758992}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &1823461360
@@ -7959,8 +8025,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 966430379}
-  Target: {fileID: 365254230}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &1823461364
@@ -8076,6 +8144,7 @@ Transform:
   - {fileID: 1627883263}
   - {fileID: 365254230}
   - {fileID: 966430379}
+  - {fileID: 48878913}
   - {fileID: 802001180}
   - {fileID: 1436787476}
   m_Father: {fileID: 0}
