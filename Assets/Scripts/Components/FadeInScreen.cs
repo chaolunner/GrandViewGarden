@@ -1,7 +1,9 @@
 ﻿using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UniRx.Triggers;
 using UnityEngine;
 using DG.Tweening;
+using UniRx;
 
 public class FadeInScreen : MonoBehaviour
 {
@@ -15,19 +17,9 @@ public class FadeInScreen : MonoBehaviour
 	[Range (0, 1)]
 	public float FadeOutDelay = 0;
 
-	void OnEnable ()
-	{
-		EventTriggerListener.Get (gameObject).PointerClick += OnPointerClick;
-	}
-
-	void OnDisable ()
-	{
-		EventTriggerListener.Get (gameObject).PointerClick -= OnPointerClick;
-	}
-
 	void Start ()
 	{
-
+		gameObject.OnPointerClickAsObservable ().Subscribe (OnPointerClick);
 	}
 
 	void OnPointerClick (PointerEventData eventData)

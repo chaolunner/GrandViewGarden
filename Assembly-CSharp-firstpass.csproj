@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Plugins\ECS\Unity\Extensions\UniRxExtensions.cs" />
      <Compile Include="Assets\Plugins\UniRx\Examples\Sample01_ObservableWWW.cs" />
      <Compile Include="Assets\Plugins\UniRx\Examples\Sample02_ObservableTriggers.cs" />
      <Compile Include="Assets\Plugins\UniRx\Examples\Sample03_GameObjectAsObservable.cs" />

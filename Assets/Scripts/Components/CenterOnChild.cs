@@ -2,7 +2,9 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.UI;
+using UniRx.Triggers;
 using UnityEngine;
+using UniRx;
 
 [RequireComponent (typeof(ScrollRect))]
 public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
@@ -28,23 +30,23 @@ public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 
 		for (int i = 0; i < scrollView.content.childCount; i++) {
 			var child = scrollView.content.GetChild (i);
-			EventTriggerListener.Get (child.gameObject).PointerClick += (eventData => {
+			child.OnPointerClickAsObservable ().Subscribe (eventData => {
 				if (!eventData.dragging) {
 					StopCentering ();
 					centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
 				}
 			});
 
-			EventTriggerListener.Get (child.gameObject).BeginDrag += (eventData => {
+			child.OnBeginDragAsObservable ().Subscribe (eventData => {
 				scrollView.OnBeginDrag (eventData);
 				StopCentering ();
 			});
 
-			EventTriggerListener.Get (child.gameObject).Drag += (eventData => {
+			child.OnDragAsObservable ().Subscribe (eventData => {
 				scrollView.OnDrag (eventData);
 			});
 
-			EventTriggerListener.Get (child.gameObject).EndDrag += (eventData => {
+			child.OnEndDragAsObservable ().Subscribe (eventData => {
 				scrollView.OnEndDrag (eventData);
 				if (Center != null) {
 					StartCentering ();

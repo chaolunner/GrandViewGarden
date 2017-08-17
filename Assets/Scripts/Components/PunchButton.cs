@@ -1,6 +1,8 @@
 ﻿using UnityEngine.EventSystems;
+using UniRx.Triggers;
 using UnityEngine;
 using DG.Tweening;
+using UniRx;
 
 public class PunchButton : MonoBehaviour
 {
@@ -9,19 +11,9 @@ public class PunchButton : MonoBehaviour
 	[Range (0, 1)]
 	public float Duration = 0.2f;
 
-	void OnEnable ()
-	{
-		EventTriggerListener.Get (gameObject).PointerDown += PointerDown;
-	}
-
-	void OnDisable ()
-	{
-		EventTriggerListener.Get (gameObject).PointerDown -= PointerDown;
-	}
-
 	void Start ()
 	{
-		
+		gameObject.OnPointerDownAsObservable ().Subscribe (PointerDown);
 	}
 
 	void PointerDown (PointerEventData eventData)

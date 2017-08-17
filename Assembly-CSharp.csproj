@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
-     <Compile Include="Assets\Scripts\Components\EventTriggerListener.cs" />
      <Compile Include="Assets\Scripts\Components\ExchangePosition.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInScreen.cs" />

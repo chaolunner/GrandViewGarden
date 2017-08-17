@@ -1,6 +1,8 @@
 ﻿using UnityEngine.EventSystems;
+using UniRx.Triggers;
 using UnityEngine;
 using DG.Tweening;
+using UniRx;
 
 public class ExchangePosition : MonoBehaviour
 {
@@ -12,19 +14,9 @@ public class ExchangePosition : MonoBehaviour
 	[Range (0, 2)]
 	public float Delay = 0;
 
-	void OnEnable ()
-	{
-		EventTriggerListener.Get (gameObject).PointerClick += OnPointerClick;
-	}
-
-	void OnDisable ()
-	{
-		EventTriggerListener.Get (gameObject).PointerClick -= OnPointerClick;
-	}
-
 	void Start ()
 	{
-		
+		gameObject.OnPointerClickAsObservable ().Subscribe (OnPointerClick);
 	}
 
 	void OnPointerClick (PointerEventData eventData)
@@ -37,8 +29,8 @@ public class ExchangePosition : MonoBehaviour
 		tweener.SetDelay (Delay);
 		tweener.SetEase (Ease.InBack);
 		tweener.OnComplete (() => {
-			Target.gameObject.SetActive(true);
-			Origin.gameObject.SetActive(false);
+			Target.gameObject.SetActive (true);
+			Origin.gameObject.SetActive (false);
 			Target.DOMove (originPosition, Duration).SetEase (Ease.OutBack);
 		});
 	}
