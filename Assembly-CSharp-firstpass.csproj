@@ -51,7 +51,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Plugins\ECS\Unity\Extensions\UniRxExtensions.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Components\IComponent.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Entities\Entity.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Entities\IEntity.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\ComponentAddedEvent.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\ComponentCreated.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\ComponentDestroyed.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\ComponentRemovedEvent.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\EntityAddedEvent.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\EntityRemovedEvent.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\EventSystem.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\IEventSystem.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\PoolAddedEvent.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Events\PoolRemovedEvent.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Extensions\IDisposableContainer.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Extensions\IGroupExtensions.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Groups\Group.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Groups\GroupFactory.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Groups\IGroup.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Pools\Identifiers\IIdentityGenerator.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Pools\Identifiers\SequentialIdentityGenerator.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Pools\IPool.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Pools\IPoolManager.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Pools\Pool.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Pools\PoolManager.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Systems\ISystem.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Core\Systems\System.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Unity\Extensions\UniRxExtensions.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Unity\MonoBehaviours\ComponentBehaviour.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Unity\MonoBehaviours\EntityBehaviour.cs" />
+     <Compile Include="Assets\Plugins\UniECS\Unity\MonoBehaviours\SystemBehaviour.cs" />
      <Compile Include="Assets\Plugins\UniRx\Examples\Sample01_ObservableWWW.cs" />
      <Compile Include="Assets\Plugins\UniRx\Examples\Sample02_ObservableTriggers.cs" />
      <Compile Include="Assets\Plugins\UniRx\Examples\Sample03_GameObjectAsObservable.cs" />

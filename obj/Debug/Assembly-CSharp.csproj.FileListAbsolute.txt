@@ -118,3 +118,4 @@ H:\Workspace\FateForSpeed\Temp\bin\Debug\DOTween50.xml
 H:\Workspace\FateForSpeed\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 H:\Workspace\FateForSpeed\obj\Debug\Assembly-CSharp.dll
 H:\Workspace\FateForSpeed\obj\Debug\Assembly-CSharp.pdb
+E:\FateForSpeed\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb

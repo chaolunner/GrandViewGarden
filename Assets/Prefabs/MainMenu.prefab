@@ -197,12 +197,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224120161448557146}
+  - component: {fileID: 114875516637417396}
   - component: {fileID: 222408314975324150}
   - component: {fileID: 114484460389376448}
   - component: {fileID: 114835016998474304}
   - component: {fileID: 114225121244967932}
   - component: {fileID: 114554455727624000}
-  - component: {fileID: 114333077185559482}
   m_Layer: 5
   m_Name: SettingButton
   m_TagString: Untagged
@@ -238,8 +238,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 224683683911060280}
-  Target: {fileID: 0}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114099956642387964
@@ -253,8 +255,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 224683683911060280}
-  Target: {fileID: 0}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114225121244967932
@@ -311,23 +315,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 0}
-  Target: {fileID: 0}
-  Duration: 0.5
-  Delay: 0
---- !u!114 &114333077185559482
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1960676287266968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Origin: {fileID: 0}
-  Target: {fileID: 0}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114345240051932342
@@ -341,8 +332,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 0}
-  Target: {fileID: 0}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114372336051052060
@@ -356,8 +349,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 224683683911060280}
-  Target: {fileID: 0}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114402644356970158
@@ -486,8 +481,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 224683683911060280}
-  Target: {fileID: 0}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114658580696639552
@@ -541,8 +538,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 0}
-  Target: {fileID: 0}
+  IsOn:
+    value: 0
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114780483988053146
@@ -652,6 +651,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114875516637417396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1960676287266968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444437bd5ca7c402fa0635ccb55fb1ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PoolName: 
+  RemoveEntityOnDestroy: 1
 --- !u!114 &114907320072313494
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -943,7 +955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -253}
+  m_AnchoredPosition: {x: 0, y: -172}
   m_SizeDelta: {x: 716, y: 193}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224884314003647164
