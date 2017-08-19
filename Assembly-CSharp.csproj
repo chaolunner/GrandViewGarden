@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInScreen.cs" />
      <Compile Include="Assets\Scripts\Components\FreeDriving.cs" />
+     <Compile Include="Assets\Scripts\Components\GoToLevelPanel.cs" />
      <Compile Include="Assets\Scripts\Components\LoadScene.cs" />
      <Compile Include="Assets\Scripts\Components\PunchButton.cs" />
      <Compile Include="Assets\Scripts\Components\RenderParticle.cs" />
@@ -74,6 +75,7 @@
      <Compile Include="Assets\Scripts\Systems\FadeInCenterSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FadeInScreenSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FreeDrivingSystem.cs" />
+     <Compile Include="Assets\Scripts\Systems\GoToLevelPanelSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\LoadSceneSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\PunchButtonSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\RenderParticleSystem.cs" />
@@ -81,6 +83,8 @@
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
      <Compile Include="Assets\Scripts\Utilities\FPSUtility.cs" />
      <Compile Include="Assets\Scripts\Utilities\Hexahedron.cs" />
+     <Compile Include="Assets\Scripts\Utilities\LoadAssetsUtility.cs" />
+     <Compile Include="Assets\Scripts\Utilities\LoadSceneHistory.cs" />
      <Compile Include="Assets\Scripts\Utilities\RangedFloat.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
      <None Include="Assets\Plugins\DOTween\DOTween50.xml" />

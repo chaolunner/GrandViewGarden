@@ -74,13 +74,13 @@ public class FadeInCenterSystem : SystemBehaviour
 						}
 					}
 				}
-			});
+			}).AddTo (this.Disposer).AddTo (fadeInCenter.Disposer);
 
 			fadeInCenter.OnTriggerExit2DAsObservable ().Subscribe (col => {
 				if (col.gameObject.layer == LayerMask.NameToLayer ("UI")) {
 					col.transform.localScale = Vector3.one;
 				}
-			});
-		});
+			}).AddTo (this.Disposer).AddTo (fadeInCenter.Disposer);
+		}).AddTo (this.Disposer);
 	}
 }

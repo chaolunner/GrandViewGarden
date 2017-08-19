@@ -32,7 +32,7 @@ public class PauseContinue : MonoBehaviour {
 
 	void Update(){
 		if (pause) {
-			Time.timeScale = 0;
+//			Time.timeScale = 0;
 		}else {
 			Time.timeScale = 1;
 		}
