@@ -1,90 +1,89 @@
 ﻿using System.Collections.Generic;
 using UnityEngine.EventSystems;
-using System.Collections;
 using UnityEngine.UI;
-using UniRx.Triggers;
 using UnityEngine;
-using UniRx;
+using UniECS;
+
 
 [RequireComponent (typeof(ScrollRect))]
-public class CenterOnChild : MonoBehaviour,IBeginDragHandler,IEndDragHandler
+public class CenterOnChild : ComponentBehaviour//,IBeginDragHandler,IEndDragHandler
 {
 	public Transform Center;
 	[Range (0, 20)]
 	public float CenterSpeed = 5f;
-	private ScrollRect scrollView;
-	private GridLayoutGroup gridLayoutGroup;
-	private List<Coroutine> centerCoroutines = new List<Coroutine> ();
+	public ScrollRect scrollView;
+	public  GridLayoutGroup gridLayoutGroup;
+	public List<Coroutine> centerCoroutines = new List<Coroutine> ();
 
 	public delegate void OnCenterHandler (Transform centerChild);
 
 	public event OnCenterHandler onCenter;
 
-	void Start ()
-	{
-		if (Center == null) {
-			Center = transform;
-		}
-		scrollView = GetComponent<ScrollRect> ();
-		gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
+//	void Start ()
+//	{
+//		if (Center == null) {
+//			Center = transform;
+//		}
+//		scrollView = GetComponent<ScrollRect> ();
+//		gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
+//
+//		for (int i = 0; i < scrollView.content.childCount; i++) {
+//			var child = scrollView.content.GetChild (i);
+//			child.OnPointerClickAsObservable ().Subscribe (eventData => {
+//				if (!eventData.dragging) {
+//					StopCentering ();
+//					centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
+//				}
+//			});
+//
+//			child.OnBeginDragAsObservable ().Subscribe (eventData => {
+//				scrollView.OnBeginDrag (eventData);
+//				StopCentering ();
+//			});
+//
+//			child.OnDragAsObservable ().Subscribe (eventData => {
+//				scrollView.OnDrag (eventData);
+//			});
+//
+//			child.OnEndDragAsObservable ().Subscribe (eventData => {
+//				scrollView.OnEndDrag (eventData);
+//				if (Center != null) {
+//					StartCentering ();
+//				}
+//			});
+//		}
+//	}
 
-		for (int i = 0; i < scrollView.content.childCount; i++) {
-			var child = scrollView.content.GetChild (i);
-			child.OnPointerClickAsObservable ().Subscribe (eventData => {
-				if (!eventData.dragging) {
-					StopCentering ();
-					centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
-				}
-			});
+//	public void OnBeginDrag (PointerEventData eventData)
+//	{
+//		StopCentering ();
+//	}
+//
+//	public void OnEndDrag (PointerEventData eventData)
+//	{
+//		if (Center != null) {
+//			StartCentering ();
+//		}
+//	}
+//
+//	void StartCentering ()
+//	{
+//		var child = FindClosestChild ();
+//		centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
+//	}
 
-			child.OnBeginDragAsObservable ().Subscribe (eventData => {
-				scrollView.OnBeginDrag (eventData);
-				StopCentering ();
-			});
-
-			child.OnDragAsObservable ().Subscribe (eventData => {
-				scrollView.OnDrag (eventData);
-			});
-
-			child.OnEndDragAsObservable ().Subscribe (eventData => {
-				scrollView.OnEndDrag (eventData);
-				if (Center != null) {
-					StartCentering ();
-				}
-			});
-		}
-	}
-
-	public void OnBeginDrag (PointerEventData eventData)
-	{
-		StopCentering ();
-	}
-
-	public void OnEndDrag (PointerEventData eventData)
-	{
-		if (Center != null) {
-			StartCentering ();
-		}
-	}
-
-	void StartCentering ()
-	{
-		var child = FindClosestChild ();
-		centerCoroutines.Add (StartCoroutine (CenterAsync (child)));
-	}
-
-	IEnumerator CenterAsync (Transform target)
-	{
-		var offset = target.position - scrollView.content.position;
-
-		scrollView.velocity = Vector2.zero;
-
-		while (Vector3.Magnitude (scrollView.content.position + offset - Center.position) > 0.01f) {
-			scrollView.content.position = Vector3.Lerp (scrollView.content.position + offset, Center.position, CenterSpeed * Time.deltaTime) - offset;
-			yield return null;	
-		}
-		scrollView.content.position = Center.position - offset;
-	}
+//	IEnumerator CenterAsync (Transform target)
+//	{
+//		var offset = target.position - scrollView.content.position;
+//
+//		scrollView.velocity = Vector2.zero;
+//
+//		while (Vector3.Magnitude (scrollView.content.position + offset - Center.position) > 0.01f) {
+//			scrollView.content.position = Vector3.Lerp (scrollView.content.position + offset, Center.position, CenterSpeed * Time.deltaTime) - offset;
+//			yield return null;	
+//		}
+//		scrollView.content.position = Center.position - offset;
+//	}
 
 	void StopCentering ()
 	{

@@ -3,7 +3,7 @@ using UniRx.Triggers;
 using UnityEngine;
 using UniRx;
 
-public class ChangeScenes : MonoBehaviour
+public class ChangeScene : MonoBehaviour
 {
 	public string sceneName = "Pass";
 

@@ -8,12 +8,13 @@ public class AxleInfo{
 	public WheelCollider rightWheel;
 	public bool motor;
 	public bool steering;
+
 }
 public class CarWheelCollider : MonoBehaviour {
 	public List<AxleInfo> axleInfos;
 	public float maxMotorTorque;
 	public float maxSteeringAngle;
-	[Range (0,9)]
+	[Range (0,10)]
 	public float speed=5;
 
 	public void ApplyLocalPositionToVisuals(WheelCollider collider){
@@ -30,8 +31,13 @@ public class CarWheelCollider : MonoBehaviour {
 		visualWheel.transform.rotation = rotation;
 	}
 
+	void Start(){
+		
+	}
+
 	void FixedUpdate(){		
-		float motor = speed*20 + maxMotorTorque *Input.GetAxis("Vertical");
+
+		float motor = speed*100 + maxMotorTorque *Input.GetAxis("Vertical");
 		float steering = maxSteeringAngle * Input.GetAxis ("Horizontal");
 
 		foreach (AxleInfo axleInfo in axleInfos) {

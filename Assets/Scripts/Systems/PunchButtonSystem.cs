@@ -19,6 +19,7 @@ public class PunchButtonSystem : SystemBehaviour
 			var punchButton = entity.GetComponent<PunchButton> ();
 
 			punchButton.OnPointerDownAsObservable ().Subscribe (_ => {
+				
 				var originScale = punchButton.transform.localScale;
 				var tweener = punchButton.transform.DOScale (punchButton.Scale * Vector2.one, punchButton.Duration);
 				tweener.OnComplete (() => {
