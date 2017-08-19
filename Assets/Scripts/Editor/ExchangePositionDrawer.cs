@@ -24,6 +24,9 @@ public class ExchangePositionDrawer : Editor
 		originList.AddRange (exchangePosition.Origins);
 		targetList.AddRange (exchangePosition.Targets);
 
+		if (GUILayout.Button ("Do Exchange") && exchangePosition.DoExchange.CanExecute.Value) {
+			exchangePosition.DoExchange.Execute ();
+		}
 		var duration = EditorGUILayout.FloatField ("Duration", exchangePosition.Duration);
 		var delay = EditorGUILayout.FloatField ("Delay", exchangePosition.Delay);
 		foldout = EditorGUILayout.Foldout (foldout, "Setting");

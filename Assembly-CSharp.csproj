@@ -62,6 +62,7 @@
      <Compile Include="Assets\Scripts\FollowCamera.cs" />
      <Compile Include="Assets\Scripts\GameRestart.cs" />
      <Compile Include="Assets\Scripts\PauseContinue.cs" />
+     <Compile Include="Assets\Scripts\Systems\ExchangePositionSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\PunchButtonSystem.cs" />
      <Compile Include="Assets\Scripts\Utilities\CombineMeshes.cs" />
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
