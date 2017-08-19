@@ -9,9 +9,9 @@ public class ChangeScene : MonoBehaviour
 
 	void Start ()
 	{
-		Time.timeScale = 1;
-		gameObject.OnPointerClickAsObservable ().Subscribe (_ => {
-			SceneManager.LoadScene (sceneName);
-		});
+//		Time.timeScale = 1;
+//		gameObject.OnPointerClickAsObservable ().Subscribe (_ => {
+//			SceneManager.LoadScene (sceneName);
+//		});
 	}
 }
