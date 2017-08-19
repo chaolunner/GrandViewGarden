@@ -4,6 +4,7 @@ using UniRx;
 
 public class FreeDriving : ComponentBehaviour
 {
+	public ReactiveCommand DoExchange = new ReactiveCommand ();
 	[Range (1, 30)]
 	public float Speed = 10;
 	[Range (0, 10)]

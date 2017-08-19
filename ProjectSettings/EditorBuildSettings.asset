@@ -9,5 +9,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Overview.unity
     guid: a11184a1c9e77fb408a4ed56e3918dea
   - enabled: 1
-    path: Assets/Scenes/Pass.unity
+    path: Assets/Scenes/Gameplay.unity
     guid: 6bbbcdf515627ec4c82927f4dbecd2a6
