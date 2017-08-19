@@ -30,7 +30,8 @@ public class LoadSceneSystem : SystemBehaviour
 					var loadScene = loadSceneEntity.GetComponent<LoadScene> ();
 
 					loadScene.OnPointerClickAsObservable ().Where (_ => loadScene.BindToClick).Select (_ => true)
-						.Merge (EventSystem.OnEvent<ClickCenterEvent> ().Where (e => !string.IsNullOrEmpty (loadScene.SceneName) && loadScene.transform == e.Target).Select (_ => true))
+						.Merge (EventSystem.OnEvent<ClickCenterEvent> ().Where (e => loadScene.transform == e.Target).Select (_ => true))
+						.Where (_ => !string.IsNullOrEmpty (loadScene.SceneName))
 						.Subscribe (unused => {
 						fadeIn.Alpha.Value = 1;
 						Observable.Timer (TimeSpan.FromSeconds (fadeIn.Duration)).Subscribe (_ => {

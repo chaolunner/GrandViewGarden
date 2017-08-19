@@ -44,7 +44,7 @@ public class FadeInSystem : SystemBehaviour
 				ExchangePositionEntities.OnAdd ().Subscribe (exchangePositionEntity => {
 					var exchangePosition = exchangePositionEntity.GetComponent<ExchangePosition> ();
 
-					exchangePosition.OnPointerClickAsObservable ().TakeWhile (_ => fadeIn != null).Subscribe (unused => {
+					exchangePosition.IsOn.DistinctUntilChanged ().Where (b => b == true && exchangePosition.Duration > 0).TakeWhile (_ => fadeIn != null).Subscribe (unused => {
 						fadeIn.Alpha.Value = 1;
 						Observable.Timer (TimeSpan.FromSeconds (0.6f)).Subscribe (_ => {
 							fadeIn.Alpha.Value = 0;
