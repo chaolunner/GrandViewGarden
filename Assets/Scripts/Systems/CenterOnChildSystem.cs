@@ -27,7 +27,7 @@ public class CenterOnChildSystem : SystemBehaviour
 			typeof(ScrollRect),
 		});
 
-		CenterOnChildEntities.OnAdd ().Subscribe (entity => {
+		CenterOnChildEntities.OnAdd ().DelayFrame(1).Subscribe (entity => {
 			var centerOnCenter = entity.GetComponent<CenterOnChild> ();
 			var scrollView = entity.GetComponent<ScrollRect> ();
 			var gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();

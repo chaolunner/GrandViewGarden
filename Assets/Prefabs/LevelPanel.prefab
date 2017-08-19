@@ -3223,7 +3223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CenterSpeed: 5
   Target:
-    value: {fileID: 224752103888168760}
+    value: {fileID: 0}
 --- !u!114 &114866981123666706
 MonoBehaviour:
   m_ObjectHideFlags: 1
