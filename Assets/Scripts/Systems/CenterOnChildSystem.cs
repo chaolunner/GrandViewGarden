@@ -6,11 +6,11 @@ using System;
 using UniECS;
 using UniRx;
 
-public class CenterOnChildEvent
+public class ClickCenterEvent
 {
 	public Transform Target;
 
-	public CenterOnChildEvent (Transform target)
+	public ClickCenterEvent (Transform target)
 	{
 		Target = target;
 	}
@@ -27,7 +27,7 @@ public class CenterOnChildSystem : SystemBehaviour
 			typeof(ScrollRect),
 		});
 
-		CenterOnChildEntities.OnAdd ().DelayFrame(1).Subscribe (entity => {
+		CenterOnChildEntities.OnAdd ().DelayFrame (1).Subscribe (entity => {
 			var centerOnCenter = entity.GetComponent<CenterOnChild> ();
 			var scrollView = entity.GetComponent<ScrollRect> ();
 			var gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
@@ -56,6 +56,9 @@ public class CenterOnChildSystem : SystemBehaviour
 
 				child.OnPointerClickAsObservable ().TakeWhile (_ => child != null).Subscribe (eventData => {
 					if (!eventData.dragging) {
+						if (centerOnCenter.Target.Value == child) {
+							EventSystem.Publish (new ClickCenterEvent (child));
+						}
 						centerOnCenter.Target.Value = child;
 					}
 				}).AddTo (this.Disposer).AddTo (centerOnCenter.Disposer);
@@ -126,8 +129,6 @@ public class CenterOnChildSystem : SystemBehaviour
 		}
 
 		var centerChild = scrollView.content.GetChild (childIndex);
-
-		EventSystem.Publish (new CenterOnChildEvent (centerChild));
 
 		return centerChild;
 	}
