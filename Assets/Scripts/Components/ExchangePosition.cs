@@ -4,7 +4,7 @@ using UniRx;
 
 public class ExchangePosition : ComponentBehaviour
 {
-	public ReactiveCommand DoExchange = new ReactiveCommand ();
+	public BoolReactiveProperty IsOn;
 	public Transform[] Origins;
 	public Transform[] Targets;
 	[Range (0, 1)]
