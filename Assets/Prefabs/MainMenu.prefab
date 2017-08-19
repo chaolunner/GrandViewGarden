@@ -238,8 +238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -255,8 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -315,8 +311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -332,12 +326,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a0ecce8a920364ca23b9ab4b2f676e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   Mask: {fileID: 0}
   Alpha: 1
   Duration: 0.3
   FadeInDelay: 0
   FadeOutDelay: 0.3
 --- !u!114 &114417601195845190
+=======
+  Origins: []
+  Targets: []
+  Duration: 0.5
+  Delay: 0
+--- !u!114 &114372336051052060
+>>>>>>> a0fc0869ea37b8da9baa765e33f8a2ea19643518
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -348,9 +350,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444437bd5ca7c402fa0635ccb55fb1ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   PoolName: 
   RemoveEntityOnDestroy: 1
 --- !u!114 &114436071576377122
+=======
+  Origins: []
+  Targets: []
+  Duration: 0.5
+  Delay: 0
+--- !u!114 &114402644356970158
+>>>>>>> a0fc0869ea37b8da9baa765e33f8a2ea19643518
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -486,8 +496,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -532,6 +540,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Scale: 1.2
   Duration: 0.2
+<<<<<<< HEAD
+=======
+--- !u!114 &114709513132166150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1196843412320144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Origins: []
+  Targets: []
+  Duration: 0.5
+  Delay: 0
+>>>>>>> a0fc0869ea37b8da9baa765e33f8a2ea19643518
 --- !u!114 &114780483988053146
 MonoBehaviour:
   m_ObjectHideFlags: 1

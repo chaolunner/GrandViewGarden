@@ -1873,7 +1873,26 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+<<<<<<< HEAD
 --- !u!114 &114193582910429122
+=======
+--- !u!114 &114288259173498310
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1151551940594012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Origins: []
+  Targets: []
+  Duration: 0.5
+  Delay: 0
+--- !u!114 &114305695073035926
+>>>>>>> a0fc0869ea37b8da9baa765e33f8a2ea19643518
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2188,6 +2207,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+<<<<<<< HEAD
   m_Sprite: {fileID: 21300000, guid: ec09bb49a5fa04e429ac11519a156959, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
@@ -2197,6 +2217,40 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
 --- !u!114 &114357054408873554
+=======
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 8f1041ed9553ea74d8b50d94e5e5982b, type: 3}
+    m_FontSize: 56
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 140
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: '1-3
+
+    pass3'
+--- !u!114 &114471161738365768
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1151551940594012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Origins: []
+  Targets: []
+  Duration: 0.5
+  Delay: 0
+--- !u!114 &114483427176519664
+>>>>>>> a0fc0869ea37b8da9baa765e33f8a2ea19643518
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2864,6 +2918,7 @@ MonoBehaviour:
   m_Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   m_Content: {fileID: 224943347896718504}
   m_Horizontal: 1
   m_Vertical: 0
@@ -2885,6 +2940,10 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114647178412341362
+=======
+  sceneName: Pass
+--- !u!114 &114770956837858050
+>>>>>>> a0fc0869ea37b8da9baa765e33f8a2ea19643518
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

@@ -245,8 +245,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4791627756892644}
+  - component: {fileID: 114619302980720614}
   - component: {fileID: 198986571379288812}
   - component: {fileID: 199758460745150920}
+  - component: {fileID: 114679455863002572}
   m_Layer: 0
   m_Name: TailGas
   m_TagString: Untagged
@@ -381,8 +383,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4289277361756678}
+  - component: {fileID: 114199914384913634}
   - component: {fileID: 198854011387720872}
   - component: {fileID: 199896378072656502}
+  - component: {fileID: 114732083264451996}
   m_Layer: 0
   m_Name: TailGasShadow
   m_TagString: Untagged
@@ -1430,6 +1434,19 @@ MonoBehaviour:
   - {x: -0.1, y: -0.17677668, z: 0.17677674}
   - {x: -0.1, y: -0.24999999, z: -0.000000014901161}
   - {x: -0.1, y: -0.1767767, z: -0.17677668}
+--- !u!114 &114199914384913634
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953433258376052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444437bd5ca7c402fa0635ccb55fb1ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PoolName: 
+  RemoveEntityOnDestroy: 1
 --- !u!114 &114204529016926076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1690,6 +1707,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 10
   Delay: 1
+--- !u!114 &114619302980720614
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1454852031187608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444437bd5ca7c402fa0635ccb55fb1ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PoolName: 
+  RemoveEntityOnDestroy: 1
 --- !u!114 &114625726233844766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1762,6 +1792,32 @@ MonoBehaviour:
   - {x: 0.45, y: 0.36, z: 0.22}
   - {x: 0.45, y: 0.16, z: -0.48}
   - {x: -0.45, y: 0.16, z: -0.48}
+--- !u!114 &114679455863002572
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1454852031187608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e613139444644644b3dea22e1cc4d18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target:
+    value: {fileID: 23060851537473666}
+--- !u!114 &114732083264451996
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953433258376052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e613139444644644b3dea22e1cc4d18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target:
+    value: {fileID: 23060851537473666}
 --- !u!114 &114816082496479894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2066,7 +2122,7 @@ ParticleSystem:
   moveWithTransform: 2
   moveWithCustomTransform: {fileID: 4223831885204040}
   scalingMode: 1
-  randomSeed: -755048144
+  randomSeed: 1648673953
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -5328,7 +5384,7 @@ ParticleSystem:
   moveWithTransform: 2
   moveWithCustomTransform: {fileID: 4223831885204040}
   scalingMode: 1
-  randomSeed: -198908469
+  randomSeed: 1704329612
   InitialModule:
     serializedVersion: 3
     enabled: 1
