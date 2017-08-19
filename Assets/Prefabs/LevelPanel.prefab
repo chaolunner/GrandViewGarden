@@ -849,7 +849,6 @@ GameObject:
   - component: {fileID: 222722604709398504}
   - component: {fileID: 114921977726602150}
   - component: {fileID: 114195265272491030}
-  - component: {fileID: 114901339206987902}
   - component: {fileID: 114326282542734160}
   m_Layer: 5
   m_Name: BackButton
@@ -1472,6 +1471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BindToClick: 0
   SceneName: Gameplay
 --- !u!114 &114034186497015174
 MonoBehaviour:
@@ -2200,6 +2200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BindToClick: 0
   SceneName: Gameplay
 --- !u!114 &114370993445252248
 MonoBehaviour:
@@ -2632,6 +2633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BindToClick: 0
   SceneName: Gameplay
 --- !u!114 &114578947821855876
 MonoBehaviour:
@@ -3050,6 +3052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BindToClick: 0
   SceneName: Gameplay
 --- !u!114 &114699597631094690
 MonoBehaviour:
@@ -3089,6 +3092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BindToClick: 0
   SceneName: Gameplay
 --- !u!114 &114733302853816292
 MonoBehaviour:
@@ -3269,6 +3273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BindToClick: 0
   SceneName: Gameplay
 --- !u!114 &114843957205185834
 MonoBehaviour:
@@ -3376,6 +3381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BindToClick: 0
   SceneName: Gameplay
 --- !u!114 &114900790190840144
 MonoBehaviour:
@@ -3404,22 +3410,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114901339206987902
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1555153506890618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a0ecce8a920364ca23b9ab4b2f676e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Mask: {fileID: 0}
-  Alpha: 1
-  Duration: 0.3
-  FadeInDelay: 0
-  FadeOutDelay: 0.3
 --- !u!114 &114910433881884486
 MonoBehaviour:
   m_ObjectHideFlags: 1

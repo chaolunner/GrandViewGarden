@@ -58,13 +58,15 @@
      <Compile Include="Assets\Scripts\Classes\TransformReactiveProperty.cs" />
      <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
      <Compile Include="Assets\Scripts\Components\ExchangePosition.cs" />
+     <Compile Include="Assets\Scripts\Components\FadeIn.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />
-     <Compile Include="Assets\Scripts\Components\FadeInScreen.cs" />
+     <Compile Include="Assets\Scripts\Components\FadeInTag.cs" />
      <Compile Include="Assets\Scripts\Components\FreeDriving.cs" />
      <Compile Include="Assets\Scripts\Components\GoToLevelPanel.cs" />
      <Compile Include="Assets\Scripts\Components\LoadScene.cs" />
      <Compile Include="Assets\Scripts\Components\PunchButton.cs" />
      <Compile Include="Assets\Scripts\Components\RenderParticle.cs" />
+     <Compile Include="Assets\Scripts\Extensions\AsyncOperationExtensions.cs" />
      <Compile Include="Assets\Scripts\Extensions\RendererExtensions.cs" />
      <Compile Include="Assets\Scripts\FollowCamera.cs" />
      <Compile Include="Assets\Scripts\GameRestart.cs" />
@@ -73,7 +75,7 @@
      <Compile Include="Assets\Scripts\Systems\CenterOnChildSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\ExchangePositionSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FadeInCenterSystem.cs" />
-     <Compile Include="Assets\Scripts\Systems\FadeInScreenSystem.cs" />
+     <Compile Include="Assets\Scripts\Systems\FadeInSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FreeDrivingSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\GoToLevelPanelSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\LoadSceneSystem.cs" />
