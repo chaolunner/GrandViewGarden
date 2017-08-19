@@ -21,9 +21,8 @@ public class RenderParticleSystem : SystemBehaviour
 
 			renderParticle.Target.DistinctUntilChanged ().Subscribe (target => {
 				#if UNITY_EDITOR
-				var renderer = target.GetComponent<Renderer> ();
 				Observable.EveryUpdate ().TakeWhile (_ => target == renderParticle.Target.Value).Subscribe (_ => {
-					particleSystemRenderer.enabled = renderer.IsVisible ();
+					particleSystemRenderer.enabled = target.IsVisible ();
 				}).AddTo (this.Disposer).AddTo (renderParticle.Disposer);
 				#else
 				target.OnBecameVisibleAsObservable ().TakeWhile (_ => target == renderParticle.Target.Value).Subscribe (_ => {

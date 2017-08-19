@@ -1804,7 +1804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target:
-    value: {fileID: 4411162243120818}
+    value: {fileID: 23060851537473666}
 --- !u!114 &114732083264451996
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1817,7 +1817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target:
-    value: {fileID: 4411162243120818}
+    value: {fileID: 23060851537473666}
 --- !u!114 &114816082496479894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2122,7 +2122,7 @@ ParticleSystem:
   moveWithTransform: 2
   moveWithCustomTransform: {fileID: 4223831885204040}
   scalingMode: 1
-  randomSeed: -1582533381
+  randomSeed: 1648673953
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -5384,7 +5384,7 @@ ParticleSystem:
   moveWithTransform: 2
   moveWithCustomTransform: {fileID: 4223831885204040}
   scalingMode: 1
-  randomSeed: -5890333
+  randomSeed: 1704329612
   InitialModule:
     serializedVersion: 3
     enabled: 1

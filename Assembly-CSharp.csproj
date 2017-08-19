@@ -53,6 +53,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\CarWheelCollider.cs" />
      <Compile Include="Assets\Scripts\ChangeScenes.cs" />
+     <Compile Include="Assets\Scripts\Classes\GameObjectReactiveProperty.cs" />
+     <Compile Include="Assets\Scripts\Classes\RendererReactiveProperty.cs" />
      <Compile Include="Assets\Scripts\Classes\TransformReactiveProperty.cs" />
      <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
      <Compile Include="Assets\Scripts\Components\ExchangePosition.cs" />
