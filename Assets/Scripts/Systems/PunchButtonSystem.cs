@@ -17,11 +17,12 @@ public class PunchButtonSystem : SystemBehaviour
 
 		PunchButtonEntities.OnAdd ().Subscribe (entity => {
 			var punchButton = entity.GetComponent<PunchButton> ();
+			var originScale = punchButton.transform.localScale;
+			Tweener tweener = null;
 
 			punchButton.OnPointerDownAsObservable ().Subscribe (_ => {
-				
-				var originScale = punchButton.transform.localScale;
-				var tweener = punchButton.transform.DOScale (punchButton.Scale * Vector2.one, punchButton.Duration);
+				tweener.Kill ();
+				tweener = punchButton.transform.DOScale (punchButton.Scale * Vector2.one, punchButton.Duration);
 				tweener.OnComplete (() => {
 					punchButton.transform.DOScale (originScale, punchButton.Duration);
 				});
