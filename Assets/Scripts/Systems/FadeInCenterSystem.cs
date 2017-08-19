@@ -1,10 +1,9 @@
-﻿using UniRx.Triggers;
-using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine.UI;
+using UniRx.Triggers;
 using UnityEngine;
-using UniECS;
 using System;
+using UniECS;
 using UniRx;
 
 public class FadeInCenterSystem : SystemBehaviour
@@ -14,33 +13,36 @@ public class FadeInCenterSystem : SystemBehaviour
 		base.Awake ();
 
 		var FadeInCenterEntities = GroupFactory.Create (new Type[] {
-			typeof(FadeInCenter)
+			typeof(RectTransform),
+			typeof(FadeInCenter),
+			typeof(ScrollRect),
 		});
-		FadeInCenterEntities.OnAdd ().Subscribe (entity => {	
-			
+
+		FadeInCenterEntities.OnAdd ().Subscribe (entity => {
 			var fadeInCenter = entity.GetComponent<FadeInCenter> ();
+			var scrollView = entity.GetComponent<ScrollRect> ();
+			var items = new Dictionary<Transform, CanvasGroup> ();
 
-			if (fadeInCenter.Center == null) {
-				fadeInCenter.Center = transform as RectTransform;
-			}
-			fadeInCenter.scrollView = GetComponent<ScrollRect> ();
-			fadeInCenter.gridLayoutGroup = fadeInCenter.scrollView.content.GetComponent<GridLayoutGroup> ();
+			var center = scrollView.viewport;
+			var gridLayoutGroup = scrollView.content.GetComponent<GridLayoutGroup> ();
+			var centerCollider = scrollView.gameObject.AddComponent<BoxCollider2D> ();
 
-			fadeInCenter.centerCollider = gameObject.AddComponent<BoxCollider2D> ();
-			fadeInCenter.centerCollider.size = fadeInCenter.gridLayoutGroup.cellSize;
-			fadeInCenter.centerCollider.isTrigger = true;
+			centerCollider.size = gridLayoutGroup.cellSize;
+			centerCollider.isTrigger = true;
 
-			for (int i = 0; i < fadeInCenter.scrollView.content.childCount; i++) {
-				var child = fadeInCenter.scrollView.content.GetChild (i) as RectTransform;
+			for (int i = 0; i < scrollView.content.childCount; i++) {
+				var child = scrollView.content.GetChild (i) as RectTransform;
 				var col = child.gameObject.AddComponent<BoxCollider2D> ();
 				var rig = child.gameObject.AddComponent<Rigidbody2D> ();
 				var canvasGroup = child.GetComponentInChildren<CanvasGroup> ();
+
 				if (canvasGroup != null) {
-					fadeInCenter.components.Add (child, canvasGroup);
+					items.Add (child, canvasGroup);
 					canvasGroup.alpha = 0;
 				}
+
 				rig.sleepMode = RigidbodySleepMode2D.NeverSleep;
-				col.size = fadeInCenter.gridLayoutGroup.cellSize;
+				col.size = gridLayoutGroup.cellSize;
 				col.isTrigger = true;
 				rig.gravityScale = 0;
 			}
@@ -48,24 +50,27 @@ public class FadeInCenterSystem : SystemBehaviour
 			fadeInCenter.OnTriggerStay2DAsObservable ().Subscribe (col => {
 				if (col.gameObject.layer == LayerMask.NameToLayer ("UI")) {
 					var k = 1f;
-					var distance = Vector3.Distance (col.transform.position, fadeInCenter.Center.position);
-					if (fadeInCenter.scrollView.horizontal) {
-						k -= Mathf.Clamp01 (distance / fadeInCenter.centerCollider.bounds.size.x);
+					var distance = Vector3.Distance (col.transform.position, center.position);
+
+					if (scrollView.horizontal) {
+						k -= Mathf.Clamp01 (distance / centerCollider.bounds.size.x);
 					} else {
-						k -= Mathf.Clamp01 (distance / fadeInCenter.centerCollider.bounds.size.y);
+						k -= Mathf.Clamp01 (distance / centerCollider.bounds.size.y);
 					}
+
 					col.transform.localScale = (1 + k * (fadeInCenter.Scale - 1)) * Vector3.one;
 
-					if (!fadeInCenter.components.ContainsKey (col.transform)) {
+					if (!items.ContainsKey (col.transform)) {
 						var canvasGroup = col.GetComponentInChildren<CanvasGroup> ();
 						if (canvasGroup != null) {
-							fadeInCenter.components.Add (col.transform, canvasGroup);
+							items.Add (col.transform, canvasGroup);
 						}
 					}
-					if (fadeInCenter.components.ContainsKey (col.transform)) {
-						var canvasGroup = fadeInCenter.components [col.transform];
+
+					if (items.ContainsKey (col.transform)) {
+						var canvasGroup = items [col.transform];
 						if (canvasGroup != null) {
-							canvasGroup.alpha = k;
+							canvasGroup.alpha = Mathf.Clamp (k, fadeInCenter.AlphaRange.min, fadeInCenter.AlphaRange.max);
 						}
 					}
 				}
@@ -76,7 +81,6 @@ public class FadeInCenterSystem : SystemBehaviour
 					col.transform.localScale = Vector3.one;
 				}
 			});
-
 		});
 	}
 }

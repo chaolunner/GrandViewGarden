@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Attributes\MinMaxRangeAttribute.cs" />
      <Compile Include="Assets\Scripts\CarWheelCollider.cs" />
      <Compile Include="Assets\Scripts\ChangeScene.cs" />
      <Compile Include="Assets\Scripts\Classes\GameObjectReactiveProperty.cs" />
@@ -79,6 +80,7 @@
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
      <Compile Include="Assets\Scripts\Utilities\FPSUtility.cs" />
      <Compile Include="Assets\Scripts\Utilities\Hexahedron.cs" />
+     <Compile Include="Assets\Scripts\Utilities\RangedFloat.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
      <None Include="Assets\Plugins\DOTween\DOTween50.xml" />
      <None Include="Assets\Plugins\DOTween\readme.txt" />
