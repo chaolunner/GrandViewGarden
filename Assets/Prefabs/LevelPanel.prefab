@@ -1761,8 +1761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 0}
-  Target: {fileID: 0}
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114305695073035926
@@ -2112,8 +2112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Origin: {fileID: 224073744528034470}
-  Target: {fileID: 0}
+  Origins: []
+  Targets: []
   Duration: 0.5
   Delay: 0
 --- !u!114 &114483427176519664
@@ -2761,7 +2761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3fdf1e3dcbe7394e8a27aed5a1a33be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene: 1
+  sceneName: Pass
 --- !u!114 &114770956837858050
 MonoBehaviour:
   m_ObjectHideFlags: 1
