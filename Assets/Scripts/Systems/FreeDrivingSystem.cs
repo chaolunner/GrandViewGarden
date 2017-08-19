@@ -22,7 +22,7 @@ public class FreeDrivingSystem : SystemBehaviour
 			Tweener directionTweener = null;
 			Tweener rotationTweener = null;
 
-			freeDriving.DoDriving.Subscribe (_ => {
+			freeDriving.PoseIndex.DistinctUntilChanged ().Subscribe (index => {
 				if (rotationTweener != null) {
 					rotationTweener.Kill ();
 				}
@@ -30,7 +30,6 @@ public class FreeDrivingSystem : SystemBehaviour
 					directionTweener.Kill ();
 				}
 
-				var index = UnityEngine.Random.Range (0, freeDriving.options.Length);
 				var selected = freeDriving.options [index];
 				var rotation = animator.GetFloat ("Rotation");
 				var direction = animator.GetFloat ("Direction");
@@ -40,9 +39,7 @@ public class FreeDrivingSystem : SystemBehaviour
 				rotationTweener.SetEase (Ease.InOutQuad);
 				rotationTweener.SetDelay (freeDriving.Delay);
 				rotationTweener.OnComplete (() => {
-					if (freeDriving.DoDriving.CanExecute.Value) {
-						freeDriving.DoDriving.Execute ();
-					}
+					freeDriving.PoseIndex.Value = UnityEngine.Random.Range (0, freeDriving.options.Length);
 				});
 
 				if (selected != rotation) {
@@ -56,10 +53,6 @@ public class FreeDrivingSystem : SystemBehaviour
 					});
 				}
 			}).AddTo (this.Disposer).AddTo (freeDriving.Disposer);
-
-			if (freeDriving.DoDriving.CanExecute.Value) {
-				freeDriving.DoDriving.Execute ();
-			}
 		}).AddTo (this.Disposer);
 	}
 }

@@ -1708,6 +1708,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 10
   Delay: 1
+  PoseIndex:
+    value: 0
 --- !u!114 &114619302980720614
 MonoBehaviour:
   m_ObjectHideFlags: 1
