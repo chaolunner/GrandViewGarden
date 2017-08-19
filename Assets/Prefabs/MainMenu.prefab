@@ -238,8 +238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -255,8 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -315,8 +311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -332,8 +326,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -349,8 +341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -481,8 +471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
@@ -538,8 +526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
   Origins: []
   Targets: []
   Duration: 0.5
