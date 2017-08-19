@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\Editor\ChameleonShaderGUI.cs" />
      <Compile Include="Assets\Scripts\Editor\CylinderDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\ExchangePositionDrawer.cs" />
+     <Compile Include="Assets\Scripts\Editor\ExtendInspectorDisplayDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\FPSUtilityDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\HexahedronDrawer.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
