@@ -438,7 +438,7 @@ MonoBehaviour:
   - {fileID: 584896425}
   - {fileID: 966430379}
   Duration: 0
-  Delay: 0
+  Delay: 0.02
 --- !u!114 &48878916
 MonoBehaviour:
   m_ObjectHideFlags: 0
