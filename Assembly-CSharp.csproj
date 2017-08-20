@@ -44,10 +44,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>E:/Unity3D/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>E:/Unity3D/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\Components\LoadScene.cs" />
      <Compile Include="Assets\Scripts\Components\PunchButton.cs" />
      <Compile Include="Assets\Scripts\Components\RenderParticle.cs" />
+     <Compile Include="Assets\Scripts\Components\TimingTime.cs" />
      <Compile Include="Assets\Scripts\Extensions\AsyncOperationExtensions.cs" />
      <Compile Include="Assets\Scripts\Extensions\RendererExtensions.cs" />
      <Compile Include="Assets\Scripts\FollowCamera.cs" />
@@ -83,6 +84,7 @@
      <Compile Include="Assets\Scripts\Systems\LoadSceneSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\PunchButtonSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\RenderParticleSystem.cs" />
+     <Compile Include="Assets\Scripts\Systems\TimingTimeSystem.cs" />
      <Compile Include="Assets\Scripts\Utilities\CombineMeshes.cs" />
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
      <Compile Include="Assets\Scripts\Utilities\FPSUtility.cs" />
@@ -97,37 +99,37 @@
      <None Include="Assets\Plugins\DOTween\DOTween43.xml" />
      <None Include="Assets\Shaders\Chameleon.shader" />
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ <HintPath>E:/Unity3D/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ <HintPath>E:/Unity3D/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.TestRunner">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll</HintPath>
+ <HintPath>E:/Unity3D/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
+ <HintPath>E:/Unity3D/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Timeline">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll</HintPath>
+ <HintPath>E:/Unity3D/Unity/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ <HintPath>E:/Unity3D/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+ <HintPath>E:/Unity3D/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
  </Reference>
  <Reference Include="DOTween">
- <HintPath>E:/FateForSpeed/Assets/Plugins/DOTween/DOTween.dll</HintPath>
+ <HintPath>F:/Workspace/FateForSpeed/Assets/Plugins/DOTween/DOTween.dll</HintPath>
  </Reference>
  <Reference Include="DOTween43">
- <HintPath>E:/FateForSpeed/Assets/Plugins/DOTween/DOTween43.dll</HintPath>
+ <HintPath>F:/Workspace/FateForSpeed/Assets/Plugins/DOTween/DOTween43.dll</HintPath>
  </Reference>
  <Reference Include="DOTween46">
- <HintPath>E:/FateForSpeed/Assets/Plugins/DOTween/DOTween46.dll</HintPath>
+ <HintPath>F:/Workspace/FateForSpeed/Assets/Plugins/DOTween/DOTween46.dll</HintPath>
  </Reference>
  <Reference Include="DOTween50">
- <HintPath>E:/FateForSpeed/Assets/Plugins/DOTween/DOTween50.dll</HintPath>
+ <HintPath>F:/Workspace/FateForSpeed/Assets/Plugins/DOTween/DOTween50.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
