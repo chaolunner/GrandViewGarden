@@ -22,7 +22,9 @@ public class FreeDrivingSystem : SystemBehaviour
 			Tweener directionTweener = null;
 			Tweener rotationTweener = null;
 
-			freeDriving.PoseIndex.DistinctUntilChanged ().Subscribe (index => {
+			freeDriving.PoseIndex.DistinctUntilChanged ()
+				.Where (index => index >= 0)
+				.Subscribe (index => {
 				if (rotationTweener != null) {
 					rotationTweener.Kill ();
 				}
@@ -39,6 +41,7 @@ public class FreeDrivingSystem : SystemBehaviour
 				rotationTweener.SetEase (Ease.InOutQuad);
 				rotationTweener.SetDelay (freeDriving.Delay);
 				rotationTweener.OnComplete (() => {
+					freeDriving.PoseIndex.Value = -1;
 					freeDriving.PoseIndex.Value = UnityEngine.Random.Range (0, freeDriving.options.Length);
 				});
 

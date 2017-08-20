@@ -14,6 +14,8 @@ public class FreeDrivingDrawer : Editor
 
 	public override void OnInspectorGUI ()
 	{
+		DrawDefaultInspector ();
+
 		EditorGUI.BeginChangeCheck ();
 		var index = EditorGUILayout.Popup ("Pose Index", freeDriving.PoseIndex.Value, freeDriving.options.Select (x => x.ToString ()).ToArray ());
 		if (EditorGUI.EndChangeCheck ()) {
