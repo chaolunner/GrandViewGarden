@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Editor\ChameleonShaderGUI.cs" />
+     <Compile Include="Assets\Scripts\Editor\ColorComponentDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\CylinderDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\ExchangePositionDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\ExtendInspectorDisplayDrawer.cs" />

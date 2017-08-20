@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 114745160112650208}
   - component: {fileID: 95985141757805190}
   - component: {fileID: 114609454171245268}
+  - component: {fileID: 114792695925107534}
   m_Layer: 0
   m_Name: OverviewCar
   m_TagString: Untagged
@@ -937,7 +938,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 29ac18e2cefef7842a54a548a22872e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1193,7 +1194,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 29ac18e2cefef7842a54a548a22872e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1834,6 +1835,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolName: 
   RemoveEntityOnDestroy: 1
+--- !u!114 &114792695925107534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1250639038259142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27939e8a04a3ba49b86bb7e31cd4f97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IncludeChild: 1
+  Color:
+    value: {r: 0.918, g: 0, b: 0.261, a: 1}
 --- !u!114 &114816082496479894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5400,7 +5415,7 @@ ParticleSystem:
   moveWithTransform: 2
   moveWithCustomTransform: {fileID: 4223831885204040}
   scalingMode: 1
-  randomSeed: 1704329612
+  randomSeed: -557056637
   InitialModule:
     serializedVersion: 3
     enabled: 1

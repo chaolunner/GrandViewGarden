@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\Classes\RendererReactiveProperty.cs" />
      <Compile Include="Assets\Scripts\Classes\TransformReactiveProperty.cs" />
      <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
+     <Compile Include="Assets\Scripts\Components\ColorComponent.cs" />
      <Compile Include="Assets\Scripts\Components\ExchangePosition.cs" />
      <Compile Include="Assets\Scripts\Components\FadeIn.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />
@@ -73,6 +74,7 @@
      <Compile Include="Assets\Scripts\GoBackView.cs" />
      <Compile Include="Assets\Scripts\PauseContinue.cs" />
      <Compile Include="Assets\Scripts\Systems\CenterOnChildSystem.cs" />
+     <Compile Include="Assets\Scripts\Systems\ColorSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\ExchangePositionSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FadeInCenterSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FadeInSystem.cs" />

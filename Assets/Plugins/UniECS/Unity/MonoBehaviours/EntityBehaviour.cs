@@ -54,8 +54,9 @@ namespace UniECS
 				} else {
 					if (mb.GetType () != typeof(Transform)) {
 						if (mb.GetType () == typeof(EntityBehaviour)) {
-							if (!Entity.HasComponent<EntityBehaviour> ())
+							if (!Entity.HasComponent<EntityBehaviour> ()) {
 								Entity.AddComponent (mb);
+							}
 						} else {
 							Entity.AddComponent (mb);
 						}
