@@ -11484,7 +11484,7 @@ GameObject:
   - component: {fileID: 1809013239}
   - component: {fileID: 1809013240}
   m_Layer: 0
-  m_Name: TimingTimeSystem
+  m_Name: TimingSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11511,7 +11511,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1809013238}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf52b4d92f42f0944a85ee1d9932a67f, type: 3}
+  m_Script: {fileID: 11500000, guid: 85bb747cf05c6b746b4dd1e02960ad1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1818336256
@@ -11561,15 +11561,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1818336256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3874b4c135d2c834aab2c5b8be50ec9f, type: 3}
+  m_Script: {fileID: 11500000, guid: ece40b05f17ea2b43ae0f1f5f842f383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hour: 0
-  minute: 0
-  second: 0
-  millisecond: 0
-  timeSpeed: 0
-  text_timeSpeed: {fileID: 1818336259}
+  Hour: 0
+  Minute: 0
+  Second: 0
+  MilliSecond: 0
+  TimeSpeed: 0
 --- !u!114 &1818336259
 MonoBehaviour:
   m_ObjectHideFlags: 0
