@@ -13,8 +13,5 @@ public class GoBackView : MonoBehaviour
 		gameObject.OnPointerClickAsObservable ().Subscribe (_ => {
 			SceneManager.LoadScene (sceneName);
 		});
-//		GameObject view = GameObject.Find("Level");        
-//		GameObject car = view.transform.Find("OverviewCar").gameObject;       
-//		car.SetActive(true);
 	}
 }
