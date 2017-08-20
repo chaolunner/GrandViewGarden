@@ -1846,7 +1846,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27939e8a04a3ba49b86bb7e31cd4f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IncludeChild: 1
+  IncludeChild:
+    value: 1
   Color:
     value: {r: 0.918, g: 0, b: 0.261, a: 1}
 --- !u!114 &114816082496479894
