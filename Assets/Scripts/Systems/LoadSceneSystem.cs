@@ -5,6 +5,14 @@ using UniECS;
 using System;
 using UniRx;
 
+public class LoadSceneStart
+{
+}
+
+public class LoadSceneCompleted
+{
+}
+
 public class LoadSceneSystem : SystemBehaviour
 {
 	public override void Awake ()
@@ -34,9 +42,13 @@ public class LoadSceneSystem : SystemBehaviour
 						.Where (_ => !string.IsNullOrEmpty (loadScene.SceneName))
 						.Subscribe (unused => {
 						fadeIn.Alpha.Value = 1;
-						Observable.Timer (TimeSpan.FromSeconds (fadeIn.Duration)).Subscribe (_ => {
+						EventSystem.Publish (new LoadSceneStart ());
+						Observable.Timer (TimeSpan.FromSeconds (fadeIn.Duration)).Subscribe (_unused => {
 							SceneManager.LoadSceneAsync (loadScene.SceneName).ToObservable ().DoOnCompleted (() => {
 								fadeIn.Alpha.Value = 0;
+								Observable.Timer (TimeSpan.FromSeconds (fadeIn.Duration)).Subscribe (_ => {
+									EventSystem.Publish (new LoadSceneCompleted ());
+								}).AddTo (this.Disposer).AddTo (loadScene.Disposer).AddTo (fadeIn.Disposer);
 							}).Subscribe ().AddTo (this.Disposer).AddTo (loadScene.Disposer).AddTo (fadeIn.Disposer);
 						}).AddTo (this.Disposer).AddTo (loadScene.Disposer).AddTo (fadeIn.Disposer);
 					}).AddTo (this.Disposer).AddTo (loadScene.Disposer).AddTo (fadeIn.Disposer);
