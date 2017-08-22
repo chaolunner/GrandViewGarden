@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Components\FadeIn.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInTag.cs" />
+     <Compile Include="Assets\Scripts\Components\FollowCamera.cs" />
      <Compile Include="Assets\Scripts\Components\FreeDriving.cs" />
      <Compile Include="Assets\Scripts\Components\GoToLevelPanel.cs" />
      <Compile Include="Assets\Scripts\Components\LoadScene.cs" />
@@ -75,6 +76,7 @@
      <Compile Include="Assets\Scripts\Systems\ExchangePositionSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FadeInCenterSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FadeInSystem.cs" />
+     <Compile Include="Assets\Scripts\Systems\FollowCameraSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\FreeDrivingSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\GoToLevelPanelSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\LoadSceneSystem.cs" />
@@ -84,10 +86,8 @@
      <Compile Include="Assets\Scripts\Systems\TimingSystem.cs" />
      <Compile Include="Assets\Scripts\TODO\ChangeAlpha.cs" />
      <Compile Include="Assets\Scripts\TODO\Components\CarWheelCollider.cs" />
-     <Compile Include="Assets\Scripts\TODO\Components\FollowCamera.cs" />
      <Compile Include="Assets\Scripts\TODO\Speed.cs" />
      <Compile Include="Assets\Scripts\TODO\Systems\CarWheelColliderSystm.cs" />
-     <Compile Include="Assets\Scripts\TODO\Systems\FollowCameraSystem.cs" />
      <Compile Include="Assets\Scripts\Utilities\CombineMeshes.cs" />
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
      <Compile Include="Assets\Scripts\Utilities\FPSUtility.cs" />
