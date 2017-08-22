@@ -36,7 +36,7 @@ public class LoadSceneSystem : SystemBehaviour
 			if (fadeInTag.FadeInType == FadeInType.Scene) {
 				LoadSceneEntities.OnAdd ().Subscribe (loadSceneEntity => {
 					var loadScene = loadSceneEntity.GetComponent<LoadScene> ();
-
+						
 					loadScene.OnPointerClickAsObservable ().Where (_ => loadScene.BindToClick).Select (_ => true)
 						.Merge (EventSystem.OnEvent<ClickCenterEvent> ().Where (e => loadScene.transform == e.Target).Select (_ => true))
 						.Where (_ => !string.IsNullOrEmpty (loadScene.SceneName))
