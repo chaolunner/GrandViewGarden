@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 222913826491217206}
   - component: {fileID: 114594232976695190}
   - component: {fileID: 114714562103823808}
-  - component: {fileID: 114155746037983412}
+  - component: {fileID: 114490463875615528}
   m_Layer: 5
   m_Name: PlayContinueButton
   m_TagString: Untagged
@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 222458919597835112}
   - component: {fileID: 114111589146795420}
   - component: {fileID: 114204123082583148}
+  - component: {fileID: 114289907003867282}
   m_Layer: 5
   m_Name: SignOutButton
   m_TagString: Untagged
@@ -250,25 +251,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114155746037983412
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1001164091058162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
-  Origins:
-  - {fileID: 224559176610071716}
-  Targets:
-  - {fileID: 0}
-  Duration: 0.5
-  Delay: 0
 --- !u!114 &114199191352928460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -295,6 +277,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Scale: 0
   Duration: 0
+--- !u!114 &114289907003867282
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1454576131652766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 994b5af9aba63a54ba373314b9535ddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BindToClick: 1
+  SceneName: Overview
+--- !u!114 &114490463875615528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1001164091058162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e29b558d9cd8cd74faca6eceffb5c2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsOn:
+    value: 0
+  Origins:
+  - {fileID: 224559176610071716}
+  Targets:
+  - {fileID: 0}
+  Duration: 0.5
+  Delay: 0
 --- !u!114 &114594232976695190
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -346,8 +360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f3bf4d60baba642886dd88f645c5c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Scale: 0
-  Duration: 0
+  Scale: 1.2
+  Duration: 0.2
 --- !u!114 &114763309260111464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -603,7 +617,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1264}
+  m_AnchoredPosition: {x: 0, y: -1462}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224561279800461590

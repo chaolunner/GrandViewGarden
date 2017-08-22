@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.Linq;
 
 [CustomEditor (typeof(Timing))]
 public class TimingDrawer : Editor
@@ -14,7 +13,6 @@ public class TimingDrawer : Editor
 
 	public override void OnInspectorGUI ()
 	{
-		EditorGUILayout.LabelField ("Time", timing.Hour+":"+timing.Minute+":"+timing.Second+":"+timing.MilliSecond);
+		EditorGUILayout.LabelField ("Time", string.Format ("{0:D2}:{1:D2}:{2:D2}:{3:D3}", timing.Hour, timing.Minute, timing.Second, timing.MilliSecond));
 	}
-
 }
