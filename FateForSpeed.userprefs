@@ -1,11 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Speed.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TODO\Speed.cs">
     <Files>
-      <File FileName="Assets\Scripts\Components\Timing.cs" Line="1" Column="1" />
-      <File FileName="Assets\Speed.cs" Line="16" Column="63" />
-      <File FileName="Assets\Scripts\Components\LoadScene.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Systems\LoadSceneSystem.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Components\Timing.cs" Line="1" Column="19" />
+      <File FileName="Assets\Scripts\Systems\TimingSystem.cs" Line="3" Column="14" />
+      <File FileName="Assets\Scripts\Editor\TimingDrawer.cs" Line="8" Column="2" />
+      <File FileName="Assets\Scripts\Systems\PauseSystem.cs" Line="35" Column="38" />
+      <File FileName="Assets\Scripts\Systems\LoadSceneSystem.cs" Line="16" Column="1" />
+      <File FileName="Assets\Scripts\Systems\FollowCameraSystem.cs" Line="29" Column="13" />
+      <File FileName="Assets\Scripts\TODO\Speed.cs" Line="14" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
