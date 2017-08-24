@@ -168,6 +168,12 @@
             Returns the 2D angle between two vectors
             </summary>
         </member>
+        <member name="M:DG.Tweening.Core.Utils.Vector3AreApproximatelyEqual(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>
+            Uses approximate equality on each axis instead of Unity's Vector3 equality,
+            because the latter fails (in some cases) when assigning a Vector3 to a transform.position and then checking it.
+            </summary>
+        </member>
         <member name="T:DG.Tweening.Color2">
             <summary>
             Struct that stores two colors (used for LineRenderer tweens)
@@ -365,6 +371,13 @@
             IMPORTANT: this will cause an error on UWP platform, so don't use it there 
             BEWARE: this is a slightly expensive operation so use it with care
             </summary>
+        </member>
+        <member name="M:DG.Tweening.DOTween.ManualUpdate(System.Single,System.Single)">
+            <summary>
+            Updates all tweens that are set to <see cref="F:DG.Tweening.UpdateType.Manual"/>.
+            </summary>
+            <param name="deltaTime">Manual deltaTime</param>
+            <param name="unscaledDeltaTime">Unscaled delta time (used with tweens set as timeScaleIndependent)</param>
         </member>
         <member name="M:DG.Tweening.DOTween.To(DG.Tweening.Core.DOGetter{System.Single},DG.Tweening.Core.DOSetter{System.Single},System.Single,System.Single)">
             <summary>Tweens a property or field to the given value using default plugins</summary>
@@ -2508,6 +2521,9 @@
         </member>
         <member name="F:DG.Tweening.UpdateType.Fixed">
             <summary>Updates using FixedUpdate calls</summary>
+        </member>
+        <member name="F:DG.Tweening.UpdateType.Manual">
+            <summary>Updates using manual update calls</summary>
         </member>
     </members>
 </doc>
