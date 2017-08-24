@@ -6,35 +6,35 @@ using System.Linq;
 [CustomEditor (typeof(ExchangePosition))]
 public class ExchangePositionDrawer : Editor
 {
-	public bool foldout;
-	public ExchangePosition exchangePosition;
-	public List<Transform> originList = new List<Transform> ();
-	public List<Transform> targetList = new List<Transform> ();
+	public bool Foldout;
+	public ExchangePosition ExchangePosition;
+	public List<Transform> OriginList = new List<Transform> ();
+	public List<Transform> TargetList = new List<Transform> ();
 
 	void OnEnable ()
 	{
-		exchangePosition = target as ExchangePosition;
+		ExchangePosition = target as ExchangePosition;
 	}
 
 	public override void OnInspectorGUI ()
 	{
 		EditorGUI.BeginChangeCheck ();
-		originList.Clear ();
-		targetList.Clear ();
-		originList.AddRange (exchangePosition.Origins);
-		targetList.AddRange (exchangePosition.Targets);
+		OriginList.Clear ();
+		TargetList.Clear ();
+		OriginList.AddRange (ExchangePosition.Origins);
+		TargetList.AddRange (ExchangePosition.Targets);
 
 		if (GUILayout.Button ("Do Exchange")) {
-			exchangePosition.IsOn.Value = true;
+			ExchangePosition.IsOn.Value = true;
 		}
-		var duration = EditorGUILayout.FloatField ("Duration", exchangePosition.Duration);
-		var delay = EditorGUILayout.FloatField ("Delay", exchangePosition.Delay);
-		foldout = EditorGUILayout.Foldout (foldout, "Setting");
-		if (foldout) {
+		var duration = EditorGUILayout.FloatField ("Duration", ExchangePosition.Duration);
+		var delay = EditorGUILayout.FloatField ("Delay", ExchangePosition.Delay);
+		Foldout = EditorGUILayout.Foldout (Foldout, "Setting");
+		if (Foldout) {
 			EditorGUI.indentLevel++;
-			for (int i = 0; i < originList.Count; i++) {
-				var origin = originList [i];
-				var target = targetList [i];
+			for (int i = 0; i < OriginList.Count; i++) {
+				var origin = OriginList [i];
+				var target = TargetList [i];
 				var rect = EditorGUILayout.GetControlRect ();
 				rect.xMax -= 18;
 				var changeRect = new Rect (rect);
@@ -52,29 +52,29 @@ public class ExchangePositionDrawer : Editor
 				EditorGUI.LabelField (changeRect, content);
 				target = (Transform)EditorGUI.ObjectField (targetRect, target, typeof(Transform), true);
 				if (GUI.Button (buttonRect, "-")) {
-					originList.RemoveAt (i);
-					targetList.RemoveAt (i);
+					OriginList.RemoveAt (i);
+					TargetList.RemoveAt (i);
 					break;
 				}
-				originList [i] = origin;
-				targetList [i] = target;
+				OriginList [i] = origin;
+				TargetList [i] = target;
 			}
 
 			if (GUILayout.Button ("Add Target")) {
-				var originLast = originList.LastOrDefault ();
-				var targetLast = targetList.LastOrDefault ();
-				originList.Add (originLast);
-				targetList.Add (targetLast);
+				var originLast = OriginList.LastOrDefault ();
+				var targetLast = TargetList.LastOrDefault ();
+				OriginList.Add (originLast);
+				TargetList.Add (targetLast);
 			}
 			EditorGUI.indentLevel--;
 		}
 		if (EditorGUI.EndChangeCheck ()) {
-			Undo.RecordObject (exchangePosition, "Modify Exchange Position");
-			exchangePosition.Duration = duration;
-			exchangePosition.Delay = delay;
-			exchangePosition.Origins = originList.ToArray ();
-			exchangePosition.Targets = targetList.ToArray ();
-			EditorUtility.SetDirty (exchangePosition);
+			Undo.RecordObject (ExchangePosition, "Modify Exchange Position");
+			ExchangePosition.Duration = duration;
+			ExchangePosition.Delay = delay;
+			ExchangePosition.Origins = OriginList.ToArray ();
+			ExchangePosition.Targets = TargetList.ToArray ();
+			EditorUtility.SetDirty (ExchangePosition);
 		}
 	}
 }

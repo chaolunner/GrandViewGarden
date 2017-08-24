@@ -7,8 +7,8 @@ using System.Linq;
 [CustomEditor (typeof(Cylinder))]
 public class CylinderDrawer : Editor
 {
-	public Cylinder cylinder;
-	public bool showPosition = true;
+	public Cylinder Cylinder;
+	public bool ShowPosition = true;
 	public MeshCollider meshCollider;
 	string[] directions = new string[] { "X-Axis", "Y-Axis", "Z-Axis" };
 	string[] uvsOptions = new string[] { "Simple", "Sliced" };
@@ -26,8 +26,8 @@ public class CylinderDrawer : Editor
 
 	void OnEnable ()
 	{
-		cylinder = target as Cylinder;
-		if (cylinder.Mesh == null) {
+		Cylinder = target as Cylinder;
+		if (Cylinder.Mesh == null) {
 			CreateMesh ();
 		}
 		Undo.undoRedoPerformed += CreateMesh;
@@ -40,37 +40,37 @@ public class CylinderDrawer : Editor
 
 	public override void OnInspectorGUI ()
 	{
-		if (cylinder.Mesh == null || cylinder.Vertices == null || cylinder.MultipleVertices.Count != cylinder.Mesh.vertices.Length) {
+		if (Cylinder.Mesh == null || Cylinder.Vertices == null || Cylinder.MultipleVertices.Count != Cylinder.Mesh.vertices.Length) {
 			CreateMesh ();
 		}
 
 		var icon = EditorGUIUtility.IconContent ("EditCollider");
 		icon.tooltip = "Edit Mesh Vertices\n\n- Hold Ctrl after clicking control handle to Multi-point editing";
-		var bounds = new Bounds (cylinder.transform.TransformPoint (cylinder.Mesh.bounds.center), cylinder.Mesh.bounds.size);
+		var bounds = new Bounds (Cylinder.transform.TransformPoint (Cylinder.Mesh.bounds.center), Cylinder.Mesh.bounds.size);
 		EditMode.DoEditModeInspectorModeButton (EditMode.SceneViewEditMode.Collider, "Edit Point", icon, bounds, this);
 		if (!editingHexahedron) {
 			selectedIndexs.Clear ();
 		}
 
 		EditorGUI.BeginChangeCheck ();
-		var direction = EditorGUILayout.Popup ("Direction", cylinder.direction, directions);
-		var uvsOption = EditorGUILayout.Popup ("UVs", cylinder.uvsOption, uvsOptions);
-		var segments = EditorGUILayout.IntSlider ("Segments", cylinder.segments, 3, 60);
-		var sectionRadius = cylinder.sectionRadius;
-		var bottomRadius = cylinder.bottomRadius;
+		var direction = EditorGUILayout.Popup ("Direction", Cylinder.direction, directions);
+		var uvsOption = EditorGUILayout.Popup ("UVs", Cylinder.uvsOption, uvsOptions);
+		var segments = EditorGUILayout.IntSlider ("Segments", Cylinder.segments, 3, 60);
+		var sectionRadius = Cylinder.sectionRadius;
+		var bottomRadius = Cylinder.bottomRadius;
 
 		var controlRect = EditorGUILayout.GetControlRect ();
 		controlRect = EditorGUI.PrefixLabel (controlRect, new GUIContent ("Radius"));
 		controlRect.xMax -= 13;
-		if (cylinder.radiusOption == 0) {
-			bottomRadius = EditorGUI.FloatField (controlRect, cylinder.bottomRadius);
+		if (Cylinder.radiusOption == 0) {
+			bottomRadius = EditorGUI.FloatField (controlRect, Cylinder.bottomRadius);
 			if (sectionRadius != bottomRadius) {
 				sectionRadius = bottomRadius;
 				GUI.changed = true;
 			}
 		} else {
-			sectionRadius = EditorGUI.FloatField (new Rect (controlRect.x, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), cylinder.sectionRadius);
-			bottomRadius = EditorGUI.FloatField (new Rect (controlRect.x + 0.5f * controlRect.width + 13, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), cylinder.bottomRadius);
+			sectionRadius = EditorGUI.FloatField (new Rect (controlRect.x, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), Cylinder.sectionRadius);
+			bottomRadius = EditorGUI.FloatField (new Rect (controlRect.x + 0.5f * controlRect.width + 13, controlRect.y, 0.5f * controlRect.width - 13, controlRect.height), Cylinder.bottomRadius);
 		}
 		
 		var popupRect = GUILayoutUtility.GetLastRect ();
@@ -79,44 +79,44 @@ public class CylinderDrawer : Editor
 			var menu = new GenericMenu ();
 			for (int i = 0; i < radiusOptions.Length; i++) {
 				var index = i;
-				menu.AddItem (radiusOptions [index], cylinder.radiusOption == index, () => {
-					cylinder.radiusOption = index;
+				menu.AddItem (radiusOptions [index], Cylinder.radiusOption == index, () => {
+					Cylinder.radiusOption = index;
 				});
 			}
 			menu.ShowAsContext ();
 			Event.current.Use ();
 		}
 
-		var thickness = EditorGUILayout.FloatField ("Thickness", cylinder.thickness);
+		var thickness = EditorGUILayout.FloatField ("Thickness", Cylinder.thickness);
 		if (EditorGUI.EndChangeCheck ()) {
-			Undo.RecordObject (cylinder, "Change Cylinder");
-			cylinder.direction = direction;
-			cylinder.segments = segments;
-			cylinder.sectionRadius = sectionRadius;
+			Undo.RecordObject (Cylinder, "Change Cylinder");
+			Cylinder.direction = direction;
+			Cylinder.segments = segments;
+			Cylinder.sectionRadius = sectionRadius;
 			if (bottomRadius > 0) {
-				cylinder.bottomRadius = bottomRadius;
+				Cylinder.bottomRadius = bottomRadius;
 			}
-			cylinder.uvsOption = uvsOption;
-			cylinder.thickness = thickness;
-			cylinder.ResetMesh ();
-			EditorUtility.SetDirty (cylinder);
+			Cylinder.uvsOption = uvsOption;
+			Cylinder.thickness = thickness;
+			Cylinder.ResetMesh ();
+			EditorUtility.SetDirty (Cylinder);
 		}
 
-		showPosition = EditorGUILayout.Foldout (showPosition, "Edit Point", true);
+		ShowPosition = EditorGUILayout.Foldout (ShowPosition, "Edit Point", true);
 		EditorGUI.indentLevel++;
-		if (showPosition) {
-			for (int i = 0; i < cylinder.Vertices.Length; i++) {
+		if (ShowPosition) {
+			for (int i = 0; i < Cylinder.Vertices.Length; i++) {
 				EditorGUI.BeginChangeCheck ();
-				var point = EditorGUILayout.Vector3Field ("Point " + i, cylinder.Vertices [i]);
+				var point = EditorGUILayout.Vector3Field ("Point " + i, Cylinder.Vertices [i]);
 				if (EditorGUI.EndChangeCheck ()) {
-					Undo.RecordObject (cylinder, "Move Point");
-					cylinder.Vertices [i] = point;
-					var vertices = cylinder.Mesh.vertices;
-					foreach (var index in cylinder.MultipleVertices[i]) {
-						vertices [index] = cylinder.Vertices [i];
+					Undo.RecordObject (Cylinder, "Move Point");
+					Cylinder.Vertices [i] = point;
+					var vertices = Cylinder.Mesh.vertices;
+					foreach (var index in Cylinder.MultipleVertices[i]) {
+						vertices [index] = Cylinder.Vertices [i];
 					}
-					cylinder.Mesh.vertices = vertices;
-					EditorUtility.SetDirty (cylinder);
+					Cylinder.Mesh.vertices = vertices;
+					EditorUtility.SetDirty (Cylinder);
 				}
 			}
 		}
@@ -125,7 +125,7 @@ public class CylinderDrawer : Editor
 
 	void OnSceneGUI ()
 	{
-		if (cylinder.Mesh == null || cylinder.Vertices == null || cylinder.MultipleVertices.Count != cylinder.Mesh.vertices.Length) {
+		if (Cylinder.Mesh == null || Cylinder.Vertices == null || Cylinder.MultipleVertices.Count != Cylinder.Mesh.vertices.Length) {
 			CreateMesh ();
 		}
 
@@ -134,8 +134,8 @@ public class CylinderDrawer : Editor
 		}
 
 		if (editingHexahedron) {
-			for (int i = 0; i < cylinder.Vertices.Length; i++) {
-				var pos = cylinder.transform.TransformPoint (cylinder.Vertices [i]);
+			for (int i = 0; i < Cylinder.Vertices.Length; i++) {
+				var pos = Cylinder.transform.TransformPoint (Cylinder.Vertices [i]);
 				var size = 0.025f * HandleUtility.GetHandleSize (pos);
 				var pickSize = 2 * size;
 				var color = Color.white;
@@ -155,7 +155,7 @@ public class CylinderDrawer : Editor
 				}
 
 				Handles.color = color;
-				if (Handles.Button (pos, cylinder.transform.rotation, size, pickSize, Handles.DotHandleCap)) {
+				if (Handles.Button (pos, Cylinder.transform.rotation, size, pickSize, Handles.DotHandleCap)) {
 					if (!Event.current.control) {
 						selectedIndexs.Clear ();
 					}
@@ -169,24 +169,24 @@ public class CylinderDrawer : Editor
 
 			if (selectedIndexs.Count > 0) {
 				var selectedIndex = selectedIndexs.Last ();
-				var pos = cylinder.transform.TransformPoint (cylinder.Vertices [selectedIndex]);
+				var pos = Cylinder.transform.TransformPoint (Cylinder.Vertices [selectedIndex]);
 				Handles.Label (pos, "Point " + selectedIndex);
 				EditorGUI.BeginChangeCheck ();
-				var point = Handles.DoPositionHandle (pos, cylinder.transform.rotation);
+				var point = Handles.DoPositionHandle (pos, Cylinder.transform.rotation);
 				if (EditorGUI.EndChangeCheck ()) {
-					Undo.RecordObject (cylinder, "Move Point");
-					var delta = cylinder.transform.InverseTransformPoint (point) - cylinder.Vertices [selectedIndex];
+					Undo.RecordObject (Cylinder, "Move Point");
+					var delta = Cylinder.transform.InverseTransformPoint (point) - Cylinder.Vertices [selectedIndex];
 					foreach (var id in selectedIndexs) {
-						var vertices = cylinder.Mesh.vertices;
-						cylinder.Vertices [id] += delta;
-						foreach (var index in cylinder.MultipleVertices[id]) {
-							vertices [index] = cylinder.Vertices [id];
+						var vertices = Cylinder.Mesh.vertices;
+						Cylinder.Vertices [id] += delta;
+						foreach (var index in Cylinder.MultipleVertices[id]) {
+							vertices [index] = Cylinder.Vertices [id];
 						}
-						cylinder.Mesh.vertices = vertices;
+						Cylinder.Mesh.vertices = vertices;
 
-						meshCollider.sharedMesh = cylinder.Mesh;
+						meshCollider.sharedMesh = Cylinder.Mesh;
 					}
-					EditorUtility.SetDirty (cylinder);
+					EditorUtility.SetDirty (Cylinder);
 				}
 			}
 		}
@@ -194,7 +194,7 @@ public class CylinderDrawer : Editor
 
 	void CreateMesh ()
 	{
-		cylinder.CreateMesh ();
+		Cylinder.CreateMesh ();
 
 		CreateCollider ();
 	}
@@ -205,11 +205,11 @@ public class CylinderDrawer : Editor
 			return;
 		}
 
-		meshCollider = cylinder.GetComponent<MeshCollider> ();
+		meshCollider = Cylinder.GetComponent<MeshCollider> ();
 		if (meshCollider == null) {
-			meshCollider = cylinder.gameObject.AddComponent<MeshCollider> ();
+			meshCollider = Cylinder.gameObject.AddComponent<MeshCollider> ();
 			meshCollider.hideFlags = HideFlags.HideAndDontSave;
 		}
-		meshCollider.sharedMesh = cylinder.Mesh;
+		meshCollider.sharedMesh = Cylinder.Mesh;
 	}
 }

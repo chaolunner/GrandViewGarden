@@ -14,22 +14,28 @@ public class GamePlay
 
 public class PauseSystem : SystemBehaviour
 {
+	public BoolReactiveProperty IsPause = new BoolReactiveProperty ();
+
 	public override void Awake ()
 	{
 		base.Awake ();
 
 		var PauseEntities = GroupFactory.Create (new Type[] {
-			typeof(PauseComponent)	
+			typeof(InteractiveComponent),
+			typeof(PauseComponent),
 		});
 
 		PauseEntities.OnAdd ().Subscribe (entitiy => {
 			var pauseComponent = entitiy.GetComponent<PauseComponent> ();
+			var interactiveComponent = entitiy.GetComponent<InteractiveComponent> ();
 
-			pauseComponent.OnPointerClickAsObservable ().Subscribe (_ => {
-				pauseComponent.IsPause.Value = !pauseComponent.IsPause.Value;
-			}).AddTo (this.Disposer).AddTo (pauseComponent.Disposer);
+			foreach (var touchArea in interactiveComponent.TouchAreas) {
+				touchArea.OnPointerClickAsObservable ().Subscribe (_ => {
+					IsPause.Value = !IsPause.Value;
+				}).AddTo (this.Disposer).AddTo (pauseComponent.Disposer);
+			}
 
-			pauseComponent.IsPause.DistinctUntilChanged ().Subscribe (b => {
+			IsPause.DistinctUntilChanged ().Subscribe (b => {
 				if (b) {
 					Time.timeScale = 0;
 					EventSystem.Publish (new GamePause ());
@@ -40,7 +46,7 @@ public class PauseSystem : SystemBehaviour
 			}).AddTo (this.Disposer).AddTo (pauseComponent.Disposer);
 
 			EventSystem.OnEvent<LoadSceneStart> ().Subscribe (_ => {
-				pauseComponent.IsPause.Value = false;
+				IsPause.Value = false;
 			}).AddTo (this.Disposer).AddTo (pauseComponent.Disposer);
 		}).AddTo (this.Disposer);
 	}

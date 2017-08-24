@@ -4,22 +4,22 @@ using UnityEngine;
 [CustomEditor (typeof(ColorComponent))]
 public class ColorComponentDrawer : Editor
 {
-	public bool foldout;
-	public ColorComponent colorComponent;
+	public bool Foldout;
+	public ColorComponent ColorComponent;
 
 	void OnEnable ()
 	{
-		colorComponent = target as ColorComponent;
+		ColorComponent = target as ColorComponent;
 	}
 
 	public override void OnInspectorGUI ()
 	{
 		DrawDefaultInspector ();
 
-		foldout = EditorGUILayout.Foldout (foldout, "Color Components");
-		if (foldout) {
+		Foldout = EditorGUILayout.Foldout (Foldout, "Color Components");
+		if (Foldout) {
 			EditorGUI.indentLevel++;
-			foreach (var child in colorComponent.ColorCollection) {
+			foreach (var child in ColorComponent.ColorCollection) {
 				EditorGUILayout.ObjectField (child, typeof(ColorComponent), true);
 			}
 			EditorGUI.indentLevel--;

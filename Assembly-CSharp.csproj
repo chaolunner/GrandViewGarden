@@ -64,6 +64,7 @@
      <Compile Include="Assets\Scripts\Components\FollowCamera.cs" />
      <Compile Include="Assets\Scripts\Components\FreeDriving.cs" />
      <Compile Include="Assets\Scripts\Components\GoToLevelPanel.cs" />
+     <Compile Include="Assets\Scripts\Components\InteractiveComponent.cs" />
      <Compile Include="Assets\Scripts\Components\LoadScene.cs" />
      <Compile Include="Assets\Scripts\Components\PauseComponent.cs" />
      <Compile Include="Assets\Scripts\Components\PunchButton.cs" />

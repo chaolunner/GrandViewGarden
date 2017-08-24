@@ -5,11 +5,11 @@ using System.Linq;
 [CustomEditor (typeof(FreeDriving))]
 public class FreeDrivingDrawer : Editor
 {
-	public FreeDriving freeDriving;
+	public FreeDriving FreeDriving;
 
 	void OnEnable ()
 	{
-		freeDriving = target as FreeDriving;
+		FreeDriving = target as FreeDriving;
 	}
 
 	public override void OnInspectorGUI ()
@@ -17,11 +17,11 @@ public class FreeDrivingDrawer : Editor
 		DrawDefaultInspector ();
 
 		EditorGUI.BeginChangeCheck ();
-		var index = EditorGUILayout.Popup ("Pose Index", freeDriving.PoseIndex.Value, freeDriving.options.Select (x => x.ToString ()).ToArray ());
+		var index = EditorGUILayout.Popup ("Pose Index", FreeDriving.PoseIndex.Value, FreeDriving.options.Select (x => x.ToString ()).ToArray ());
 		if (EditorGUI.EndChangeCheck ()) {
-			Undo.RecordObject (freeDriving, "Change PoseIndex");
-			freeDriving.PoseIndex.Value = index;
-			EditorUtility.SetDirty (freeDriving);
+			Undo.RecordObject (FreeDriving, "Change PoseIndex");
+			FreeDriving.PoseIndex.Value = index;
+			EditorUtility.SetDirty (FreeDriving);
 		}
 	}
 }

@@ -7,31 +7,31 @@ using System.Linq;
 [CustomEditor (typeof(FPSUtility))]
 public class FPSUtilityDrawer : Editor
 {
-	public bool foldout;
-	public FPSUtility fpsUtility;
-	public List<FPSColor> fpsColorList = new List<FPSColor> ();
+	public bool Foldout;
+	public FPSUtility FpsUtility;
+	public List<FPSColor> FpsColorList = new List<FPSColor> ();
 
 	void OnEnable ()
 	{
-		fpsUtility = target as FPSUtility;
+		FpsUtility = target as FPSUtility;
 	}
 
 	public override void OnInspectorGUI ()
 	{
 		EditorGUI.BeginChangeCheck ();
-		var frameRange = EditorGUILayout.IntField ("Frame Range", fpsUtility.frameRange);
-		var highestFPSLabel = (Text)EditorGUILayout.ObjectField ("Highest FPS Label", fpsUtility.highestFPSLabel, typeof(Text), true);
-		var averageFPSLabel = (Text)EditorGUILayout.ObjectField ("Average FPS Label", fpsUtility.averageFPSLabel, typeof(Text), true);
-		var lowestFPSLabel = (Text)EditorGUILayout.ObjectField ("Lowest FPS Label", fpsUtility.lowestFPSLabel, typeof(Text), true);
+		var frameRange = EditorGUILayout.IntField ("Frame Range", FpsUtility.frameRange);
+		var highestFPSLabel = (Text)EditorGUILayout.ObjectField ("Highest FPS Label", FpsUtility.highestFPSLabel, typeof(Text), true);
+		var averageFPSLabel = (Text)EditorGUILayout.ObjectField ("Average FPS Label", FpsUtility.averageFPSLabel, typeof(Text), true);
+		var lowestFPSLabel = (Text)EditorGUILayout.ObjectField ("Lowest FPS Label", FpsUtility.lowestFPSLabel, typeof(Text), true);
 
-		fpsColorList.Clear ();
-		fpsColorList.AddRange (fpsUtility.coloring);
+		FpsColorList.Clear ();
+		FpsColorList.AddRange (FpsUtility.coloring);
 
-		foldout = EditorGUILayout.Foldout (foldout, "Edit Color Setting");
-		if (foldout) {
+		Foldout = EditorGUILayout.Foldout (Foldout, "Edit Color Setting");
+		if (Foldout) {
 			EditorGUI.indentLevel++;
-			for (int i = 0; i < fpsColorList.Count; i++) {
-				var fpsColor = fpsColorList [i];
+			for (int i = 0; i < FpsColorList.Count; i++) {
+				var fpsColor = FpsColorList [i];
 				var rect = EditorGUILayout.GetControlRect ();
 				rect = EditorGUI.PrefixLabel (rect, new GUIContent ("If FPS >= "));
 				rect.xMax -= 18;
@@ -45,30 +45,30 @@ public class FPSUtilityDrawer : Editor
 				fpsColor.minimumFPS = EditorGUI.IntField (intRect, fpsColor.minimumFPS);
 				fpsColor.color = EditorGUI.ColorField (colRect, fpsColor.color);
 				if (GUI.Button (btnRect, "-")) {
-					fpsColorList.RemoveAt (i);
+					FpsColorList.RemoveAt (i);
 					break;
 				}
-				fpsColorList [i] = fpsColor;
+				FpsColorList [i] = fpsColor;
 			}
 			
 			if (GUILayout.Button ("Add Color List")) {
-				var last = fpsColorList.LastOrDefault ();
+				var last = FpsColorList.LastOrDefault ();
 				var newest = new FPSColor ();
 				newest.minimumFPS = last.minimumFPS;
 				newest.color = last.color;
-				fpsColorList.Add (newest);
+				FpsColorList.Add (newest);
 			}
 			EditorGUI.indentLevel--;
 		}
 
 		if (EditorGUI.EndChangeCheck ()) {
-			Undo.RecordObject (fpsUtility, "Change FPS Setting");
-			fpsUtility.frameRange = frameRange;
-			fpsUtility.highestFPSLabel = highestFPSLabel;
-			fpsUtility.averageFPSLabel = averageFPSLabel;
-			fpsUtility.lowestFPSLabel = lowestFPSLabel;
-			fpsUtility.coloring = fpsColorList.ToArray ();
-			EditorUtility.SetDirty (fpsUtility);
+			Undo.RecordObject (FpsUtility, "Change FPS Setting");
+			FpsUtility.frameRange = frameRange;
+			FpsUtility.highestFPSLabel = highestFPSLabel;
+			FpsUtility.averageFPSLabel = averageFPSLabel;
+			FpsUtility.lowestFPSLabel = lowestFPSLabel;
+			FpsUtility.coloring = FpsColorList.ToArray ();
+			EditorUtility.SetDirty (FpsUtility);
 		}
 	}
 }
