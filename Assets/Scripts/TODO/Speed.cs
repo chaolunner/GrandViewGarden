@@ -11,7 +11,7 @@ public class Speed : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider)
 	{
-		Debug.Log (collider.gameObject.name);
+//		Debug.Log (collider.gameObject.name);
 		if (collider.gameObject.name == "sphere") {
 			carWheelCollider.maxMotorTorque  = carWheelCollider.maxMotorTorque + 100f;
 
