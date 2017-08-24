@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\Editor\FPSUtilityDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\FreeDrivingDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\HexahedronDrawer.cs" />
+     <Compile Include="Assets\Scripts\Editor\InteractiveComponentDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\MinMaxRangeDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\TimingDrawer.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
