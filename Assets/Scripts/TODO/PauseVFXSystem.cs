@@ -25,6 +25,8 @@ public class PauseVFXSystem : SystemBehaviour
 
 		Observable.CombineLatest (FollowCameraEntities.OnAdd (), PausePanelEntities.OnAdd (), GamePanelEntities.OnAdd (), (followCameraEntity, pausePanelEntity, gamePanelEntity) => {
 			var camera = followCameraEntity.GetComponent<Camera> ();
+			var followCamera = followCameraEntity.GetComponent<FollowCamera> ();
+			var pausePanel = pausePanelEntity.GetComponent<PausePanel> ();
 			var canvasGroup = pausePanelEntity.GetComponent<CanvasGroup> ();
 			var gamePanel = gamePanelEntity.GetComponent<GamePanel> ();
 
@@ -41,7 +43,7 @@ public class PauseVFXSystem : SystemBehaviour
 					.Join (canvasGroup.DOFade (1, 1).SetRelative ())
 					.Join (gamePanel.transform.DOMoveY (originPosition.y + 500, 1))
 					.SetUpdate (true);
-			});
+			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
 			EventSystem.OnEvent<GamePlay> ().Subscribe (_ => {
 				sequence.Kill ();
@@ -50,7 +52,7 @@ public class PauseVFXSystem : SystemBehaviour
 					.Join (canvasGroup.DOFade (originAlpha, 1))
 					.Join (gamePanel.transform.DOMove (originPosition, 1))
 					.SetUpdate (true);
-			});
+			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
 			return true;
 		}).Subscribe ().AddTo (this.Disposer);

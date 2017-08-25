@@ -25,15 +25,13 @@ public class LoadSceneSystem : SystemBehaviour
 
 		var FadeInEntities = GroupFactory.Create (new Type[] {
 			typeof(CanvasGroup),
-			typeof(FadeInTag),
 			typeof(FadeIn),
 		});
 
 		FadeInEntities.OnAdd ().Subscribe (fadeInEntity => {
 			var fadeIn = fadeInEntity.GetComponent<FadeIn> ();
-			var fadeInTag = fadeInEntity.GetComponent<FadeInTag> ();
 
-			if (fadeInTag.FadeInType == FadeInType.Scene) {
+			if (fadeIn.FadeInType == FadeInType.Scene) {
 				LoadSceneEntities.OnAdd ().Subscribe (loadSceneEntity => {
 					var loadScene = loadSceneEntity.GetComponent<LoadScene> ();
 
@@ -41,11 +39,11 @@ public class LoadSceneSystem : SystemBehaviour
 						.Merge (EventSystem.OnEvent<ClickCenterEvent> ().Where (e => loadScene.transform == e.Target).Select (_ => true))
 						.Where (_ => !string.IsNullOrEmpty (loadScene.SceneName))
 						.Subscribe (unused => {
-						fadeIn.Alpha.Value = 1;
+						fadeIn.NormalizedTime.Value = 1;
 						EventSystem.Publish (new LoadSceneStart ());
 						Observable.Timer (TimeSpan.FromSeconds (fadeIn.Duration)).Subscribe (_unused => {
 							SceneManager.LoadSceneAsync (loadScene.SceneName).ToObservable ().DoOnCompleted (() => {
-								fadeIn.Alpha.Value = 0;
+								fadeIn.NormalizedTime.Value = 0;
 								Observable.Timer (TimeSpan.FromSeconds (fadeIn.Duration)).Subscribe (_ => {
 									EventSystem.Publish (new LoadSceneCompleted ());
 								}).AddTo (this.Disposer).AddTo (loadScene.Disposer).AddTo (fadeIn.Disposer);

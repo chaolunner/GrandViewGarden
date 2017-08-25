@@ -74,7 +74,6 @@ GameObject:
   - component: {fileID: 225956606269922944}
   - component: {fileID: 114932389170335948}
   - component: {fileID: 114018885895766798}
-  - component: {fileID: 114978697680698174}
   m_Layer: 5
   m_Name: FadeInPanel
   m_TagString: Untagged
@@ -151,9 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb2a77b7c222c434d873940f7d31fa22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Alpha:
+  FadeInType: 2
+  NormalizedTime:
     value: 0
   Duration: 0.3
+  Sequence: {fileID: 11400000, guid: 12a17cc93f984db409311a0c7a3b7b28, type: 2}
 --- !u!114 &114290599949987596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -264,18 +265,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a6221519dbc28419fc45be14897562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114978697680698174
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1759383266447852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0619b356083624a4689ece83ce1545d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FadeInType: 1
 --- !u!222 &222113458626596838
 CanvasRenderer:
   m_ObjectHideFlags: 1

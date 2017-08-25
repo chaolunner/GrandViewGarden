@@ -60,7 +60,6 @@
      <Compile Include="Assets\Scripts\Components\ExchangePosition.cs" />
      <Compile Include="Assets\Scripts\Components\FadeIn.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />
-     <Compile Include="Assets\Scripts\Components\FadeInTag.cs" />
      <Compile Include="Assets\Scripts\Components\FollowCamera.cs" />
      <Compile Include="Assets\Scripts\Components\FreeDriving.cs" />
      <Compile Include="Assets\Scripts\Components\GoToLevelPanel.cs" />
@@ -72,6 +71,9 @@
      <Compile Include="Assets\Scripts\Components\Timing.cs" />
      <Compile Include="Assets\Scripts\Extensions\AsyncOperationExtensions.cs" />
      <Compile Include="Assets\Scripts\Extensions\RendererExtensions.cs" />
+     <Compile Include="Assets\Scripts\ScriptableObjects\Fade.cs" />
+     <Compile Include="Assets\Scripts\ScriptableObjects\FadeInSequence.cs" />
+     <Compile Include="Assets\Scripts\ScriptableObjects\Split.cs" />
      <Compile Include="Assets\Scripts\Systems\CenterOnChildSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\ColorSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\ExchangePositionSystem.cs" />
