@@ -5,28 +5,36 @@ using UniRx;
 
 public static class AsyncOperationExtensions
 {
-	public static IObservable<float> ToObservable (this AsyncOperation asyncOperation)
+	public static IObservable<int> ToObservable (this AsyncOperation asyncOperation)
 	{
 		if (asyncOperation == null) {
 			throw new ArgumentNullException ("asyncOperation");
 		}
-		return Observable.FromCoroutine<float> ((observer, cancellationToken) => RunAsyncOperation (asyncOperation, observer, cancellationToken));
+		return Observable.FromCoroutine<int> ((observer, cancellationToken) => RunAsyncOperation (asyncOperation, observer, cancellationToken));
 	}
 
-	static IEnumerator RunAsyncOperation (AsyncOperation asyncOperation, IObserver<float> observer, CancellationToken cancellationToken)
+	static IEnumerator RunAsyncOperation (AsyncOperation asyncOperation, IObserver<int> observer, CancellationToken cancellationToken)
 	{
+		var totalProgress = 0;
+		var currentProgress = 0;
 		asyncOperation.allowSceneActivation = false;
 		while (!asyncOperation.isDone && !cancellationToken.IsCancellationRequested) {
-			observer.OnNext (asyncOperation.progress);
-			if (asyncOperation.progress >= 0.9f) {
+			observer.OnNext (currentProgress);
+			if (asyncOperation.progress < 0.9f) {
+				totalProgress = (int)(asyncOperation.progress * 100);
+			} else {
 				asyncOperation.allowSceneActivation = true;
-				observer.OnCompleted ();
+				totalProgress = 100;
+			}
+			if (currentProgress < totalProgress) {
+				currentProgress++;
+			}
+			if (currentProgress == 100) {
+				break;
 			}
 			yield return null;
 		}
-		if (!cancellationToken.IsCancellationRequested) {
-			observer.OnNext (asyncOperation.progress);
-			observer.OnCompleted ();
-		}
+		observer.OnNext (currentProgress);
+		observer.OnCompleted ();
 	}
 }
