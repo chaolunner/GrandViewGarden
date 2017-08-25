@@ -6,6 +6,9 @@ using UniRx;
 
 public class PauseVFXSystem : SystemBehaviour
 {
+	[Range (0, 1)]
+	public float Duration = 0.3f;
+
 	public override void Awake ()
 	{
 		base.Awake ();
@@ -39,18 +42,18 @@ public class PauseVFXSystem : SystemBehaviour
 			EventSystem.OnEvent<GamePause> ().Subscribe (_ => {
 				sequence.Kill ();
 				sequence = DOTween.Sequence ()
-					.Join (camera.DOFieldOfView (30, 1).SetRelative ())
-					.Join (canvasGroup.DOFade (1, 1).SetRelative ())
-					.Join (gamePanel.transform.DOMoveY (originPosition.y + 500, 1))
+					.Join (camera.DOFieldOfView (-40, Duration).SetRelative ())
+					.Join (canvasGroup.DOFade (1, Duration).SetRelative ())
+					.Join (gamePanel.transform.DOMoveY (originPosition.y + 500, Duration))
 					.SetUpdate (true);
 			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
 			EventSystem.OnEvent<GamePlay> ().Subscribe (_ => {
 				sequence.Kill ();
 				sequence = DOTween.Sequence ()
-					.Join (camera.DOFieldOfView (originFieldOfView, 1))
-					.Join (canvasGroup.DOFade (originAlpha, 1))
-					.Join (gamePanel.transform.DOMove (originPosition, 1))
+					.Join (camera.DOFieldOfView (originFieldOfView, Duration))
+					.Join (canvasGroup.DOFade (originAlpha, Duration))
+					.Join (gamePanel.transform.DOMove (originPosition, Duration))
 					.SetUpdate (true);
 			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
