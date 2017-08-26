@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\Classes\TransformReactiveProperty.cs" />
      <Compile Include="Assets\Scripts\Components\CenterOnChild.cs" />
      <Compile Include="Assets\Scripts\Components\ColorComponent.cs" />
+     <Compile Include="Assets\Scripts\Components\ContinueComponent.cs" />
      <Compile Include="Assets\Scripts\Components\ExchangePosition.cs" />
      <Compile Include="Assets\Scripts\Components\FadeIn.cs" />
      <Compile Include="Assets\Scripts\Components\FadeInCenter.cs" />

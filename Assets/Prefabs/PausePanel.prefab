@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 222913826491217206}
   - component: {fileID: 114594232976695190}
   - component: {fileID: 114714562103823808}
+  - component: {fileID: 114445275280620668}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -269,6 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Zoom: {fileID: 224119683397480156}
+  Cooldown: {fileID: 0}
 --- !u!114 &114111589146795420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -335,6 +337,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BindToClick: 1
   SceneName: Overview
+--- !u!114 &114445275280620668
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1001164091058162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7762d652dcd434142a8ef4f7891d8346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114512439243213492
 MonoBehaviour:
   m_ObjectHideFlags: 1

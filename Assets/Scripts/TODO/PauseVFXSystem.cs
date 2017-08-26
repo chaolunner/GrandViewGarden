@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using UniRx.Triggers;
+using UnityEngine;
 using DG.Tweening;
 using System;
 using UniECS;
 using UniRx;
+
+public class ContinueCooldownCompleted
+{
+}
 
 public class PauseVFXSystem : SystemBehaviour
 {
@@ -22,11 +27,16 @@ public class PauseVFXSystem : SystemBehaviour
 			typeof(GamePanel)
 		});
 
-		Observable.CombineLatest (FollowCameraEntities.OnAdd (), PausePanelEntities.OnAdd (), GamePanelEntities.OnAdd (), (followCameraEntity, pausePanelEntity, gamePanelEntity) => {
+		var ContinueEntities = GroupFactory.Create (new Type[] {
+			typeof(ContinueComponent)
+		});
+
+		Observable.CombineLatest (FollowCameraEntities.OnAdd (), PausePanelEntities.OnAdd (), GamePanelEntities.OnAdd (), ContinueEntities.OnAdd (), (followCameraEntity, pausePanelEntity, gamePanelEntity, continueEntity) => {
 			var followCamera = followCameraEntity.GetComponent<FollowCamera> ();
 			var pausePanel = pausePanelEntity.GetComponent<PausePanel> ();
 			var canvasGroup = pausePanelEntity.GetComponent<CanvasGroup> ();
 			var gamePanel = gamePanelEntity.GetComponent<GamePanel> ();
+			var continueComponent = continueEntity.GetComponent<ContinueComponent> ();
 
 			var direction = Vector3.Normalize (Vector3.ProjectOnPlane (followCamera.Camera.transform.forward, Vector3.up));
 			var originCameraPosition = followCamera.Translate.transform.position;
@@ -36,6 +46,7 @@ public class PauseVFXSystem : SystemBehaviour
 
 			pausePanel.Zoom.localScale = Vector3.zero;
 			canvasGroup.blocksRaycasts = false;
+			pausePanel.Cooldown.fillAmount = 0;
 
 			EventSystem.OnEvent<GamePause> ().Subscribe (_ => {
 				originCameraPosition = followCamera.transform.position;
@@ -53,16 +64,21 @@ public class PauseVFXSystem : SystemBehaviour
 				});
 			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
-			EventSystem.OnEvent<GamePlay> ().Subscribe (_ => {
+			continueComponent.OnPointerClickAsObservable ().Subscribe (_ => {
 				pausePanel.Zoom.localScale = Vector3.zero;
 				canvasGroup.blocksRaycasts = false;
+				pausePanel.Cooldown.fillAmount = 1;
+				canvasGroup.alpha = 0;
 
 				sequence.Kill (true);
 				sequence = DOTween.Sequence ()
-					.Join (followCamera.Translate.transform.DOMove (originCameraPosition, 1))
-					.Join (canvasGroup.DOFade (0, 1))
-					.Join (DOTween.To (() => gamePanelRectTransform.anchoredPosition.y, setter => gamePanelRectTransform.anchoredPosition = new Vector2 (gamePanelRectTransform.anchoredPosition.x, setter), 0, 1))
+					.Join (followCamera.Translate.transform.DOMove (originCameraPosition, 0.5f))
+					.Join (pausePanel.Cooldown.DOFillAmount (0, 3))
 					.SetUpdate (true);
+				sequence.OnComplete (() => {
+					DOTween.To (() => gamePanelRectTransform.anchoredPosition.y, setter => gamePanelRectTransform.anchoredPosition = new Vector2 (gamePanelRectTransform.anchoredPosition.x, setter), 0, 0.5f);
+					EventSystem.Publish (new ContinueCooldownCompleted ());
+				});
 			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
 			return true;

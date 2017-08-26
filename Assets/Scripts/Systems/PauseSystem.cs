@@ -45,7 +45,9 @@ public class PauseSystem : SystemBehaviour
 				}
 			}).AddTo (this.Disposer).AddTo (pauseComponent.Disposer);
 
-			EventSystem.OnEvent<LoadSceneStart> ().Subscribe (_ => {
+			EventSystem.OnEvent<LoadSceneStart> ().Select (_ => true)
+				.Merge (EventSystem.OnEvent<ContinueCooldownCompleted> ().Select (_ => true))
+				.Subscribe (_ => {
 				IsPause.Value = false;
 			}).AddTo (this.Disposer).AddTo (pauseComponent.Disposer);
 		}).AddTo (this.Disposer);

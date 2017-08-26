@@ -171,7 +171,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TouchAreas:
   - {fileID: 224462665087359118}
-  - {fileID: 0}
 --- !u!114 &114150772301002460
 MonoBehaviour:
   m_ObjectHideFlags: 1
