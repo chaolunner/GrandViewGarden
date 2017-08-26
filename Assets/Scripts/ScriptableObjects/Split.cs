@@ -13,11 +13,11 @@ public class Split : FadeInSequence
 			var topTransform = interactiveComponent.TouchAreas [0] as RectTransform;
 			var bottomTransform = interactiveComponent.TouchAreas [1] as RectTransform;
 			var max = Mathf.Max (topTransform.localScale.y, bottomTransform.localScale.y);
-			var duration = Mathf.Abs (1 - endValue - max) * fadeIn.Duration;
+			var duration = Mathf.Abs (endValue - max) * fadeIn.Duration;
 			var sequence = DOTween.Sequence ();
 
-			sequence.Join (topTransform.DOScaleY (1 - endValue, duration));
-			sequence.Join (bottomTransform.DOScaleY (1 - endValue, duration));
+			sequence.Join (topTransform.DOScaleY (endValue, duration));
+			sequence.Join (bottomTransform.DOScaleY (endValue, duration));
 			if (endValue > max) {
 				sequence.SetEase (Ease.InQuart);
 			} else {

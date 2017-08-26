@@ -90,7 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FadeInType: 1
   NormalizedTime:
-    value: 1
+    value: 0
   Duration: 1
   Sequence: {fileID: 11400000, guid: 0cddb3df1baeada4c988f9403ed01b9c, type: 2}
 --- !u!114 &114469648102214450
@@ -200,7 +200,7 @@ RectTransform:
   m_GameObject: {fileID: 1797498568934544}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224741103143528330}
   m_RootOrder: 1
@@ -218,7 +218,7 @@ RectTransform:
   m_GameObject: {fileID: 1248989479843346}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224741103143528330}
   m_RootOrder: 0
