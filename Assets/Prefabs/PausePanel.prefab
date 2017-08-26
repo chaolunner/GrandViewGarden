@@ -270,7 +270,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Zoom: {fileID: 224119683397480156}
-  Cooldown: {fileID: 0}
 --- !u!114 &114111589146795420
 MonoBehaviour:
   m_ObjectHideFlags: 1

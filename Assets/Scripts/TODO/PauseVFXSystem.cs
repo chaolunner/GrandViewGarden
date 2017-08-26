@@ -40,13 +40,12 @@ public class PauseVFXSystem : SystemBehaviour
 
 			var direction = Vector3.Normalize (Vector3.ProjectOnPlane (followCamera.Camera.transform.forward, Vector3.up));
 			var originCameraPosition = followCamera.Translate.transform.position;
-			var gamePanelRectTransform = gamePanel.transform as RectTransform;
 
 			Sequence sequence = null;
 
 			pausePanel.Zoom.localScale = Vector3.zero;
 			canvasGroup.blocksRaycasts = false;
-			pausePanel.Cooldown.fillAmount = 0;
+			gamePanel.Cooldown.fillAmount = 0;
 
 			EventSystem.OnEvent<GamePause> ().Subscribe (_ => {
 				originCameraPosition = followCamera.transform.position;
@@ -57,7 +56,7 @@ public class PauseVFXSystem : SystemBehaviour
 					.Join (followCamera.Translate.transform.DOMove (originCameraPosition + 25 * direction, 0.5f))
 					.Join (canvasGroup.DOFade (1, 1))
 					.Join (pausePanel.Zoom.DOScale (Vector3.one, 1).SetEase (Ease.OutQuad))
-					.Join (DOTween.To (() => gamePanelRectTransform.anchoredPosition.y, setter => gamePanelRectTransform.anchoredPosition = new Vector2 (gamePanelRectTransform.anchoredPosition.x, setter), 200, 1))
+					.Join (DOTween.To (() => gamePanel.Translate.anchoredPosition.y, setter => gamePanel.Translate.anchoredPosition = new Vector2 (gamePanel.Translate.anchoredPosition.x, setter), 200, 1))
 					.SetUpdate (true);
 				sequence.OnComplete (() => {
 					canvasGroup.blocksRaycasts = true;
@@ -67,16 +66,16 @@ public class PauseVFXSystem : SystemBehaviour
 			continueComponent.OnPointerClickAsObservable ().Subscribe (_ => {
 				pausePanel.Zoom.localScale = Vector3.zero;
 				canvasGroup.blocksRaycasts = false;
-				pausePanel.Cooldown.fillAmount = 1;
+				gamePanel.Cooldown.fillAmount = 1;
 				canvasGroup.alpha = 0;
 
 				sequence.Kill (true);
 				sequence = DOTween.Sequence ()
 					.Join (followCamera.Translate.transform.DOMove (originCameraPosition, 0.5f))
-					.Join (pausePanel.Cooldown.DOFillAmount (0, 3))
+					.Join (gamePanel.Cooldown.DOFillAmount (0, 3))
 					.SetUpdate (true);
 				sequence.OnComplete (() => {
-					DOTween.To (() => gamePanelRectTransform.anchoredPosition.y, setter => gamePanelRectTransform.anchoredPosition = new Vector2 (gamePanelRectTransform.anchoredPosition.x, setter), 0, 0.5f);
+					DOTween.To (() => gamePanel.Translate.anchoredPosition.y, setter => gamePanel.Translate.anchoredPosition = new Vector2 (gamePanel.Translate.anchoredPosition.x, setter), 0, 0.5f);
 					EventSystem.Publish (new ContinueCooldownCompleted ());
 				});
 			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
