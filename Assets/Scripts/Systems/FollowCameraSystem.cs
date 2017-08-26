@@ -11,7 +11,7 @@ public class FollowCameraSystem :SystemBehaviour
 		base.Awake ();
 
 		var FollowCameraEntities = GroupFactory.Create (new Type[] {
-			typeof(FollowCamera)	
+			typeof(FollowCamera)
 		});
 
 		FollowCameraEntities.OnAdd ().Subscribe (entitiy => {

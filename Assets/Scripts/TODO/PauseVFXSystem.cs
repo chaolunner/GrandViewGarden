@@ -6,16 +6,17 @@ using UniRx;
 
 public class PauseVFXSystem : SystemBehaviour
 {
-	[Range (0, 1)]
-	public float Duration = 0.3f;
+	[Range (0, 2)]
+	public float Duration = 0.5f;
+	[Range (0, 30)]
+	public float Zoom = 25;
 
 	public override void Awake ()
 	{
 		base.Awake ();
 
 		var FollowCameraEntities = GroupFactory.Create (new Type[] {
-			typeof(FollowCamera),
-			typeof(Camera),
+			typeof(FollowCamera)
 		});
 
 		var PausePanelEntities = GroupFactory.Create (new Type[] {
@@ -27,33 +28,33 @@ public class PauseVFXSystem : SystemBehaviour
 		});
 
 		Observable.CombineLatest (FollowCameraEntities.OnAdd (), PausePanelEntities.OnAdd (), GamePanelEntities.OnAdd (), (followCameraEntity, pausePanelEntity, gamePanelEntity) => {
-			var camera = followCameraEntity.GetComponent<Camera> ();
 			var followCamera = followCameraEntity.GetComponent<FollowCamera> ();
 			var pausePanel = pausePanelEntity.GetComponent<PausePanel> ();
 			var canvasGroup = pausePanelEntity.GetComponent<CanvasGroup> ();
 			var gamePanel = gamePanelEntity.GetComponent<GamePanel> ();
 
-			var originFieldOfView = camera.fieldOfView;
-			var originAlpha = canvasGroup.alpha;
-			var originPosition = gamePanel.transform.position;
+			var direction = Vector3.Normalize (Vector3.ProjectOnPlane (followCamera.Camera.transform.forward, Vector3.up));
+			var originCameraPosition = followCamera.Translate.transform.position;
+			var originGamePanelPosition = gamePanel.transform.position;
 
 			Sequence sequence = null;
 
 			EventSystem.OnEvent<GamePause> ().Subscribe (_ => {
+				originCameraPosition = followCamera.transform.position;
 				sequence.Kill ();
 				sequence = DOTween.Sequence ()
-					.Join (camera.DOFieldOfView (-40, Duration).SetRelative ())
-					.Join (canvasGroup.DOFade (1, Duration).SetRelative ())
-					.Join (gamePanel.transform.DOMoveY (originPosition.y + 500, Duration))
+					.Join (followCamera.Translate.transform.DOMove (originCameraPosition + Zoom * direction, Duration))
+					.Join (canvasGroup.DOFade (1, Duration))
+					.Join (gamePanel.transform.DOMoveY (originGamePanelPosition.y + 500, Duration))
 					.SetUpdate (true);
 			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
 			EventSystem.OnEvent<GamePlay> ().Subscribe (_ => {
 				sequence.Kill ();
 				sequence = DOTween.Sequence ()
-					.Join (camera.DOFieldOfView (originFieldOfView, Duration))
-					.Join (canvasGroup.DOFade (originAlpha, Duration))
-					.Join (gamePanel.transform.DOMove (originPosition, Duration))
+					.Join (followCamera.Translate.transform.DOMove (originCameraPosition, Duration))
+					.Join (canvasGroup.DOFade (0, Duration))
+					.Join (gamePanel.transform.DOMove (originGamePanelPosition, Duration))
 					.SetUpdate (true);
 			}).AddTo (this.Disposer).AddTo (gamePanel.Disposer).AddTo (pausePanel.Disposer).AddTo (followCamera.Disposer);
 
