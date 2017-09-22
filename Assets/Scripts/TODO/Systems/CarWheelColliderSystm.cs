@@ -16,18 +16,19 @@ public class CarWheelColliderSystm : SystemBehaviour
 			typeof(CarWheelCollider)	
 		});
 
-		CarWheelColliderEntities.OnAdd ().Subscribe (entitiy => {
-			var carWheelCollider	= entitiy.GetComponent<CarWheelCollider> ();
+		CarWheelColliderEntities.OnAdd ().Subscribe (entity => {
+			var carWheelCollider = entity.GetComponent<CarWheelCollider> ();
 
 			Observable.EveryFixedUpdate ().Subscribe (_ => {
-				float motor = carWheelCollider.speed + carWheelCollider.maxMotorTorque * Input.GetAxis ("Vertical");
-				float steering = carWheelCollider.maxSteeringAngle * Input.GetAxis ("Horizontal");
+				float motor = carWheelCollider.Speed * 0.3f;
+//				float steering = carWheelCollider.maxSteeringAngle * Input.GetAxis ("Horizontal");
+				carWheelCollider.transform.position = Vector3.MoveTowards (carWheelCollider.transform.position, carWheelCollider.target.position, carWheelCollider.Speed * 0.7f * Time.deltaTime);
 
 				foreach (AxleInfo axleInfo in carWheelCollider.axleInfos) {
-					if (axleInfo.steering) {
-						axleInfo.leftWheel.steerAngle = steering;
-						axleInfo.rightWheel.steerAngle = steering;
-					}
+//					if (axleInfo.steering) {
+//						axleInfo.leftWheel.steerAngle = steering;
+//						axleInfo.rightWheel.steerAngle = steering;
+//					}
 					if (axleInfo.motor) {
 						axleInfo.leftWheel.motorTorque = motor;
 						axleInfo.rightWheel.motorTorque = motor;
