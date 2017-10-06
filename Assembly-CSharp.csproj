@@ -85,6 +85,7 @@
      <Compile Include="Assets\Scripts\Systems\GoToLevelPanelSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\LoadSceneSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\PauseSystem.cs" />
+     <Compile Include="Assets\Scripts\Systems\PauseVFXSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\PunchButtonSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\RenderParticleSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\TimingSystem.cs" />
@@ -95,7 +96,6 @@
      <Compile Include="Assets\Scripts\TODO\PausePanel.cs" />
      <Compile Include="Assets\Scripts\TODO\Settlement.cs" />
      <Compile Include="Assets\Scripts\TODO\Systems\CarWheelColliderSystm.cs" />
-     <Compile Include="Assets\Scripts\TODO\Systems\PauseVFXSystem.cs" />
      <Compile Include="Assets\Scripts\TODO\Systems\SettlementSystem.cs" />
      <Compile Include="Assets\Scripts\TODO\Systems\SpeedSystem.cs" />
      <Compile Include="Assets\Scripts\Utilities\CombineMeshes.cs" />
@@ -105,6 +105,7 @@
      <Compile Include="Assets\Scripts\Utilities\LoadAssetsUtility.cs" />
      <Compile Include="Assets\Scripts\Utilities\LoadSceneHistory.cs" />
      <Compile Include="Assets\Scripts\Utilities\RangedFloat.cs" />
+     <Compile Include="Assets\Temp\PlayerControl.cs" />
      <None Include="Assets\Plugins\DOTween\DOTween46.xml" />
      <None Include="Assets\Plugins\DOTween\DOTween50.xml" />
      <None Include="Assets\Plugins\DOTween\readme.txt" />
