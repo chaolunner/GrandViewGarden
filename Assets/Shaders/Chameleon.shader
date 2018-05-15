@@ -1,4 +1,6 @@
-﻿Shader "Custom/Chameleon" {
+﻿// Upgrade NOTE: upgraded instancing buffer 'Props' to new syntax.
+
+Shader "Custom/Chameleon" {
 	Properties {
 		_MainColor ("Main Color", Color) = (1,1,1,1)
 		_MainTexture ("Main Texture", 2D) = "white" {}
@@ -30,8 +32,8 @@
 		fixed4 _MainColor;
 		fixed4 _BaseColor;
 
-		UNITY_INSTANCING_CBUFFER_START(Props)
-		UNITY_INSTANCING_CBUFFER_END
+		UNITY_INSTANCING_BUFFER_START(Props)
+		UNITY_INSTANCING_BUFFER_END(Props)
 
 		fixed4 OverlayBlendMode(fixed4 basePixel, fixed4 blendPixel) {
     		if (basePixel.a == 0) {

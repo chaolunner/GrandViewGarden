@@ -1,0 +1,6 @@
+[submodule "Assets/EasyFramework"]
+	path = Assets/EasyFramework
+	url = git@github.com:chaolunner/EasyFramework.git
+[submodule "Assets/StreamingAssets"]
+	path = Assets/StreamingAssets
+	url = git@github.com:chaolunner/EasyFrameworkStreamingAssets.git
