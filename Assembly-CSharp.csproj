@@ -221,19 +221,6 @@
      <Compile Include="Assets\EasyFramework\Plugins\UniEasy\Utilities\Reflections\TypeHelper.cs" />
      <Compile Include="Assets\EasyFramework\Plugins\UniEasy\Utilities\UI\Effects\Circular.cs" />
      <Compile Include="Assets\EasyFramework\Plugins\UniEasy\Utilities\UI\Effects\Distortion.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample01_ObservableWWW.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample02_ObservableTriggers.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample03_GameObjectAsObservable.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample04_ConvertFromUnityCallback.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample05_ConvertFromCoroutine.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample06_ConvertToCoroutine.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample07_OrchestratIEnumerator.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample08_DetectDoubleClick.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample09_EventHandling.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample10_MainThreadDispatcher.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample11_Logger.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample12_ReactiveProperty.cs" />
-     <Compile Include="Assets\EasyFramework\Plugins\UniRx\Examples\Sample13_ToDoApp.cs" />
      <Compile Include="Assets\EasyFramework\Plugins\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\EasyFramework\Plugins\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\EasyFramework\Plugins\UniRx\Scripts\Disposables\CancellationDisposable.cs" />
@@ -515,7 +502,6 @@
      <Compile Include="Assets\Scripts\Utilities\Cylinder.cs" />
      <Compile Include="Assets\Scripts\Utilities\FPSUtility.cs" />
      <Compile Include="Assets\Scripts\Utilities\Hexahedron.cs" />
-     <Compile Include="Assets\Scripts\Utilities\LoadAssetsUtility.cs" />
      <Compile Include="Assets\Scripts\Utilities\LoadSceneHistory.cs" />
      <Compile Include="Assets\Scripts\Utilities\RangedFloat.cs" />
      <Compile Include="Assets\UniECS\Core\Components\IComponent.cs" />
