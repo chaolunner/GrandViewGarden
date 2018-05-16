@@ -1,2 +1,8 @@
 Library/
-Temp/
+[Tt]emp/
+[Tt]emp.meta
+[Oo]bj/
+[Oo]bj.meta
+*.csproj
+*.suo
+*.userprefs

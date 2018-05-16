@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 8f1041ed9553ea74d8b50d94e5e5982b
+timeCreated: 1502528766
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: A-OTF Gothic BBB Pro
+  fontNames:
+  - A-OTF Gothic BBB Pro
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
