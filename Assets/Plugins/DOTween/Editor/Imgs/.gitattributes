@@ -1,0 +1,1 @@
+*.{cubemap,unitypackage,apk,exe,ipa,pdf,dll,pdb,so,7z,bz2,gz,rar,tar,zip,3dm,3ds,blend,c4d,collada,dae,dxf,fbx,jas,lws,lxo,ma,max,mb,obj,ply,skp,stl,ztl,abc,aif,aiff,it,mod,mp3,ogg,s3m,wav,xm,otf,ttf,bmp,exr,gif,hdr,iff,jpeg,jpg,pict,png,psd,tga,tif,tiff,ai,asd,pmp,asf,avi,flv,mov,mp4,mpeg,mpg,ogv,wmv,a,arobject,lxo,reason,rns} filter=lfs diff=lfs merge=lfs -text

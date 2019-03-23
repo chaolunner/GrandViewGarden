@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25456854d3f20642aa5cfe7b9716e10, type: 3}
+  m_Name: Block0
+  m_EditorClassIdentifier: 
+  keys: 0000000001000000
+  values:
+  - BlockName: RequestBlockProcessingTrigger
+    GameObject: {fileID: 1409471541849296, guid: c2c48ec1c3acdc142ae8658ea716c020,
+      type: 2}
+    LocalPosition: {x: 0, y: 10, z: 25}
+    LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 1, y: 20, z: 1}
+  - BlockName: Road1
+    GameObject: {fileID: 1455357713630928, guid: 71edb7d6de59e034b9cca614f40c333a,
+      type: 2}
+    LocalPosition: {x: 0, y: 0, z: 25}
+    LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 2, y: 1, z: 50}
