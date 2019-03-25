@@ -2,7 +2,7 @@
 
 Created by chaolun
 
-This is my first project when I was in College. At that time, because of the lack of experience, many regrets and shortcomings were left behind. So now I'm going to remake it :P
+It's a game project based on the [UnityFramework](https://github.com/chaolunner/UnityFramework) framework to show some features and usage of the framework.
 
 Reference
 ---
