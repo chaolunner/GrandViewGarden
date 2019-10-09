@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -15,13 +16,13 @@ MonoBehaviour:
   values:
   - BlockName: RequestBlockProcessingTrigger
     GameObject: {fileID: 1409471541849296, guid: c2c48ec1c3acdc142ae8658ea716c020,
-      type: 2}
+      type: 3}
     LocalPosition: {x: 0, y: 10, z: 25}
     LocalRotation: {x: 0, y: 0, z: 0, w: 1}
     LocalScale: {x: 1, y: 20, z: 1}
   - BlockName: Road1
     GameObject: {fileID: 1455357713630928, guid: 71edb7d6de59e034b9cca614f40c333a,
-      type: 2}
+      type: 3}
     LocalPosition: {x: 0, y: 0, z: 25}
     LocalRotation: {x: 0, y: 0, z: 0, w: 1}
     LocalScale: {x: 2, y: 1, z: 50}

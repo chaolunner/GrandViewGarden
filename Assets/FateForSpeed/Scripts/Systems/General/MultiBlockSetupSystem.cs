@@ -85,6 +85,7 @@ public class MultiBlockSetupSystem : SystemBehaviour
             {
                 foreach (var prefab in prefabs)
                 {
+                    Debug.Log(PoolSystem + " : " + prefab);
                     PoolSystem.Alloc(prefab, transform, blockSetuper.MaxVisibleCount * maximum[prefab]);
                 }
 
