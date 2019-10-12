@@ -968,6 +968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targets: []
+  references: []
 --- !u!1 &1979256293358710
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,7 +981,7 @@ GameObject:
   - component: {fileID: 114694461198322712}
   - component: {fileID: 95148725957280052}
   - component: {fileID: 114339292413931066}
-  - component: {fileID: 114852000469786072}
+  - component: {fileID: 6866229189293674292}
   m_Layer: 5
   m_Name: SettingPanel
   m_TagString: Untagged
@@ -1025,7 +1026,7 @@ MonoBehaviour:
   Components:
   - {fileID: 95148725957280052}
   - {fileID: 114339292413931066}
-  - {fileID: 114852000469786072}
+  - {fileID: 6866229189293674292}
   RuntimeComponents: []
   ScriptableComponents: []
   AutoUpdate: 1
@@ -1063,7 +1064,7 @@ MonoBehaviour:
   IsOn:
     value: 0
   Group: {fileID: 0}
---- !u!114 &114852000469786072
+--- !u!114 &6866229189293674292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1072,9 +1073,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1979256293358710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc03470e1df63a44b8cc34f9e56d717c, type: 3}
+  m_Script: {fileID: 11500000, guid: a124b940a56bb9f41961c9e2831b0739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets:
-  - EventType: FSMButtonClickedEvent
-    Target: {fileID: 0}
+  targets: []
+  references: []

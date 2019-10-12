@@ -1,104 +1,31 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &100100000
-Prefab:
-  m_ObjectHideFlags: 1
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications: []
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1033299262774168}
-  m_IsPrefabAsset: 1
 --- !u!1 &1033299262774168
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224128907433922828}
   - component: {fileID: 114410963918512692}
   - component: {fileID: 95613220913327696}
   - component: {fileID: 114907035539684744}
-  - component: {fileID: 114399661438609314}
+  - component: {fileID: 3263178938456064263}
   m_Layer: 5
-  m_Name: GameOver
+  m_Name: GameOverPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!95 &95613220913327696
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1033299262774168}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 68078bed1d0417041bc33d00c260a874, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114399661438609314
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1033299262774168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc03470e1df63a44b8cc34f9e56d717c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targets:
-  - EventType: TriggerEnterEvent
-    Target: {fileID: 11400000, guid: cb8083faa718cfd408d687a9798b610e, type: 2}
---- !u!114 &114410963918512692
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1033299262774168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce741a935e6eca44692af4174752d2bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Components:
-  - {fileID: 95613220913327696}
-  - {fileID: 114907035539684744}
-  - {fileID: 114399661438609314}
-  RuntimeComponents: []
-  ScriptableComponents: []
-  AutoUpdate: 1
---- !u!114 &114907035539684744
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1033299262774168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 647f770c4a9234e409de2cab898dd3d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsOn:
-    value: 0
-  Group: {fileID: 0}
 --- !u!224 &224128907433922828
 RectTransform:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033299262774168}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -112,3 +39,72 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &114410963918512692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033299262774168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce741a935e6eca44692af4174752d2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Components:
+  - {fileID: 95613220913327696}
+  - {fileID: 114907035539684744}
+  - {fileID: 3263178938456064263}
+  RuntimeComponents: []
+  ScriptableComponents: []
+  AutoUpdate: 1
+--- !u!95 &95613220913327696
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033299262774168}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 68078bed1d0417041bc33d00c260a874, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114907035539684744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033299262774168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647f770c4a9234e409de2cab898dd3d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsOn:
+    value: 0
+  Group: {fileID: 0}
+--- !u!114 &3263178938456064263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033299262774168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a124b940a56bb9f41961c9e2831b0739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targets:
+  - EventType: TriggerEnterEvent
+    Target: {fileID: 11400000, guid: cb8083faa718cfd408d687a9798b610e, type: 2}
+  references: []

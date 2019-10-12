@@ -6,15 +6,15 @@ using UniEasy;
 using UniRx;
 
 [System.Serializable]
-public struct EventListenObject
+public struct SerializableEventObject
 {
     [TypePopup(typeof(ISerializableEvent))]
     public string EventType;
     public Object Target;
 }
 
-[AddComponentMenu("Listeners/EventsListener")]
-public class EventsListener : ListenerBehaviour<EventListenObject>
+[AddComponentMenu("Listeners/SerializableEventListener")]
+public class SerializableEventListener : ListenerBehaviour<SerializableEventObject, GameObject>
 {
     protected IEventSystem EventSystem
     {

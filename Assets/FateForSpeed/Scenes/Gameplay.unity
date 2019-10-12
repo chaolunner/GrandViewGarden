@@ -320,6 +320,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 816461011084718735, guid: 9b603752917e6234db3153fd98c0f881,
+        type: 3}
+      propertyPath: targets.Array.data[0].EventType
+      value: TriggerEnterEvent
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b603752917e6234db3153fd98c0f881, type: 3}
 --- !u!1 &313579180

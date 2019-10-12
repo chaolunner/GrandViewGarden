@@ -1,6 +1,6 @@
 using UnityEngine;
 
 [AddComponentMenu("Listeners/ClickListener")]
-public class ClickListener : SimplifiedListener
+public class ClickListener : GameObjectListener
 {
 }

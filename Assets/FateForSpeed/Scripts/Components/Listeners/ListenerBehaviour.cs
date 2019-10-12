@@ -4,14 +4,22 @@ using UnityEngine;
 using UniEasy;
 
 [AddComponentMenu("Listeners/ListenerBehaviour")]
-public class ListenerBehaviour<T> : ComponentBehaviour, IListener<T>
+public class ListenerBehaviour<T1, T2> : ComponentBehaviour, IListener<T1>
 {
     [SerializeField, Reorderable(elementName: null, isDrawObjectReference: false)]
-    protected List<T> targets;
+    protected List<T1> targets;
+    [SerializeField, Reorderable(elementName: null, isDrawObjectReference: false)]
+    protected List<T2> references;
 
-    public virtual List<T> Targets
+    public virtual List<T1> Targets
     {
         get { return targets; }
         set { targets = value; }
+    }
+
+    public virtual List<T2> References
+    {
+        get { return references; }
+        set { references = value; }
     }
 }

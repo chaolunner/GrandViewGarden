@@ -3160,8 +3160,46 @@ PrefabInstance:
       propertyPath: targets.Array.data[0].EventType
       value: FSMButtonClickedEvent
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 254821977296113439, guid: c4af229356d7fce4b8fe96905a9baf6e,
+        type: 3}
+      propertyPath: Components.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 254821977296113439, guid: c4af229356d7fce4b8fe96905a9baf6e,
+        type: 3}
+      propertyPath: Components.Array.data[2]
+      value: 
+      objectReference: {fileID: 3884924636724844909}
+    - target: {fileID: 8688213895751659828, guid: c4af229356d7fce4b8fe96905a9baf6e,
+        type: 3}
+      propertyPath: targets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688213895751659828, guid: c4af229356d7fce4b8fe96905a9baf6e,
+        type: 3}
+      propertyPath: targets.Array.data[0].EventType
+      value: FSMButtonClickedEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688213895751659828, guid: c4af229356d7fce4b8fe96905a9baf6e,
+        type: 3}
+      propertyPath: targets.Array.data[0].Target
+      value: 
+      objectReference: {fileID: 427194977}
+    m_RemovedComponents:
+    - {fileID: 1295739007, guid: c4af229356d7fce4b8fe96905a9baf6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c4af229356d7fce4b8fe96905a9baf6e, type: 3}
+--- !u!114 &3884924636724844909 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8688213895751659828, guid: c4af229356d7fce4b8fe96905a9baf6e,
+    type: 3}
+  m_PrefabInstance: {fileID: 3884924636724844908}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a124b940a56bb9f41961c9e2831b0739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5449635226978690795
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class LoadingScreenSystem : RuntimeSystem
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
-        loadingScreens = this.Create(typeof(LoadingScreen), typeof(Animator), typeof(EventsListener));
+        loadingScreens = this.Create(typeof(LoadingScreen), typeof(Animator), typeof(SerializableEventListener));
     }
 
     public override void OnEnable()
@@ -22,7 +22,7 @@ public class LoadingScreenSystem : RuntimeSystem
         loadingScreens.OnAdd().Subscribe(entity =>
         {
             var loadingScreen = entity.GetComponent<LoadingScreen>();
-            var listener = entity.GetComponent<EventsListener>();
+            var listener = entity.GetComponent<SerializableEventListener>();
             var animator = entity.GetComponent<Animator>();
 
             loadingScreen.State.DistinctUntilChanged().Subscribe(state =>

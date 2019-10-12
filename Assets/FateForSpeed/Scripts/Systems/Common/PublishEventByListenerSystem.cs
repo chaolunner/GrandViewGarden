@@ -33,18 +33,18 @@ public class PublishEventByListenerSystem : SystemBehaviour
                 {
                     if (publishEventByListener.Identifier)
                     {
-                        PublishEvents(publishEventByListener.Identifier, publishEventByListener.Events);
+                        PublishEvents(publishEventByListener.Identifier, publishEventByListener.Events, publishEventByListener.References);
                     }
                     else
                     {
-                        PublishEvents(viewComponent.Transforms[0].gameObject, publishEventByListener.Events);
+                        PublishEvents(viewComponent.Transforms[0].gameObject, publishEventByListener.Events, publishEventByListener.References);
                     }
                 }).AddTo(this.Disposer).AddTo(publishEventByListener.Disposer);
             }
         }).AddTo(this.Disposer);
     }
 
-    private void PublishEvents(Object source, List<InspectableObjectData> events)
+    private void PublishEvents(Object source, List<InspectableObjectData> events, List<GameObject> references = null)
     {
         foreach (var evt in events)
         {
@@ -52,6 +52,7 @@ public class PublishEventByListenerSystem : SystemBehaviour
             var serializableEvent = message as ISerializableEvent;
 
             serializableEvent.Source = source;
+            serializableEvent.References = references;
             EventSystem.Publish(message);
         }
     }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
 [AddComponentMenu("Listeners/TriggerEnterListener")]
-public class TriggerEnterListener : SimplifiedListener
+public class TriggerEnterListener : GameObjectListener
 {
 }

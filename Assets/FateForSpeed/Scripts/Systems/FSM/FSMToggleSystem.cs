@@ -24,9 +24,9 @@ public class FSMToggleSystem : RuntimeSystem
             var toggle = entity.GetComponent<FSMToggle>();
             var animator = entity.GetComponent<Animator>();
 
-            if (entity.HasComponent<EventsListener>())
+            if (entity.HasComponent<SerializableEventListener>())
             {
-                var listener = entity.GetComponent<EventsListener>();
+                var listener = entity.GetComponent<SerializableEventListener>();
 
                 listener.OnEvent<FSMButtonClickedEvent>().Subscribe(_ =>
                 {

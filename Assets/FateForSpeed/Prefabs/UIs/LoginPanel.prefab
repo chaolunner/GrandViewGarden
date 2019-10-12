@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 254821977296113439}
   - component: {fileID: 3082176411556906046}
   - component: {fileID: 3082176411556906045}
-  - component: {fileID: 1295739007}
+  - component: {fileID: 8688213895751659828}
   m_Layer: 5
   m_Name: LoginPanel
   m_TagString: Untagged
@@ -229,7 +229,7 @@ MonoBehaviour:
   Components:
   - {fileID: 3082176411556906046}
   - {fileID: 3082176411556906045}
-  - {fileID: 1295739007}
+  - {fileID: 8688213895751659828}
   RuntimeComponents: []
   ScriptableComponents: []
   AutoUpdate: 1
@@ -267,7 +267,7 @@ MonoBehaviour:
   IsOn:
     value: 0
   Group: {fileID: 0}
---- !u!114 &1295739007
+--- !u!114 &8688213895751659828
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -276,10 +276,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3082176411556906044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc03470e1df63a44b8cc34f9e56d717c, type: 3}
+  m_Script: {fileID: 11500000, guid: a124b940a56bb9f41961c9e2831b0739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targets: []
+  references: []
 --- !u!1 &3082176411597940439
 GameObject:
   m_ObjectHideFlags: 0

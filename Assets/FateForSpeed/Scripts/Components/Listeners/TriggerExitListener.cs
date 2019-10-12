@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
 [AddComponentMenu("Listeners/TriggerExitListener")]
-public class TriggerExitListener : SimplifiedListener
+public class TriggerExitListener : GameObjectListener
 {
 }

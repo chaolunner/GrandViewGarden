@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class SimplifiedListener : ListenerBehaviour<GameObject>
+public class GameObjectListener : ListenerBehaviour<GameObject, GameObject>
 {
     public override List<GameObject> Targets
     {
