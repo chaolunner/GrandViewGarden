@@ -297,6 +297,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 802001180}
     m_Modifications:
+    - target: {fileID: 1723644298293702, guid: b6cf654f70efcab44a7a97ad81647906, type: 3}
+      propertyPath: m_Name
+      value: MainMenuPanel
+      objectReference: {fileID: 0}
     - target: {fileID: 224194023051777302, guid: b6cf654f70efcab44a7a97ad81647906,
         type: 3}
       propertyPath: m_LocalPosition.x
