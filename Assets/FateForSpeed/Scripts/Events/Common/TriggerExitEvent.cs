@@ -1,6 +1,6 @@
 ﻿using UniEasy;
 
-[ContextMenu("General/TriggerExitEvent")]
+[ContextMenu("Common/TriggerExitEvent")]
 public class TriggerExitEvent : SerializableEvent
 {
 }

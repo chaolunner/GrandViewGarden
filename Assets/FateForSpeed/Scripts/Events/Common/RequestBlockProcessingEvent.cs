@@ -1,6 +1,6 @@
 ﻿using UniEasy;
 
-[ContextMenu("General/RequestBlockProcessingEvent")]
+[ContextMenu("Common/RequestBlockProcessingEvent")]
 public class RequestBlockProcessingEvent : SerializableEvent
 {
 }

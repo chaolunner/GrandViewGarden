@@ -1,6 +1,6 @@
 ﻿using UniEasy;
 
-[ContextMenu("General/TriggerEnterEvent")]
+[ContextMenu("Common/TriggerEnterEvent")]
 public class TriggerEnterEvent : SerializableEvent
 {
 }
