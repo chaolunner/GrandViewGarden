@@ -44,11 +44,11 @@ public class PublishEventByListenerSystem : SystemBehaviour
         }).AddTo(this.Disposer);
     }
 
-    private void PublishEvents(Object source, List<InspectableObjectData> events, List<GameObject> references = null)
+    private void PublishEvents(Object source, List<string> events, List<GameObject> references = null)
     {
         foreach (var evt in events)
         {
-            var message = evt.CreateInstance(false);
+            var message = RuntimeObject.FromJson(evt);
             var serializableEvent = message as ISerializableEvent;
 
             serializableEvent.Source = source;

@@ -7,7 +7,7 @@ public class PublishEventByListener : ComponentBehaviour
 {
     public IdentificationObject Identifier;
     [Reorderable(elementName: null), DropdownMenu(typeof(ISerializableEvent))]
-    public List<InspectableObjectData> Events;
+    public List<string> Events;
     [Reorderable(elementName: null)]
     public List<GameObject> References;
 }
