@@ -2,6 +2,6 @@
 using UnityEngine;
 
 [AddComponentMenu("Systems/PhysicsSystems")]
-public class PhysicsSystems : Feature
+public class PhysicsSystems : RuntimeFeature
 {
 }

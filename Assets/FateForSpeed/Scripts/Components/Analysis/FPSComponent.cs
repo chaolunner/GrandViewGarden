@@ -18,6 +18,6 @@ public class FPSComponent : RuntimeComponent
 {
     public int FrameRange = 60;
     public Text HighestFPSLabel, AverageFPSLabel, LowestFPSLabel;
-    [Reorderable(elementName: null)]
+    [Reorderable]
     public List<FPSColorRange> ColorRamp;
 }

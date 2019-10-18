@@ -29,7 +29,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409471541849296}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 10, z: 25}
   m_LocalScale: {x: 1, y: 20, z: 1}
   m_Children: []
@@ -129,10 +129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Identifier: {fileID: 0}
   Events:
-  - keys: 
-    values: []
-    Type: RequestBlockProcessingEvent
-    Data: '{}'
+  - '{"Type":"RequestBlockProcessingEvent","Data":"{}"}'
+  References: []
 --- !u!114 &114918995518364774
 MonoBehaviour:
   m_ObjectHideFlags: 0

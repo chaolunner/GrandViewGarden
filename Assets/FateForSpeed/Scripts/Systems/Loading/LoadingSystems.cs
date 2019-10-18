@@ -2,6 +2,6 @@
 using UnityEngine;
 
 [AddComponentMenu("Systems/LoadingSystems")]
-public class LoadingSystems : Feature
+public class LoadingSystems : RuntimeFeature
 {
 }

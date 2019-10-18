@@ -2,6 +2,6 @@
 using UnityEngine;
 
 [AddComponentMenu("Systems/SetProgressSystems")]
-public class SetProgressSystems : Feature
+public class SetProgressSystems : RuntimeFeature
 {
 }

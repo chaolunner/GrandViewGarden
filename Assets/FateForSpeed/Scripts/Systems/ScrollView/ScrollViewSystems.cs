@@ -2,6 +2,6 @@
 using UnityEngine;
 
 [AddComponentMenu("Systems/ScrollViewSystems")]
-public class ScrollViewSystems : Feature
+public class ScrollViewSystems : RuntimeFeature
 {
 }

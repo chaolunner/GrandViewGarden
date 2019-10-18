@@ -6,8 +6,8 @@ using UniEasy;
 public class PublishEventByListener : ComponentBehaviour
 {
     public IdentificationObject Identifier;
-    [Reorderable(elementName: null), DropdownMenu(typeof(ISerializableEvent)), RuntimeObject]
+    [Reorderable, DropdownMenu(typeof(ISerializableEvent)), RuntimeObject]
     public List<string> Events;
-    [Reorderable(elementName: null)]
-    public List<GameObject> References;
+    [Reorderable, ComponentReference]
+    public List<ComponentReference> References;
 }

@@ -44,7 +44,7 @@ public class PublishEventByListenerSystem : SystemBehaviour
         }).AddTo(this.Disposer);
     }
 
-    private void PublishEvents(Object source, List<string> events, List<GameObject> references = null)
+    private void PublishEvents(Object source, List<string> events, List<ComponentReference> references = null)
     {
         foreach (var evt in events)
         {

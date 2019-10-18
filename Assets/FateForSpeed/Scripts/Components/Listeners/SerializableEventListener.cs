@@ -8,7 +8,6 @@ using UniRx;
 [System.Serializable]
 public struct SerializableEventObject
 {
-    [TypePopup(typeof(ISerializableEvent))]
     public string EventType;
     public Object Target;
 }

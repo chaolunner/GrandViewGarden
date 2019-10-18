@@ -828,14 +828,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RuntimeSystemsData:
-  - keys: 
-    values: []
-    Type: FSMToggleGroupSystem
-    Data: '{"IsOn":{"value":true}}'
-  - keys: 
-    values: []
-    Type: FSMToggleSystem
-    Data: '{"IsOn":{"value":true}}'
+  - '{"Type":"FSMClickSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
+  - '{"Type":"FSMProgressSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
+  - '{"Type":"FSMToggleGroupSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
+  - '{"Type":"FSMToggleSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
 --- !u!224 &770284273 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224128907433922828, guid: 9b603752917e6234db3153fd98c0f881,

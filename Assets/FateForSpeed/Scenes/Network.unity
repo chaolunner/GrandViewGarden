@@ -1474,18 +1474,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RuntimeSystemsData:
-  - keys: 
-    values: []
-    Type: FSMClickSystem
-    Data: '{"IsOn":{"value":true}}'
-  - keys: 
-    values: []
-    Type: FSMToggleSystem
-    Data: '{"IsOn":{"value":true}}'
-  - keys: 
-    values: []
-    Type: FSMToggleGroupSystem
-    Data: '{"IsOn":{"value":true}}'
+  - '{"Type":"FSMClickSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
+  - '{"Type":"FSMProgressSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
+  - '{"Type":"FSMToggleGroupSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
+  - '{"Type":"FSMToggleSystem","Data":"{\"IsOn\":{\"value\":true}}"}'
 --- !u!4 &1282982782
 Transform:
   m_ObjectHideFlags: 0

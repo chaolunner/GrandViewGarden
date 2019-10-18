@@ -468,9 +468,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3082176411826055700}
+  - component: {fileID: 3776438588157454092}
   - component: {fileID: 3082176411826055697}
   - component: {fileID: 3082176411826055698}
   - component: {fileID: 3082176411826055699}
+  - component: {fileID: 6851270850400708588}
+  - component: {fileID: 6597300567369058020}
   m_Layer: 5
   m_Name: LoginButton
   m_TagString: Untagged
@@ -498,6 +501,27 @@ RectTransform:
   m_AnchoredPosition: {x: -120, y: -150}
   m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3776438588157454092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3082176411826055701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce741a935e6eca44692af4174752d2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Components:
+  - {fileID: 3082176411826055697}
+  - {fileID: 3082176411826055698}
+  - {fileID: 3082176411826055699}
+  - {fileID: 6597300567369058020}
+  - {fileID: 6851270850400708588}
+  RuntimeComponents: []
+  ScriptableComponents: []
+  AutoUpdate: 1
 --- !u!222 &3082176411826055697
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -577,6 +601,43 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &6851270850400708588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3082176411826055701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 155aba596807c2448ab8c51ace7562f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targets: []
+  references: []
+--- !u!114 &6597300567369058020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3082176411826055701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5efe7f5a34d7af840b6ab0bd8fce427a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Identifier: {fileID: 0}
+  Events: []
+  References:
+  - Name: UserName
+    IsExpanded: 1
+    Target: {fileID: 3082176411597940439}
+    Component: {fileID: 3082176411597940437}
+  - Name: Password
+    IsExpanded: 1
+    Target: {fileID: 3082176412437435050}
+    Component: {fileID: 3082176412437435048}
 --- !u!1 &3082176411966922303
 GameObject:
   m_ObjectHideFlags: 0
