@@ -1,8 +1,6 @@
-﻿using UniRx.Triggers;
-using UniEasy.ECS;
+﻿using UniEasy.ECS;
 using UnityEngine;
 using UniEasy;
-using System;
 using UniRx;
 
 [ContextMenuAttribute("Progresses/SetProgressByDistanceSystem")]
@@ -27,37 +25,17 @@ public class SetProgressByDistanceSystem : RuntimeSystem
             var progressComponent = entity.GetComponent<ProgressComponent>();
             var viewComponent = entity.GetComponent<ViewComponent>();
 
-            if (entity.HasComponent<TriggerEnterListener>() || entity.HasComponent<TriggerStayListener>() || entity.HasComponent<TriggerExitListener>())
+            entity.OnListenerAsObservable().Subscribe(data =>
             {
-                IObservable<Collider> enterObservable = null;
-                IObservable<Collider> stayObservable = null;
-                IObservable<Collider> exitObservable = null;
-
-                if (entity.HasComponent<TriggerEnterListener>())
+                if (setProgressByDistance.Space == Space.Self)
                 {
-                    enterObservable = entity.GetComponent<TriggerEnterListener>().Targets.OnTriggerEnterAsObservable();
+                    progressComponent.Progress.Value = setProgressByDistance.ProgressCurve.Evaluate(1 - Mathf.Clamp01(viewComponent.Transforms[0].InverseTransformVector(viewComponent.Transforms[0].position - data.Collider.transform.position).magnitude / setProgressByDistance.Distance));
                 }
-                if (entity.HasComponent<TriggerStayListener>())
+                else
                 {
-                    stayObservable = entity.GetComponent<TriggerStayListener>().Targets.OnTriggerStayAsObservable();
+                    progressComponent.Progress.Value = setProgressByDistance.ProgressCurve.Evaluate(1 - Mathf.Clamp01(Vector3.Distance(viewComponent.Transforms[0].position, data.Collider.transform.position) / setProgressByDistance.Distance));
                 }
-                if (entity.HasComponent<TriggerExitListener>())
-                {
-                    exitObservable = entity.GetComponent<TriggerExitListener>().Targets.OnTriggerExitAsObservable();
-                }
-
-                Observable.SafeMerge(enterObservable, stayObservable, exitObservable).Subscribe(col =>
-                {
-                    if (setProgressByDistance.Space == Space.Self)
-                    {
-                        progressComponent.Progress.Value = setProgressByDistance.ProgressCurve.Evaluate(1 - Mathf.Clamp01(viewComponent.Transforms[0].InverseTransformVector(viewComponent.Transforms[0].position - col.transform.position).magnitude / setProgressByDistance.Distance));
-                    }
-                    else
-                    {
-                        progressComponent.Progress.Value = setProgressByDistance.ProgressCurve.Evaluate(1 - Mathf.Clamp01(Vector3.Distance(viewComponent.Transforms[0].position, col.transform.position) / setProgressByDistance.Distance));
-                    }
-                }).AddTo(this.Disposer).AddTo(progressComponent.Disposer);
-            }
+            }).AddTo(this.Disposer).AddTo(setProgressByDistance.Disposer);
         }).AddTo(this.Disposer);
     }
 }

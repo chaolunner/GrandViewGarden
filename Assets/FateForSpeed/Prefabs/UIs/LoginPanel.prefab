@@ -628,7 +628,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Identifier: {fileID: 0}
-  Events: []
+  Events:
+  - '{"Type":"LoginEvent","Data":"{}"}'
   References:
   - Name: UserName
     IsExpanded: 1

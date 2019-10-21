@@ -25,22 +25,17 @@ public class PublishEventByListenerSystem : SystemBehaviour
             var publishEventByListener = entity.GetComponent<PublishEventByListener>();
             var viewComponent = entity.GetComponent<ViewComponent>();
 
-            if (entity.HasComponent<TriggerEnterListener>())
+            entity.OnListenerAsObservable().Subscribe(_ =>
             {
-                var listener = entity.GetComponent<TriggerEnterListener>();
-
-                listener.Targets.OnTriggerEnterAsObservable().Subscribe(_ =>
+                if (publishEventByListener.Identifier)
                 {
-                    if (publishEventByListener.Identifier)
-                    {
-                        PublishEvents(publishEventByListener.Identifier, publishEventByListener.Events, publishEventByListener.References);
-                    }
-                    else
-                    {
-                        PublishEvents(viewComponent.Transforms[0].gameObject, publishEventByListener.Events, publishEventByListener.References);
-                    }
-                }).AddTo(this.Disposer).AddTo(publishEventByListener.Disposer);
-            }
+                    PublishEvents(publishEventByListener.Identifier, publishEventByListener.Events, publishEventByListener.References);
+                }
+                else
+                {
+                    PublishEvents(viewComponent.Transforms[0].gameObject, publishEventByListener.Events, publishEventByListener.References);
+                }
+            }).AddTo(this.Disposer).AddTo(publishEventByListener.Disposer);
         }).AddTo(this.Disposer);
     }
 

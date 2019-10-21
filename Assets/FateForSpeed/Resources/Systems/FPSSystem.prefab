@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114148421618812154}
   - component: {fileID: 223097887502558080}
   - component: {fileID: 114438987162938476}
+  - component: {fileID: 2323307410315962673}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -52,19 +53,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Components:
-  - {fileID: 114905413532079244}
   - {fileID: 223097887502558080}
   - {fileID: 114438987162938476}
-  RuntimeComponents:
-  - keys: 00420000f841000004420000
-    values:
-    - {fileID: 114886294354825334}
-    - {fileID: 114005779403825168}
-    - {fileID: 114950123178580366}
-    Type: FPSComponent
-    Data: '{"FrameRange":60,"HighestFPSLabel":{"instanceID":16896},"AverageFPSLabel":{"instanceID":16888},"LowestFPSLabel":{"instanceID":16900},"ColorRamp":[{"Color":{"r":0.0,"g":1.0,"b":1.0,"a":1.0},"Range":{"Min":45,"Max":300}},{"Color":{"r":0.0,"g":1.0,"b":0.0,"a":1.0},"Range":{"Min":30,"Max":45}},{"Color":{"r":1.0,"g":1.0,"b":0.0,"a":1.0},"Range":{"Min":25,"Max":30}},{"Color":{"r":1.0,"g":0.49803921580314639,"b":0.0,"a":1.0},"Range":{"Min":15,"Max":25}},{"Color":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"Range":{"Min":0,"Max":15}}]}'
+  - {fileID: 2323307410315962673}
+  RuntimeComponents: []
   ScriptableComponents: []
-  AutoUpdate: 0
+  AutoUpdate: 1
 --- !u!223 &223097887502558080
 Canvas:
   m_ObjectHideFlags: 0
@@ -108,6 +102,43 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &2323307410315962673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688752228143070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571021f048d7606418ad20f9371a24aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FrameRange: 60
+  HighestFPSLabel: {fileID: 114886294354825334}
+  AverageFPSLabel: {fileID: 114005779403825168}
+  LowestFPSLabel: {fileID: 114950123178580366}
+  ColorRamp:
+  - Color: {r: 1, g: 0, b: 0, a: 1}
+    Range:
+      Min: 0
+      Max: 15
+  - Color: {r: 1, g: 0.5019608, b: 0, a: 1}
+    Range:
+      Min: 15
+      Max: 30
+  - Color: {r: 1, g: 1, b: 0, a: 1}
+    Range:
+      Min: 30
+      Max: 45
+  - Color: {r: 0, g: 1, b: 0, a: 1}
+    Range:
+      Min: 45
+      Max: 60
+  - Color: {r: 0, g: 1, b: 1, a: 1}
+    Range:
+      Min: 60
+      Max: 360
 --- !u!1 &1756201839181116
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,8 +13,7 @@ public struct FPSColorRange
     public RangedInt Range;
 }
 
-[ContextMenuAttribute("ECS/FPSComponent")]
-public class FPSComponent : RuntimeComponent
+public class FPSComponent : ComponentBehaviour
 {
     public int FrameRange = 60;
     public Text HighestFPSLabel, AverageFPSLabel, LowestFPSLabel;

@@ -34,25 +34,20 @@ public class LoadSceneSystem : RuntimeSystem
         {
             var sceneLoader = entity.GetComponent<SceneLoader>();
 
-            if (entity.HasComponent<ClickListener>())
+            entity.OnListenerAsObservable().Subscribe(_ =>
             {
-                var listener = entity.GetComponent<ClickListener>();
-
-                listener.Targets.OnPointerClickAsObservable().Subscribe(_ =>
+                foreach (var setup in sceneLoader.LoadQueue)
                 {
-                    foreach(var setup in sceneLoader.LoadQueue)
+                    if (setup.Operation == SceneLoader.Operation.Load)
                     {
-                        if (setup.Operation == SceneLoader.Operation.Load)
-                        {
-                            EventSystem.Publish(new LoadSceneEvent(setup.SceneSetup));
-                        }
-                        else if (setup.Operation == SceneLoader.Operation.Unload)
-                        {
-                            EventSystem.Publish(new UnloadSceneEvent(setup.SceneSetup));
-                        }
+                        EventSystem.Publish(new LoadSceneEvent(setup.SceneSetup));
                     }
-                }).AddTo(this.Disposer).AddTo(listener.Disposer);
-            }
+                    else if (setup.Operation == SceneLoader.Operation.Unload)
+                    {
+                        EventSystem.Publish(new UnloadSceneEvent(setup.SceneSetup));
+                    }
+                }
+            }).AddTo(this.Disposer).AddTo(sceneLoader.Disposer);
         }).AddTo(this.Disposer);
 
         loadingScreens.OnAdd().Subscribe(entity =>
