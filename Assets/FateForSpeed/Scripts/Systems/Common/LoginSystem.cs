@@ -12,10 +12,12 @@ public class LoginSystem : SystemBehaviour
     [Inject]
     private INetworkSystem NetworkSystem;
 
+    private const char Separator = ',';
     private const string UserNameInputStr = "UserName";
     private const string PasswordInputStr = "Password";
     private const string UserNameEmptyError = "User name can't be empty!";
     private const string PasswordEmptyError = "Password can't be empty!";
+    private const string UserNameOrPasswordIncorrectError = "User name or Password incorrect!";
 
     public override void OnEnable()
     {
@@ -35,8 +37,23 @@ public class LoginSystem : SystemBehaviour
             }
             if (userNameInput != null && !string.IsNullOrEmpty(userNameInput.text) && passwordInput != null && !string.IsNullOrEmpty(passwordInput.text))
             {
-                NetworkSystem.Publish(RequestCode.Login, "");
+                NetworkSystem.Publish(RequestCode.Login, userNameInput.text + Separator + passwordInput.text);
             }
         }).AddTo(this.Disposer);
+
+        NetworkSystem.Receive(RequestCode.Login, OnLogin);
+    }
+
+    private void OnLogin(string data)
+    {
+        ReturnCode returnCode = (ReturnCode)int.Parse(data);
+        if (returnCode == ReturnCode.Success)
+        {
+            Debug.Log("login success!");
+        }
+        else
+        {
+            EventSystem.Publish(new MessageEvent(UserNameOrPasswordIncorrectError, LogType.Error));
+        }
     }
 }
