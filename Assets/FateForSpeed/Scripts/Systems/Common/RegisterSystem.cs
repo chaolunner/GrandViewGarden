@@ -1,0 +1,73 @@
+﻿using UniEasy.ECS;
+using UnityEngine;
+using UniEasy.Net;
+using UniEasy.DI;
+using UniEasy;
+using Common;
+using UniRx;
+using TMPro;
+
+public class RegisterSystem : SystemBehaviour
+{
+    [Inject]
+    private INetworkSystem NetworkSystem;
+
+    private const char Separator = ',';
+    private const string UserNameStr = "UserName";
+    private const string PasswordStr = "Password";
+    private const string RepeatPasswordStr = "RepeatPassword";
+    private const string UserNameEmptyError = "User name can't be empty!";
+    private const string PasswordEmptyError = "Password can't be empty!";
+    private const string RepeatPasswordEmptyError = "Repeat password can't be empty!";
+    private const string PasswordsAreInconsistentError = "Passwords are inconsistent!";
+    private const string RegistrationFailedError = "Registration failed, user already exists!";
+    private const string RegistrationSuccessedLog = "Registration successed!";
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+
+        EventSystem.OnEvent<RegisterEvent>().Subscribe(evt =>
+        {
+            var userNameInput = evt.References.GetComponent<TMP_InputField>(UserNameStr);
+            var passwordInput = evt.References.GetComponent<TMP_InputField>(PasswordStr);
+            var repeatPasswordInput = evt.References.GetComponent<TMP_InputField>(RepeatPasswordStr);
+
+            if (userNameInput == null || string.IsNullOrEmpty(userNameInput.text))
+            {
+                EventSystem.Publish(new MessageEvent(UserNameEmptyError, LogType.Error));
+            }
+            else if (passwordInput == null || string.IsNullOrEmpty(passwordInput.text))
+            {
+                EventSystem.Publish(new MessageEvent(PasswordEmptyError, LogType.Error));
+            }
+            else if (repeatPasswordInput == null || string.IsNullOrEmpty(repeatPasswordInput.text))
+            {
+                EventSystem.Publish(new MessageEvent(RepeatPasswordEmptyError, LogType.Error));
+            }
+            else if (passwordInput.text != repeatPasswordInput.text)
+            {
+                EventSystem.Publish(new MessageEvent(PasswordsAreInconsistentError, LogType.Error));
+            }
+            else
+            {
+                NetworkSystem.Publish(RequestCode.Register, userNameInput.text + Separator + passwordInput.text);
+            }
+        }).AddTo(this.Disposer);
+
+        NetworkSystem.Receive(RequestCode.Register, OnRegister);
+    }
+
+    private void OnRegister(string data)
+    {
+        ReturnCode returnCode = (ReturnCode)int.Parse(data);
+        if (returnCode == ReturnCode.Success)
+        {
+            EventSystem.Publish(new MessageEvent(RegistrationSuccessedLog, LogType.Log));
+        }
+        else
+        {
+            EventSystem.Publish(new MessageEvent(RegistrationFailedError, LogType.Error));
+        }
+    }
+}

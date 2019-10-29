@@ -13,11 +13,12 @@ public class LoginSystem : SystemBehaviour
     private INetworkSystem NetworkSystem;
 
     private const char Separator = ',';
-    private const string UserNameInputStr = "UserName";
-    private const string PasswordInputStr = "Password";
+    private const string UserNameStr = "UserName";
+    private const string PasswordStr = "Password";
     private const string UserNameEmptyError = "User name can't be empty!";
     private const string PasswordEmptyError = "Password can't be empty!";
     private const string UserNameOrPasswordIncorrectError = "User name or Password incorrect!";
+    private const string LoginSuccessedLog = "Login successed!";
 
     public override void OnEnable()
     {
@@ -25,17 +26,18 @@ public class LoginSystem : SystemBehaviour
 
         EventSystem.OnEvent<LoginEvent>().Subscribe(evt =>
         {
-            var userNameInput = evt.References.GetComponent<TMP_InputField>(UserNameInputStr);
-            var passwordInput = evt.References.GetComponent<TMP_InputField>(PasswordInputStr);
+            var userNameInput = evt.References.GetComponent<TMP_InputField>(UserNameStr);
+            var passwordInput = evt.References.GetComponent<TMP_InputField>(PasswordStr);
+
             if (userNameInput == null || string.IsNullOrEmpty(userNameInput.text))
             {
                 EventSystem.Publish(new MessageEvent(UserNameEmptyError, LogType.Error));
             }
-            if (passwordInput == null || string.IsNullOrEmpty(passwordInput.text))
+            else if (passwordInput == null || string.IsNullOrEmpty(passwordInput.text))
             {
                 EventSystem.Publish(new MessageEvent(PasswordEmptyError, LogType.Error));
             }
-            if (userNameInput != null && !string.IsNullOrEmpty(userNameInput.text) && passwordInput != null && !string.IsNullOrEmpty(passwordInput.text))
+            else
             {
                 NetworkSystem.Publish(RequestCode.Login, userNameInput.text + Separator + passwordInput.text);
             }
@@ -49,7 +51,7 @@ public class LoginSystem : SystemBehaviour
         ReturnCode returnCode = (ReturnCode)int.Parse(data);
         if (returnCode == ReturnCode.Success)
         {
-            Debug.Log("login success!");
+            EventSystem.Publish(new MessageEvent(LoginSuccessedLog, LogType.Log));
         }
         else
         {
