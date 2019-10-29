@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 20499869}
   - component: {fileID: 20499870}
   - component: {fileID: 5671341813473773460}
+  - component: {fileID: 2442642356653158632}
   m_Layer: 5
   m_Name: StartPanel
   m_TagString: Untagged
@@ -54,6 +55,7 @@ MonoBehaviour:
   Components:
   - {fileID: 20499870}
   - {fileID: 5671341813473773460}
+  - {fileID: 2442642356653158632}
   RuntimeComponents: []
   ScriptableComponents: []
   AutoUpdate: 1
@@ -91,6 +93,20 @@ MonoBehaviour:
   IsOn:
     value: 1
   Group: {fileID: 0}
+--- !u!114 &2442642356653158632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6330625824864881449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a124b940a56bb9f41961c9e2831b0739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targets: []
+  references: []
 --- !u!1 &6330625825965535564
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,3 +442,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targets: []
+  references: []
