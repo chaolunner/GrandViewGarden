@@ -30,7 +30,7 @@ public class IgnoreCollisionWithSiblingSystem : RuntimeSystem
 
             IgnoreCollisionWithSibling(viewComponent.Transforms[0], colliderIndexs);
 
-            EventSystem.Receive<ChildsChangedEvent>().Where(evt => evt.Parent == viewComponent.Transforms[0]).Subscribe(_ =>
+            EventSystem.OnEvent<ChildsChangedEvent>().Where(evt => evt.Parent == viewComponent.Transforms[0]).Subscribe(_ =>
             {
                 UpdateColliders(viewComponent.Transforms[0], colliderIndexs);
 

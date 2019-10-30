@@ -51,7 +51,7 @@ public class CenterOnChildSystem : RuntimeSystem
                 centeringTweener.SetEase(centerOnChild.SpeedCurve);
             }).AddTo(this.Disposer).AddTo(centerOnChild.Disposer);
 
-            EventSystem.Receive<ChildsChangedEvent>().Where(evt => evt.Parent == centerOnChild.Content).Subscribe(_ =>
+            EventSystem.OnEvent<ChildsChangedEvent>().Where(evt => evt.Parent == centerOnChild.Content).Subscribe(_ =>
             {
                 OnChildsChanged(entity, childsChangeDisposer, centeringTweener);
             }).AddTo(this.Disposer).AddTo(centerOnChild.Disposer);

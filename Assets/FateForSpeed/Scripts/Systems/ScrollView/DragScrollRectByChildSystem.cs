@@ -26,7 +26,7 @@ public class DragScrollRectByChildSystem : RuntimeSystem
             var scrollRect = entity.GetComponent<ScrollRect>();
             var childsChangeDisposer = new CompositeDisposable();
 
-            EventSystem.Receive<ChildsChangedEvent>().Where(evt => evt.Parent == scrollRect.content).Subscribe(_ =>
+            EventSystem.OnEvent<ChildsChangedEvent>().Where(evt => evt.Parent == scrollRect.content).Subscribe(_ =>
             {
                 OnChildsChanged(entity, childsChangeDisposer);
             }).AddTo(this.Disposer).AddTo(dragScrollRectByChild.Disposer);

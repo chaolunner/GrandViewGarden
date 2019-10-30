@@ -29,9 +29,14 @@ public class SerializableEventListener : ListenerBehaviour<SerializableEventObje
 
     private IEventSystem eventSystem;
 
-    public System.IObservable<T> OnEvent<T>() where T : ISerializableEvent
+    public System.IObservable<T> OnEvent<T>(bool onlyOnMainThread = false) where T : ISerializableEvent
     {
-        return EventSystem.OnEvent<T>().Where(evt => IsValid(evt));
+        var result = EventSystem.OnEvent<T>().Where(evt => IsValid(evt));
+        if (onlyOnMainThread)
+        {
+            result = result.ObserveOnMainThread();
+        }
+        return result;
     }
 
     public bool IsValid<T>(T evt) where T : ISerializableEvent

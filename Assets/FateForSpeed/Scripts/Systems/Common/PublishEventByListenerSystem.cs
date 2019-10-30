@@ -48,7 +48,7 @@ public class PublishEventByListenerSystem : SystemBehaviour
 
             serializableEvent.Source = source;
             serializableEvent.References = references;
-            EventSystem.Publish(message);
+            EventSystem.Send(message);
         }
     }
 }

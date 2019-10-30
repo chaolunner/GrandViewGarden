@@ -33,7 +33,7 @@ public class MessageSystem : SystemBehaviour
                 go.SetActive(false);
             }
 
-            EventSystem.Receive<MessageEvent>().ObserveOnMainThread().Subscribe(evt =>
+            EventSystem.OnEvent<MessageEvent>(true).Subscribe(evt =>
             {
                 var messageLineEntity = MessageLineComponents.Entities.OrderBy(e => e.GetComponent<MessageLineComponent>().Time.Value).FirstOrDefault();
                 var messageLineComponent = messageLineEntity.GetComponent<MessageLineComponent>();

@@ -33,12 +33,12 @@ public class FSMToggleSystem : RuntimeSystem
                     toggle.IsOn.Value = !toggle.IsOn.Value;
                 }).AddTo(this.Disposer).AddTo(toggle.Disposer);
 
-                listener.OnEvent<TriggerEnterEvent>().Subscribe(_ =>
+                listener.OnEvent<TriggerEnterEvent>(true).Subscribe(_ =>
                 {
                     toggle.IsOn.Value = true;
                 }).AddTo(this.Disposer).AddTo(toggle.Disposer);
 
-                listener.OnEvent<TriggerExitEvent>().Subscribe(_ =>
+                listener.OnEvent<TriggerExitEvent>(true).Subscribe(_ =>
                 {
                     toggle.IsOn.Value = false;
                 }).AddTo(this.Disposer).AddTo(toggle.Disposer);

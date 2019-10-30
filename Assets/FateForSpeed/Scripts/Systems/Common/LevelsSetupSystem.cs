@@ -34,7 +34,7 @@ public class LevelsSetupSystem : SystemBehaviour
                 toggle.IsOn.Value = true;
             }).AddTo(this.Disposer).AddTo(levelSetuper.Disposer);
 
-            EventSystem.Receive<LevelSelectedEvent>().Select(evt => evt.Index).Subscribe(index =>
+            EventSystem.OnEvent<LevelSelectedEvent>().Select(evt => evt.Index).Subscribe(index =>
             {
                 levelSetuper.Index.Value = index;
             }).AddTo(this.Disposer).AddTo(levelSetuper.Disposer);

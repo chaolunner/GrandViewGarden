@@ -40,11 +40,11 @@ public class LoadSceneSystem : RuntimeSystem
                 {
                     if (setup.Operation == SceneLoader.Operation.Load)
                     {
-                        EventSystem.Publish(new LoadSceneEvent(setup.SceneSetup));
+                        EventSystem.Send(new LoadSceneEvent(setup.SceneSetup));
                     }
                     else if (setup.Operation == SceneLoader.Operation.Unload)
                     {
-                        EventSystem.Publish(new UnloadSceneEvent(setup.SceneSetup));
+                        EventSystem.Send(new UnloadSceneEvent(setup.SceneSetup));
                     }
                 }
             }).AddTo(this.Disposer).AddTo(sceneLoader.Disposer);
@@ -63,7 +63,7 @@ public class LoadSceneSystem : RuntimeSystem
             }).AddTo(this.Disposer).AddTo(loadingScreen.Disposer);
         }).AddTo(this.Disposer);
 
-        EventSystem.Receive<LoadSceneEvent>().Subscribe(evt =>
+        EventSystem.OnEvent<LoadSceneEvent>().Subscribe(evt =>
         {
             foreach (var setup in evt.LoadSceneSetup.Setups)
             {
@@ -75,7 +75,7 @@ public class LoadSceneSystem : RuntimeSystem
             }
         }).AddTo(this.Disposer);
 
-        EventSystem.Receive<UnloadSceneEvent>().Subscribe(evt =>
+        EventSystem.OnEvent<UnloadSceneEvent>().Subscribe(evt =>
         {
             foreach (var setup in evt.UnloadSceneSetup.Setups)
             {
@@ -88,7 +88,7 @@ public class LoadSceneSystem : RuntimeSystem
             }
         }).AddTo(this.Disposer);
 
-        EventSystem.Receive<LoadSceneEvent>().Select(evt => evt.LoadSceneSetup).Merge(EventSystem.Receive<UnloadSceneEvent>().Select(evt => evt.UnloadSceneSetup))
+        EventSystem.OnEvent<LoadSceneEvent>().Select(evt => evt.LoadSceneSetup).Merge(EventSystem.OnEvent<UnloadSceneEvent>().Select(evt => evt.UnloadSceneSetup))
         .Where(_ => !readyToLoad.Value && scenesToLoad.Count + scenesToUnload.Count > 0).Subscribe(setup =>
         {
             var isReady = true;
