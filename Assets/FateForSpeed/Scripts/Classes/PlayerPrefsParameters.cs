@@ -1,4 +1,4 @@
 ﻿public static class PlayerPrefsParameters
 {
-    public static string CurrentLevelIndex = "CurrentLevelIndex";
+    public const string CurrentLevelIndex = "CurrentLevelIndex";
 }

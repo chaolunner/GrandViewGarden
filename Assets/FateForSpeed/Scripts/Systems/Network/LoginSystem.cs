@@ -46,7 +46,7 @@ public class LoginSystem : SystemBehaviour
             }
         }).AddTo(this.Disposer);
 
-        NetworkSystem.Receive(RequestCode.Login, OnLogin);
+        NetworkSystem.OnEvent(RequestCode.Login, OnLogin);
     }
 
     private void OnLogin(string data)

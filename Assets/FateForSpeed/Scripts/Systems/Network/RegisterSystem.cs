@@ -55,7 +55,7 @@ public class RegisterSystem : SystemBehaviour
             }
         }).AddTo(this.Disposer);
 
-        NetworkSystem.Receive(RequestCode.Register, OnRegister);
+        NetworkSystem.OnEvent(RequestCode.Register, OnRegister);
     }
 
     private void OnRegister(string data)
