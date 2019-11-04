@@ -44,6 +44,11 @@ public class LobbySystem : NetworkSystemBehaviour
                 NetworkSystem.Publish(RequestCode.CreateRoom, EmptyStr);
             }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
+            lobbyComponent.RefreshButton.OnPointerClickAsObservable().Subscribe(_ =>
+            {
+                NetworkSystem.Publish(RequestCode.ListRooms, EmptyStr);
+            }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
+
             UserComponents.OnAdd().Subscribe(entity2 =>
             {
                 var userComponent = entity2.GetComponent<UserComponent>();
@@ -95,12 +100,23 @@ public class LobbySystem : NetworkSystemBehaviour
                     {
                         var roomItemComponent = go.GetComponent<RoomItemComponent>();
 
-                        roomItemComponent.UsernameText.text = str2s[0];
-                        roomItemComponent.TotalCountText.text = TotalCount2Str + str2s[1];
-                        roomItemComponent.WinCountText.text = WinCount2Str + str2s[2];
+                        roomItemComponent.UserId = int.Parse(str2s[0]);
+                        roomItemComponent.UsernameText.text = str2s[1];
+                        roomItemComponent.TotalCountText.text = TotalCount2Str + str2s[2];
+                        roomItemComponent.WinCountText.text = WinCount2Str + str2s[3];
                     });
                 }
             });
+        }).AddTo(this.Disposer);
+
+        RoomItemComponents.OnAdd().Subscribe(entity =>
+        {
+            var roomItemComponent = entity.GetComponent<RoomItemComponent>();
+
+            roomItemComponent.JoinButton.OnPointerClickAsObservable().Subscribe(_ =>
+            {
+                NetworkSystem.Publish(RequestCode.JoinRoom, roomItemComponent.UserId.ToString());
+            }).AddTo(this.Disposer).AddTo(roomItemComponent.Disposer);
         }).AddTo(this.Disposer);
     }
 }

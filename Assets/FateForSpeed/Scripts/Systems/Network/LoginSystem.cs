@@ -50,14 +50,15 @@ public class LoginSystem : NetworkSystemBehaviour
         ReturnCode returnCode = (ReturnCode)int.Parse(strs[0]);
         if (returnCode == ReturnCode.Success)
         {
-            string username = strs[1];
-            int totalCount = int.Parse(strs[2]);
-            int winCount = int.Parse(strs[3]);
+            int userId = int.Parse(strs[1]);
+            string username = strs[2];
+            int totalCount = int.Parse(strs[3]);
+            int winCount = int.Parse(strs[4]);
             var evt = new TriggerEnterEvent();
             evt.Source = SignInIdentifier;
             EventSystem.Send(evt);
             EventSystem.Send(new MessageEvent(LoginSuccessedLog, LogType.Log));
-            EventSystem.Send(new SpawnUserEvent(username, totalCount, winCount, true));
+            EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, true));
             NetworkSystem.Publish(RequestCode.ListRooms, EmptyStr);
         }
         else
