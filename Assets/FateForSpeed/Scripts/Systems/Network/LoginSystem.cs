@@ -1,21 +1,16 @@
 ﻿using UniEasy.ECS;
 using UnityEngine;
 using UniEasy.Net;
-using UniEasy.DI;
 using UniEasy;
 using Common;
 using UniRx;
 using TMPro;
 
-public class LoginSystem : SystemBehaviour
+public class LoginSystem : NetworkSystemBehaviour
 {
-    [Inject]
-    private INetworkSystem NetworkSystem;
-
     [SerializeField]
     private IdentificationObject SignInIdentifier;
 
-    private const char Separator = ',';
     private const string UserNameStr = "UserName";
     private const string PasswordStr = "Password";
     private const string UserNameEmptyError = "User name can't be empty!";
@@ -63,6 +58,7 @@ public class LoginSystem : SystemBehaviour
             EventSystem.Send(evt);
             EventSystem.Send(new MessageEvent(LoginSuccessedLog, LogType.Log));
             EventSystem.Send(new SpawnUserEvent(username, totalCount, winCount, true));
+            NetworkSystem.Publish(RequestCode.ListRooms, EmptyStr);
         }
         else
         {

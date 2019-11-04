@@ -1605,6 +1605,7 @@ GameObject:
   - component: {fileID: 8961964809971024363}
   - component: {fileID: 8961964809971024362}
   - component: {fileID: 8959091766926490043}
+  - component: {fileID: 5157568838310059057}
   m_Layer: 5
   m_Name: RoomPanel
   m_TagString: Untagged
@@ -1651,6 +1652,7 @@ MonoBehaviour:
   - {fileID: 8961964809971024363}
   - {fileID: 8961964809971024362}
   - {fileID: 8959091766926490043}
+  - {fileID: 5157568838310059057}
   RuntimeComponents: []
   ScriptableComponents: []
   AutoUpdate: 1
@@ -1702,6 +1704,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets: []
   references: []
+--- !u!114 &5157568838310059057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8961964809971024365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43a5c3195314fb469d0efa3cdfbb9a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  User1NameText: {fileID: 2275811580740557878}
+  User1TotalCountText: {fileID: 9169941207329053603}
+  User1WinCountText: {fileID: 7012038024047341790}
+  User2NameText: {fileID: 7352233413172518004}
+  User2TotalCountText: {fileID: 3597069177760167948}
+  User2WinCountText: {fileID: 901430821826619175}
+  StartButton: {fileID: 5457178988741976916}
+  ExitButton: {fileID: 7281864300740185374}
 --- !u!1 &9217016351189012887
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,18 +1,13 @@
 ﻿using UniEasy.ECS;
 using UnityEngine;
 using UniEasy.Net;
-using UniEasy.DI;
 using UniEasy;
 using Common;
 using UniRx;
 using TMPro;
 
-public class RegisterSystem : SystemBehaviour
+public class RegisterSystem : NetworkSystemBehaviour
 {
-    [Inject]
-    private INetworkSystem NetworkSystem;
-
-    private const char Separator = ',';
     private const string UserNameStr = "UserName";
     private const string PasswordStr = "Password";
     private const string RepeatPasswordStr = "RepeatPassword";
