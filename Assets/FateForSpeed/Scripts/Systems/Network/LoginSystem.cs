@@ -16,7 +16,7 @@ public class LoginSystem : NetworkSystemBehaviour
     private const string UserNameEmptyError = "User name can't be empty!";
     private const string PasswordEmptyError = "Password can't be empty!";
     private const string UserNameOrPasswordIncorrectError = "User name or Password incorrect!";
-    private const string LoginSuccessedLog = "Login successed!";
+    private const string LoginSuccessFeedback = "Login successed!";
 
     public override void OnEnable()
     {
@@ -57,8 +57,8 @@ public class LoginSystem : NetworkSystemBehaviour
             var evt = new TriggerEnterEvent();
             evt.Source = SignInIdentifier;
             EventSystem.Send(evt);
-            EventSystem.Send(new MessageEvent(LoginSuccessedLog, LogType.Log));
-            EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, true));
+            EventSystem.Send(new MessageEvent(LoginSuccessFeedback, LogType.Log));
+            EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, true, false));
             NetworkSystem.Publish(RequestCode.ListRooms, EmptyStr);
         }
         else

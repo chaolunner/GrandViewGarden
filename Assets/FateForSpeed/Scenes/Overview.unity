@@ -1713,6 +1713,17 @@ PrefabInstance:
       propertyPath: targets.Array.data[0].EventType
       value: FSMButtonClickedEvent
       objectReference: {fileID: 0}
+    - target: {fileID: 114847517881507782, guid: 40a831e3189aabd44a827bc9ed4a5867,
+        type: 3}
+      propertyPath: Index
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114542372057906316, guid: 40a831e3189aabd44a827bc9ed4a5867,
+        type: 3}
+      propertyPath: LoadQueue.Array.data[0].SceneSetup
+      value: 
+      objectReference: {fileID: 11400000, guid: 7d68b11e73b72a64d8b592abdbb13b88,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40a831e3189aabd44a827bc9ed4a5867, type: 3}
 --- !u!1001 &1235636410

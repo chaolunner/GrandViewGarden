@@ -21,11 +21,22 @@ public class UserSystem : SystemBehaviour
 
         EventSystem.OnEvent<SpawnUserEvent>(true).Subscribe(evt =>
         {
+            foreach (var entity in UserComponents.Entities)
+            {
+                var userComponent = entity.GetComponent<UserComponent>();
+                if (userComponent.UserId == evt.UserId)
+                {
+                    userComponent.IsRoomOwner.Value = evt.IsRoomOwner;
+                    return;
+                }
+            }
             PrefabFactory.Instantiate(UserPrefab, null, false, go =>
             {
                 var userComponent = go.GetComponent<UserComponent>();
 
                 userComponent.IsLocalPlayer = evt.IsLocalPlayer;
+                userComponent.IsRoomOwner.Value = evt.IsRoomOwner;
+                userComponent.UserId = evt.UserId;
                 userComponent.Username.Value = evt.Username;
                 userComponent.TotalCount.Value = evt.TotalCount;
                 userComponent.WinCount.Value = evt.WinCount;

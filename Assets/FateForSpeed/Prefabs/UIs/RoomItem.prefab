@@ -798,6 +798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0a51da07bf93f448dded74819fec7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UserId: 0
   UsernameText: {fileID: 1681851512497388173}
   TotalCountText: {fileID: 3136355292707217088}
   WinCountText: {fileID: 8469209213316788202}

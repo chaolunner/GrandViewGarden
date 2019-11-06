@@ -15,8 +15,8 @@ public class RegisterSystem : NetworkSystemBehaviour
     private const string PasswordEmptyError = "Password can't be empty!";
     private const string RepeatPasswordEmptyError = "Repeat password can't be empty!";
     private const string PasswordsAreInconsistentError = "Passwords are inconsistent!";
-    private const string RegistrationFailedError = "Registration failed, user already exists!";
-    private const string RegistrationSuccessedLog = "Registration successed!";
+    private const string RegisterFailError = "Register failed, user already exists!";
+    private const string RegisterSuccessFeedback = "Register successed!";
 
     public override void OnEnable()
     {
@@ -58,11 +58,11 @@ public class RegisterSystem : NetworkSystemBehaviour
         ReturnCode returnCode = (ReturnCode)int.Parse(data);
         if (returnCode == ReturnCode.Success)
         {
-            EventSystem.Send(new MessageEvent(RegistrationSuccessedLog, LogType.Log));
+            EventSystem.Send(new MessageEvent(RegisterSuccessFeedback, LogType.Log));
         }
         else
         {
-            EventSystem.Send(new MessageEvent(RegistrationFailedError, LogType.Error));
+            EventSystem.Send(new MessageEvent(RegisterFailError, LogType.Error));
         }
     }
 }

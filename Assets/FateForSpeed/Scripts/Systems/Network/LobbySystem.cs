@@ -21,6 +21,7 @@ public class LobbySystem : NetworkSystemBehaviour
     private const string WinCount1Str = "Win Count : ";
     private const string TotalCount2Str = "Total Count\n";
     private const string WinCount2Str = "Win Count\n";
+    private const string JoinFailFeedback = "Failed to join the room!";
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -74,10 +75,15 @@ public class LobbySystem : NetworkSystemBehaviour
 
             NetworkSystem.OnEvent(RequestCode.CreateRoom, data =>
             {
-                ReturnCode returnCode = (ReturnCode)int.Parse(data);
+                string[] strs = data.Split(Separator);
+                ReturnCode returnCode = (ReturnCode)int.Parse(strs[0]);
                 if (returnCode == ReturnCode.Success)
                 {
-                    NetworkSystem.Publish(RequestCode.ListRooms, EmptyStr);
+                    int userId = int.Parse(strs[1]);
+                    string username = strs[2];
+                    int totalCount = int.Parse(strs[3]);
+                    int winCount = int.Parse(strs[4]);
+                    EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, true, true));
                     var evt = new TriggerEnterEvent();
                     evt.Source = JoinRoomIdentifier;
                     EventSystem.Send(evt);
@@ -105,6 +111,32 @@ public class LobbySystem : NetworkSystemBehaviour
                         roomItemComponent.TotalCountText.text = TotalCount2Str + str2s[2];
                         roomItemComponent.WinCountText.text = WinCount2Str + str2s[3];
                     });
+                }
+            });
+
+            NetworkSystem.OnEvent(RequestCode.JoinRoom, data =>
+            {
+                string[] str1s = data.Split(VerticalBar);
+                ReturnCode returnCode = (ReturnCode)int.Parse(str1s[0]);
+                if (returnCode == ReturnCode.Success)
+                {
+                    for (int i = 1; i < str1s.Length; i++)
+                    {
+                        string[] str2s = str1s[i].Split(Separator);
+                        int userId = int.Parse(str2s[0]);
+                        string username = str2s[1];
+                        int totalCount = int.Parse(str2s[2]);
+                        int winCount = int.Parse(str2s[3]);
+                        bool isRoomOwner = bool.Parse(str2s[4]);
+                        EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, false, isRoomOwner));
+                    }
+                    var evt = new TriggerEnterEvent();
+                    evt.Source = JoinRoomIdentifier;
+                    EventSystem.Send(evt);
+                }
+                else
+                {
+                    EventSystem.Send(new MessageEvent(JoinFailFeedback, LogType.Warning));
                 }
             });
         }).AddTo(this.Disposer);

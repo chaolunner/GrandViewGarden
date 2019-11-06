@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/FateForSpeed/Scenes/Gameplay.unity
     guid: 6bbbcdf515627ec4c82927f4dbecd2a6
+  - enabled: 1
+    path: Assets/FateForSpeed/Scenes/Network.unity
+    guid: 12b58c31b721cbb4891de270880f24f9
   m_configObjects: {}
