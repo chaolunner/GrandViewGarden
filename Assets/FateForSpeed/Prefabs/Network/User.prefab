@@ -62,6 +62,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsLocalPlayer: 0
+  IsRoomOwner:
+    value: 0
+  UserId: 0
   Username:
     value: 
   TotalCount:

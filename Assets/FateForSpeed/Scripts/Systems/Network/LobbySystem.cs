@@ -11,7 +11,9 @@ public class LobbySystem : NetworkSystemBehaviour
     [SerializeField]
     private GameObject roomItemPrefab;
     [SerializeField]
-    private IdentificationObject JoinRoomIdentifier;
+    private IdentificationObject LobbyId;
+    [SerializeField]
+    private IdentificationObject RoomId;
 
     private IGroup LobbyComponents;
     private IGroup UserComponents;
@@ -70,10 +72,20 @@ public class LobbySystem : NetworkSystemBehaviour
                     {
                         lobbyComponent.WinCountText.text = WinCount1Str + count;
                     }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
+
+                    NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
+                    {
+                        if (userComponent.UserId == int.Parse(data))
+                        {
+                            var evt = new TriggerEnterEvent();
+                            evt.Source = LobbyId;
+                            EventSystem.Send(evt);
+                        }
+                    }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
                 }
             }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
-            NetworkSystem.OnEvent(RequestCode.CreateRoom, data =>
+            NetworkSystem.Receive<string>(RequestCode.CreateRoom).Subscribe(data =>
             {
                 string[] strs = data.Split(Separator);
                 ReturnCode returnCode = (ReturnCode)int.Parse(strs[0]);
@@ -85,36 +97,39 @@ public class LobbySystem : NetworkSystemBehaviour
                     int winCount = int.Parse(strs[4]);
                     EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, true, true));
                     var evt = new TriggerEnterEvent();
-                    evt.Source = JoinRoomIdentifier;
+                    evt.Source = RoomId;
                     EventSystem.Send(evt);
                 }
-            });
+            }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
-            NetworkSystem.OnEvent(RequestCode.ListRooms, data =>
+            NetworkSystem.Receive<string>(RequestCode.ListRooms).Subscribe(data =>
             {
-                foreach (var e in RoomItemComponents.Entities)
+                foreach (var entity3 in RoomItemComponents.Entities)
                 {
-                    var viewComponent = e.GetComponent<ViewComponent>();
+                    var viewComponent = entity3.GetComponent<ViewComponent>();
                     Destroy(viewComponent.Transforms[0].gameObject);
                 }
 
-                string[] str1s = data.Split(VerticalBar);
-                foreach (var str1 in str1s)
+                if (!string.IsNullOrEmpty(data))
                 {
-                    string[] str2s = str1.Split(Separator);
-                    PrefabFactory.Instantiate(roomItemPrefab, lobbyComponent.RoomItemRoot, false, go =>
+                    string[] str1s = data.Split(VerticalBar);
+                    foreach (var str1 in str1s)
                     {
-                        var roomItemComponent = go.GetComponent<RoomItemComponent>();
+                        string[] str2s = str1.Split(Separator);
+                        PrefabFactory.Instantiate(roomItemPrefab, lobbyComponent.RoomItemRoot, false, go =>
+                        {
+                            var roomItemComponent = go.GetComponent<RoomItemComponent>();
 
-                        roomItemComponent.UserId = int.Parse(str2s[0]);
-                        roomItemComponent.UsernameText.text = str2s[1];
-                        roomItemComponent.TotalCountText.text = TotalCount2Str + str2s[2];
-                        roomItemComponent.WinCountText.text = WinCount2Str + str2s[3];
-                    });
+                            roomItemComponent.UserId = int.Parse(str2s[0]);
+                            roomItemComponent.UsernameText.text = str2s[1];
+                            roomItemComponent.TotalCountText.text = TotalCount2Str + str2s[2];
+                            roomItemComponent.WinCountText.text = WinCount2Str + str2s[3];
+                        });
+                    }
                 }
-            });
+            }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
-            NetworkSystem.OnEvent(RequestCode.JoinRoom, data =>
+            NetworkSystem.Receive<string>(RequestCode.JoinRoom).Subscribe(data =>
             {
                 string[] str1s = data.Split(VerticalBar);
                 ReturnCode returnCode = (ReturnCode)int.Parse(str1s[0]);
@@ -131,14 +146,14 @@ public class LobbySystem : NetworkSystemBehaviour
                         EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, false, isRoomOwner));
                     }
                     var evt = new TriggerEnterEvent();
-                    evt.Source = JoinRoomIdentifier;
+                    evt.Source = RoomId;
                     EventSystem.Send(evt);
                 }
                 else
                 {
                     EventSystem.Send(new MessageEvent(JoinFailFeedback, LogType.Warning));
                 }
-            });
+            }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
         }).AddTo(this.Disposer);
 
         RoomItemComponents.OnAdd().Subscribe(entity =>

@@ -1,7 +1,8 @@
 ﻿using UniEasy.ECS;
+using Common;
 using UniRx;
 
-public class RoomSystem : SystemBehaviour
+public class RoomSystem : NetworkSystemBehaviour
 {
     private IGroup RoomComponents;
     private IGroup UserComponents;
@@ -92,6 +93,11 @@ public class RoomSystem : SystemBehaviour
                     roomComponent.User2TotalCountText.text = TotalCountStr + 0;
                     roomComponent.User2WinCountText.text = WinCountStr + 0;
                 }
+            }).AddTo(this.Disposer).AddTo(roomComponent.Disposer);
+
+            roomComponent.ExitButton.OnClickAsObservable().Subscribe(_ =>
+            {
+                NetworkSystem.Publish(RequestCode.QuitRoom, EmptyStr);
             }).AddTo(this.Disposer).AddTo(roomComponent.Disposer);
         }).AddTo(this.Disposer);
     }

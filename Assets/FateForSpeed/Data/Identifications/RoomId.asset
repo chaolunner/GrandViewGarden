@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f86cdd2670f8f044a178ca2fa0da21e, type: 3}
-  m_Name: SignInId
+  m_Name: RoomId
   m_EditorClassIdentifier: 

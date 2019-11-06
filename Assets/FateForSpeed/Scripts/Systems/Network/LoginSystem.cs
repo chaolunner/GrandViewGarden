@@ -9,7 +9,7 @@ using TMPro;
 public class LoginSystem : NetworkSystemBehaviour
 {
     [SerializeField]
-    private IdentificationObject SignInIdentifier;
+    private IdentificationObject LobbyId;
 
     private const string UserNameStr = "UserName";
     private const string PasswordStr = "Password";
@@ -41,7 +41,7 @@ public class LoginSystem : NetworkSystemBehaviour
             }
         }).AddTo(this.Disposer);
 
-        NetworkSystem.OnEvent(RequestCode.Login, OnLogin);
+        NetworkSystem.Receive<string>(RequestCode.Login).Subscribe(OnLogin).AddTo(this.Disposer);
     }
 
     private void OnLogin(string data)
@@ -55,7 +55,7 @@ public class LoginSystem : NetworkSystemBehaviour
             int totalCount = int.Parse(strs[3]);
             int winCount = int.Parse(strs[4]);
             var evt = new TriggerEnterEvent();
-            evt.Source = SignInIdentifier;
+            evt.Source = LobbyId;
             EventSystem.Send(evt);
             EventSystem.Send(new MessageEvent(LoginSuccessFeedback, LogType.Log));
             EventSystem.Send(new SpawnUserEvent(userId, username, totalCount, winCount, true, false));

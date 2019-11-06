@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UniEasy.ECS;
+using UniEasy.Net;
+using Common;
 using UniRx;
 
-public class UserSystem : SystemBehaviour
+public class UserSystem : NetworkSystemBehaviour
 {
     [SerializeField]
     private GameObject UserPrefab;
@@ -12,7 +14,7 @@ public class UserSystem : SystemBehaviour
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
-        UserComponents = this.Create(typeof(UserComponent));
+        UserComponents = this.Create(typeof(UserComponent), typeof(ViewComponent));
     }
 
     public override void OnEnable()
@@ -46,6 +48,22 @@ public class UserSystem : SystemBehaviour
         UserComponents.OnAdd().Subscribe(entity =>
         {
             var userComponent = entity.GetComponent<UserComponent>();
+            var viewComponent = entity.GetComponent<ViewComponent>();
+
+            NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
+            {
+                if (userComponent.UserId == int.Parse(data))
+                {
+                    if (userComponent.IsLocalPlayer)
+                    {
+                        userComponent.IsRoomOwner.Value = false;
+                    }
+                    else
+                    {
+                        Destroy(viewComponent.Transforms[0].gameObject);
+                    }
+                }
+            }).AddTo(this.Disposer).AddTo(userComponent.Disposer);
         }).AddTo(this.Disposer);
     }
 }

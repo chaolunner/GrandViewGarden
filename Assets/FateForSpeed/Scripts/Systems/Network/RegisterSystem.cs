@@ -50,7 +50,7 @@ public class RegisterSystem : NetworkSystemBehaviour
             }
         }).AddTo(this.Disposer);
 
-        NetworkSystem.OnEvent(RequestCode.Register, OnRegister);
+        NetworkSystem.Receive<string>(RequestCode.Register).Subscribe(OnRegister).AddTo(this.Disposer);
     }
 
     private void OnRegister(string data)
