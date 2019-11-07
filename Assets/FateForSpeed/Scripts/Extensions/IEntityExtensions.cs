@@ -1,6 +1,7 @@
 ﻿using UniRx.Triggers;
 using UniEasy.ECS;
 using System.Linq;
+using UniEasy;
 using System;
 using UniRx;
 
@@ -30,5 +31,14 @@ public static class IEntityExtensions
                 .Select(col => new ListenerData(entity.GetComponent<TriggerExitListener>(), col)));
         }
         return result;
+    }
+
+    public static IObservable<T> OnListenerAsObservable<T>(this IEntity entity, bool onlyOnMainThread = false) where T : ISerializableEvent
+    {
+        if (entity.HasComponent<SerializableEventListener>())
+        {
+            return entity.GetComponent<SerializableEventListener>().OnEvent<T>(onlyOnMainThread);
+        }
+        return Observable.Empty<T>();
     }
 }

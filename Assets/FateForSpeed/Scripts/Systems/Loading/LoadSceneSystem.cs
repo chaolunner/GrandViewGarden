@@ -34,7 +34,9 @@ public class LoadSceneSystem : RuntimeSystem
         {
             var sceneLoader = entity.GetComponent<SceneLoader>();
 
-            entity.OnListenerAsObservable().Subscribe(_ =>
+            entity.OnListenerAsObservable<TriggerEnterEvent>().Select(_ => true)
+            .Merge(entity.OnListenerAsObservable().Select(_ => true))
+            .Subscribe(_ =>
             {
                 foreach (var setup in sceneLoader.LoadQueue)
                 {

@@ -12,7 +12,7 @@ public class LoadingScreenSystem : RuntimeSystem
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
-        loadingScreens = this.Create(typeof(LoadingScreen), typeof(Animator), typeof(SerializableEventListener));
+        loadingScreens = this.Create(typeof(LoadingScreen), typeof(Animator));
     }
 
     public override void OnEnable()
@@ -22,7 +22,6 @@ public class LoadingScreenSystem : RuntimeSystem
         loadingScreens.OnAdd().Subscribe(entity =>
         {
             var loadingScreen = entity.GetComponent<LoadingScreen>();
-            var listener = entity.GetComponent<SerializableEventListener>();
             var animator = entity.GetComponent<Animator>();
 
             loadingScreen.State.DistinctUntilChanged().Subscribe(state =>
@@ -37,12 +36,12 @@ public class LoadingScreenSystem : RuntimeSystem
                 }
             }).AddTo(this.Disposer).AddTo(loadingScreen.Disposer);
 
-            listener.OnEvent<FSMFadedInEvent>().Where(evt => loadingScreen.State.Value != FadeState.FadedIn).Subscribe(_ =>
+            entity.OnListenerAsObservable<FSMFadedInEvent>().Where(evt => loadingScreen.State.Value != FadeState.FadedIn).Subscribe(_ =>
             {
                 loadingScreen.State.Value = FadeState.FadedIn;
             }).AddTo(this.Disposer).AddTo(loadingScreen.Disposer);
 
-            listener.OnEvent<FSMFadedOutEvent>().Where(evt => loadingScreen.State.Value != FadeState.FadedOut).Subscribe(_ =>
+            entity.OnListenerAsObservable<FSMFadedOutEvent>().Where(evt => loadingScreen.State.Value != FadeState.FadedOut).Subscribe(_ =>
             {
                 loadingScreen.State.Value = FadeState.FadedOut;
             }).AddTo(this.Disposer).AddTo(loadingScreen.Disposer);

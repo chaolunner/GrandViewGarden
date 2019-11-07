@@ -24,25 +24,20 @@ public class FSMToggleSystem : RuntimeSystem
             var toggle = entity.GetComponent<FSMToggle>();
             var animator = entity.GetComponent<Animator>();
 
-            if (entity.HasComponent<SerializableEventListener>())
+            entity.OnListenerAsObservable<FSMButtonClickedEvent>().Subscribe(_ =>
             {
-                var listener = entity.GetComponent<SerializableEventListener>();
+                toggle.IsOn.Value = !toggle.IsOn.Value;
+            }).AddTo(this.Disposer).AddTo(toggle.Disposer);
 
-                listener.OnEvent<FSMButtonClickedEvent>().Subscribe(_ =>
-                {
-                    toggle.IsOn.Value = !toggle.IsOn.Value;
-                }).AddTo(this.Disposer).AddTo(toggle.Disposer);
+            entity.OnListenerAsObservable<TriggerEnterEvent>(true).Subscribe(_ =>
+            {
+                toggle.IsOn.Value = true;
+            }).AddTo(this.Disposer).AddTo(toggle.Disposer);
 
-                listener.OnEvent<TriggerEnterEvent>(true).Subscribe(_ =>
-                {
-                    toggle.IsOn.Value = true;
-                }).AddTo(this.Disposer).AddTo(toggle.Disposer);
-
-                listener.OnEvent<TriggerExitEvent>(true).Subscribe(_ =>
-                {
-                    toggle.IsOn.Value = false;
-                }).AddTo(this.Disposer).AddTo(toggle.Disposer);
-            }
+            entity.OnListenerAsObservable<TriggerExitEvent>(true).Subscribe(_ =>
+            {
+                toggle.IsOn.Value = false;
+            }).AddTo(this.Disposer).AddTo(toggle.Disposer);
 
             var onChanged = toggle.IsOn.DistinctUntilChanged().TakeWhile(_ => toggle.Group == null);
 
