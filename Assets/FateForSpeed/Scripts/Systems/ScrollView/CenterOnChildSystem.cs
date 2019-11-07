@@ -76,7 +76,7 @@ public class CenterOnChildSystem : RuntimeSystem
                 var index = i;
                 var target = index == centerOnChild.Content.childCount ? viewComponent.Transforms[0] : centerOnChild.Content.GetChild(index);
 
-                target.OnPointerClickAsObservable().Subscribe(eventData =>
+                target.OnPointerClickAsObservable().Where(eventData => !eventData.dragging && index < centerOnChild.Content.childCount).Subscribe(eventData =>
                 {
                     if (centerOnChild.Index.Value == index)
                     {
