@@ -1,4 +1,5 @@
 ﻿using UniEasy.ECS;
+using System.Linq;
 using Common;
 using UniRx;
 
@@ -27,78 +28,85 @@ public class RoomSystem : NetworkSystemBehaviour
         {
             var roomComponent = entity1.GetComponent<RoomComponent>();
 
-            roomComponent.User1NameText.text = WaitingToJoinStr;
-            roomComponent.User1TotalCountText.text = TotalCountStr + 0;
-            roomComponent.User1WinCountText.text = WinCountStr + 0;
-            roomComponent.User2NameText.text = WaitingToJoinStr;
-            roomComponent.User2TotalCountText.text = TotalCountStr + 0;
-            roomComponent.User2WinCountText.text = WinCountStr + 0;
-
             UserComponents.Entities.OnAdd().Subscribe(entity2 =>
             {
                 var userComponent = entity2.GetComponent<UserComponent>();
 
-                userComponent.IsRoomOwner.DistinctUntilChanged().Subscribe(isRoomOwner =>
+                userComponent.IsRoomOwner.DistinctUntilChanged().Subscribe(_ =>
                 {
-                    if (isRoomOwner)
-                    {
-                        userComponent.Username.DistinctUntilChanged().Where(_ => roomComponent.User1NameText).Subscribe(name =>
-                        {
-                            roomComponent.User1NameText.text = name;
-                        }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
+                    UpdateRoomState(roomComponent);
+                }).AddTo(this.Disposer).AddTo(userComponent.Disposer);
+            }).AddTo(this.Disposer);
 
-                        userComponent.TotalCount.DistinctUntilChanged().Where(_ => roomComponent.User1TotalCountText).Subscribe(count =>
-                        {
-                            roomComponent.User1TotalCountText.text = TotalCountStr + count;
-                        }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
-
-                        userComponent.WinCount.DistinctUntilChanged().Where(_ => roomComponent.User1WinCountText).Subscribe(count =>
-                        {
-                            roomComponent.User1WinCountText.text = WinCountStr + count;
-                        }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
-                    }
-                    else if (UserComponents.Entities.Count > 1)
-                    {
-                        userComponent.Username.DistinctUntilChanged().Where(_ => roomComponent.User2NameText).Subscribe(name =>
-                        {
-                            roomComponent.User2NameText.text = name;
-                        }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
-
-                        userComponent.TotalCount.DistinctUntilChanged().Where(_ => roomComponent.User2TotalCountText).Subscribe(count =>
-                        {
-                            roomComponent.User2TotalCountText.text = TotalCountStr + count;
-                        }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
-
-                        userComponent.WinCount.DistinctUntilChanged().Where(_ => roomComponent.User2WinCountText).Subscribe(count =>
-                        {
-                            roomComponent.User2WinCountText.text = WinCountStr + count;
-                        }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
-                    }
-                }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
-            }).AddTo(this.Disposer).AddTo(roomComponent.Disposer);
-
-            UserComponents.Entities.OnRemove().Subscribe(entity2 =>
+            UserComponents.Entities.OnRemove().Select(_ => true)
+                .Merge(Observable.ReturnUnit().Select(_ => true))
+                .Subscribe(_ =>
             {
-                var userComponent = entity2.GetComponent<UserComponent>();
-
-                if (userComponent.IsRoomOwner.Value)
-                {
-                    roomComponent.User1NameText.text = WaitingToJoinStr;
-                    roomComponent.User1TotalCountText.text = TotalCountStr + 0;
-                    roomComponent.User1WinCountText.text = WinCountStr + 0;
-                }
-                else
-                {
-                    roomComponent.User2NameText.text = WaitingToJoinStr;
-                    roomComponent.User2TotalCountText.text = TotalCountStr + 0;
-                    roomComponent.User2WinCountText.text = WinCountStr + 0;
-                }
-            }).AddTo(this.Disposer).AddTo(roomComponent.Disposer);
+                UpdateRoomState(roomComponent);
+            }).AddTo(this.Disposer);
 
             roomComponent.ExitButton.OnClickAsObservable().Subscribe(_ =>
             {
-                NetworkSystem.Publish(RequestCode.QuitRoom, EmptyStr);
+                foreach (var entity3 in UserComponents.Entities)
+                {
+                    var userComponent = entity3.GetComponent<UserComponent>();
+                    if (userComponent.IsRoomOwner.Value)
+                    {
+                        NetworkSystem.Publish(RequestCode.QuitRoom, userComponent.UserId.ToString());
+                        break;
+                    }
+                }
             }).AddTo(this.Disposer).AddTo(roomComponent.Disposer);
         }).AddTo(this.Disposer);
+    }
+
+    private void UpdateRoomState(RoomComponent roomComponent)
+    {
+        roomComponent.User1NameText.text = WaitingToJoinStr;
+        roomComponent.User1TotalCountText.text = TotalCountStr + 0;
+        roomComponent.User1WinCountText.text = WinCountStr + 0;
+        roomComponent.User2NameText.text = WaitingToJoinStr;
+        roomComponent.User2TotalCountText.text = TotalCountStr + 0;
+        roomComponent.User2WinCountText.text = WinCountStr + 0;
+
+        foreach (var entity in UserComponents.Entities)
+        {
+            var userComponent = entity.GetComponent<UserComponent>();
+
+            if (userComponent.IsRoomOwner.Value)
+            {
+                userComponent.Username.DistinctUntilChanged().Where(_ => roomComponent.User1NameText).Subscribe(name =>
+                {
+                    roomComponent.User1NameText.text = name;
+                }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
+
+                userComponent.TotalCount.DistinctUntilChanged().Where(_ => roomComponent.User1TotalCountText).Subscribe(count =>
+                {
+                    roomComponent.User1TotalCountText.text = TotalCountStr + count;
+                }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
+
+                userComponent.WinCount.DistinctUntilChanged().Where(_ => roomComponent.User1WinCountText).Subscribe(count =>
+                {
+                    roomComponent.User1WinCountText.text = WinCountStr + count;
+                }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
+            }
+            else if (UserComponents.Entities.Count > 1)
+            {
+                userComponent.Username.DistinctUntilChanged().Where(_ => roomComponent.User2NameText).Subscribe(name =>
+                {
+                    roomComponent.User2NameText.text = name;
+                }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
+
+                userComponent.TotalCount.DistinctUntilChanged().Where(_ => roomComponent.User2TotalCountText).Subscribe(count =>
+                {
+                    roomComponent.User2TotalCountText.text = TotalCountStr + count;
+                }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
+
+                userComponent.WinCount.DistinctUntilChanged().Where(_ => roomComponent.User2WinCountText).Subscribe(count =>
+                {
+                    roomComponent.User2WinCountText.text = WinCountStr + count;
+                }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
+            }
+        }
     }
 }

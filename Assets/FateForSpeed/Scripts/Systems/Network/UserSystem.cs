@@ -45,25 +45,44 @@ public class UserSystem : NetworkSystemBehaviour
             });
         }).AddTo(this.Disposer);
 
-        UserComponents.OnAdd().Subscribe(entity =>
+        NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
         {
-            var userComponent = entity.GetComponent<UserComponent>();
-            var viewComponent = entity.GetComponent<ViewComponent>();
-
-            NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
+            foreach (var entity in UserComponents.Entities)
             {
+                var userComponent = entity.GetComponent<UserComponent>();
+                var viewComponent = entity.GetComponent<ViewComponent>();
+
                 if (userComponent.UserId == int.Parse(data))
                 {
-                    if (userComponent.IsLocalPlayer)
+                    if (userComponent.IsLocalPlayer || userComponent.IsRoomOwner.Value)
                     {
-                        userComponent.IsRoomOwner.Value = false;
+                        ClearOtherPlayers();
                     }
                     else
                     {
                         Destroy(viewComponent.Transforms[0].gameObject);
                     }
+                    break;
                 }
-            }).AddTo(this.Disposer).AddTo(userComponent.Disposer);
+            }
         }).AddTo(this.Disposer);
+    }
+
+    private void ClearOtherPlayers()
+    {
+        foreach (var entity in UserComponents.Entities)
+        {
+            var userComponent = entity.GetComponent<UserComponent>();
+            var viewComponent = entity.GetComponent<ViewComponent>();
+
+            if (userComponent.IsLocalPlayer)
+            {
+                userComponent.IsRoomOwner.Value = false;
+            }
+            else
+            {
+                Destroy(viewComponent.Transforms[0].gameObject);
+            }
+        }
     }
 }

@@ -72,17 +72,17 @@ public class LobbySystem : NetworkSystemBehaviour
                     {
                         lobbyComponent.WinCountText.text = WinCount1Str + count;
                     }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
-
-                    NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
-                    {
-                        if (userComponent.UserId == int.Parse(data))
-                        {
-                            var evt = new TriggerEnterEvent();
-                            evt.Source = LobbyId;
-                            EventSystem.Send(evt);
-                        }
-                    }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
                 }
+
+                NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
+                {
+                    if (userComponent.UserId == int.Parse(data) && (userComponent.IsLocalPlayer || userComponent.IsRoomOwner.Value))
+                    {
+                        var evt = new TriggerEnterEvent();
+                        evt.Source = LobbyId;
+                        EventSystem.Send(evt);
+                    }
+                }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
             }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
             NetworkSystem.Receive<string>(RequestCode.CreateRoom).Subscribe(data =>
