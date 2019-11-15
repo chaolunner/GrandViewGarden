@@ -4,20 +4,22 @@ using UniRx;
 
 public class PlayerMoveSystem : SystemBehaviour
 {
-    protected IGroup playerControllers;
+    private IGroup PlayerControllerComponents;
+    private Camera mainCamera;
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
-        playerControllers = this.Create(typeof(PlayerController), typeof(CharacterController));
+        PlayerControllerComponents = this.Create(typeof(PlayerController), typeof(CharacterController));
+        mainCamera = Camera.main;
     }
 
     public override void OnEnable()
     {
         base.OnEnable();
 
-        playerControllers.OnAdd().Subscribe(entity =>
+        PlayerControllerComponents.OnAdd().Subscribe(entity =>
         {
             var characterController = entity.GetComponent<CharacterController>();
             var playerController = entity.GetComponent<PlayerController>();
@@ -27,7 +29,8 @@ public class PlayerMoveSystem : SystemBehaviour
             {
                 if (characterController.isGrounded)
                 {
-                    moveDirection = new Vector3(Input.GetAxis(InputParameters.Vertical), 0, Input.GetAxis(InputParameters.Horizontal));
+
+                    moveDirection = GetBestInputDirection(transform.forward, mainCamera.transform.forward);
                     moveDirection = transform.TransformDirection(moveDirection);
                     moveDirection *= playerController.Speed;
 
@@ -41,5 +44,17 @@ public class PlayerMoveSystem : SystemBehaviour
                 characterController.Move(moveDirection * Time.deltaTime);
             }).AddTo(this.Disposer).AddTo(playerController.Disposer);
         }).AddTo(this.Disposer);
+    }
+
+    public Vector3 GetBestInputDirection(Vector3 from, Vector3 to)
+    {
+        if (Vector3.Angle(from, to) < 35)
+        {
+            return new Vector3(Input.GetAxis(InputParameters.Horizontal), 0, Input.GetAxis(InputParameters.Vertical));
+        }
+        else
+        {
+            return new Vector3(Input.GetAxis(InputParameters.Vertical), 0, Input.GetAxis(InputParameters.Horizontal));
+        }
     }
 }

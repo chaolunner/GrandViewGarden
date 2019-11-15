@@ -45,11 +45,24 @@ public class RoomSystem : NetworkSystemBehaviour
                 UpdateRoomState(roomComponent);
             }).AddTo(this.Disposer);
 
-            roomComponent.ExitButton.OnClickAsObservable().Subscribe(_ =>
+            roomComponent.StartButton.OnClickAsObservable().Subscribe(_ =>
             {
                 foreach (var entity3 in UserComponents.Entities)
                 {
                     var userComponent = entity3.GetComponent<UserComponent>();
+                    if (userComponent.IsLocalPlayer)
+                    {
+                        NetworkSystem.Publish(RequestCode.StartGame, userComponent.UserId.ToString());
+                        break;
+                    }
+                }
+            }).AddTo(this.Disposer).AddTo(roomComponent.Disposer);
+
+            roomComponent.ExitButton.OnClickAsObservable().Subscribe(_ =>
+            {
+                foreach (var entity4 in UserComponents.Entities)
+                {
+                    var userComponent = entity4.GetComponent<UserComponent>();
                     if (userComponent.IsRoomOwner.Value)
                     {
                         NetworkSystem.Publish(RequestCode.QuitRoom, userComponent.UserId.ToString());

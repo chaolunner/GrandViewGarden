@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WanderCamera
+  m_Controller: {fileID: 9100000, guid: 68078bed1d0417041bc33d00c260a874, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: a419d4d034eb8814aaeb68873ca06b41, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 233ce6eb66b81a44bab3494dc06e87cb, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: c271aa7000f97344fa42564fbd905c76, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 321222581e1be0a499219cea2e4dc6f7, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0991b3e6acca124429f1db3bbcc5f0e5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: cf1f2b3a6bc896347a5b83f5b0580216, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: ef3a904df3b12314ea4e9b076d49a0ca, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f7e3cc69f4890b043a3da51ad11c1864, type: 2}
