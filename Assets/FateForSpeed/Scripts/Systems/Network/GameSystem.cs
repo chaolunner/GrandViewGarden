@@ -39,7 +39,8 @@ public class GameSystem : NetworkSystemBehaviour
                     PrefabFactory.Instantiate(NetworkPlayerPrefab, viewComponent.Transforms[0], true, go =>
                     {
                         var networkPlayerComponent = go.GetComponent<NetworkPlayerComponent>();
-                        networkPlayerComponent.UserEntity = entity;
+                        networkPlayerComponent.UserId = userComponent.UserId;
+                        networkPlayerComponent.IsLocalPlayer = userComponent.IsLocalPlayer;
                     });
                     break;
                 }

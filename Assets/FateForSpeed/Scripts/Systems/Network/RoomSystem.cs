@@ -63,7 +63,7 @@ public class RoomSystem : NetworkSystemBehaviour
                 foreach (var entity4 in UserComponents.Entities)
                 {
                     var userComponent = entity4.GetComponent<UserComponent>();
-                    if (userComponent.IsRoomOwner.Value)
+                    if (userComponent.IsLocalPlayer)
                     {
                         NetworkSystem.Publish(RequestCode.QuitRoom, userComponent.UserId.ToString());
                         break;

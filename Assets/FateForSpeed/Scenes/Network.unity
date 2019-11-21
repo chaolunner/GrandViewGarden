@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 111394663}
   - component: {fileID: 111394664}
   m_Layer: 0
-  m_Name: PlayerMoveSystem
+  m_Name: PlayerControllerSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -305,7 +305,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1233541218}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &111394664
 MonoBehaviour:
@@ -319,6 +319,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b660737153712499b376ea746c5a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InvertRange:
+    Min: 35
+    Max: 145
+  Smooth: 10
 --- !u!1 &113493298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,7 +1924,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1233541218}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1167052285
 MonoBehaviour:
@@ -2169,8 +2173,8 @@ Transform:
   - {fileID: 53143603}
   - {fileID: 1702333457}
   - {fileID: 131031874}
-  - {fileID: 111394663}
   - {fileID: 1167052284}
+  - {fileID: 111394663}
   - {fileID: 919119951}
   m_Father: {fileID: 2008367847}
   m_RootOrder: 5
@@ -3806,8 +3810,8 @@ MonoBehaviour:
   - {fileID: 53143604}
   - {fileID: 1702333458}
   - {fileID: 131031875}
-  - {fileID: 111394664}
   - {fileID: 1167052285}
+  - {fileID: 111394664}
   - {fileID: 919119950}
   BindingSystems: []
   AutoUpdate: 1
@@ -4377,7 +4381,7 @@ PrefabInstance:
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000038615967
+      value: 0.000051041396
       objectReference: {fileID: 0}
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
