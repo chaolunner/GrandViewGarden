@@ -4,12 +4,10 @@ using UniEasy;
 using Common;
 using UniRx;
 
-public class PlayerControllerSystem : SystemBehaviour
+public class PlayerControllerSystem : LockstepSystemBehaviour
 {
     [MinMaxRange(0, 180)]
     public RangedFloat InvertRange = new RangedFloat(35, 145);
-    [Range(1, 50)]
-    public float Smooth = 10;
 
     private IGroup PlayerControllerComponents;
     private Camera mainCamera;
@@ -26,78 +24,83 @@ public class PlayerControllerSystem : SystemBehaviour
     {
         base.OnEnable();
 
-        PlayerControllerComponents.OnAdd().Subscribe(entity =>
+        PlayerControllerComponents.OnAdd()
+            .Where(entity => !entity.HasComponent<NetworkPlayerComponent>())
+            .Subscribe(entity =>
         {
+            var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
             var characterController = entity.GetComponent<CharacterController>();
-            var playerController = entity.GetComponent<PlayerControllerComponent>();
             var moveDirection = Vector3.zero;
-            var offline = true;
-            var isLocalPlayer = false;
-
-            TransformInput currentTransform = new TransformInput();
-            currentTransform.Position = (FixVector3)characterController.transform.position;
-            currentTransform.Rotation = (FixQuaternion)characterController.transform.rotation;
-            currentTransform.LocalScale = (FixVector3)characterController.transform.localScale;
-
-            if (entity.HasComponent<NetworkPlayerComponent>())
-            {
-                var networkPlayerComponent = entity.GetComponent<NetworkPlayerComponent>();
-
-                offline = false;
-                isLocalPlayer = networkPlayerComponent.IsLocalPlayer;
-
-                EventSystem.OnEvent<UserInputEvent>().Where(evt => evt.UserId == networkPlayerComponent.UserId && evt.Input is TransformInput).Subscribe(evt =>
-                {
-                    currentTransform = evt.Input as TransformInput;
-                }).AddTo(this.Disposer).AddTo(playerController.Disposer);
-            }
 
             Observable.EveryUpdate().Subscribe(_ =>
             {
-                if (offline || isLocalPlayer)
+                if (characterController.isGrounded)
                 {
-                    if (characterController.isGrounded)
+                    var angle = Vector3.Angle(characterController.transform.forward, mainCamera.transform.forward);
+                    if (angle < InvertRange.Min || angle > InvertRange.Max)
                     {
-                        moveDirection = GetBestInputDirection(transform.forward, mainCamera.transform.forward);
-                        moveDirection = transform.TransformDirection(moveDirection);
-                        moveDirection *= playerController.Speed;
-
-                        if (Input.GetButton(InputParameters.Jump))
-                        {
-                            moveDirection.y = playerController.JumpSpeed;
-                        }
+                        moveDirection = new Vector3(Input.GetAxis(InputParameters.Horizontal), 0, Input.GetAxis(InputParameters.Vertical));
                     }
+                    else
+                    {
+                        moveDirection = new Vector3(Input.GetAxis(InputParameters.Vertical), 0, Input.GetAxis(InputParameters.Horizontal));
+                    }
+                    moveDirection = playerControllerComponent.transform.TransformDirection(moveDirection);
+                    moveDirection *= playerControllerComponent.Speed;
 
-                    moveDirection.y -= playerController.Gravity * Time.deltaTime;
-                    characterController.Move(moveDirection * Time.deltaTime);
+                    if (Input.GetButton(InputParameters.Jump))
+                    {
+                        moveDirection.y = playerControllerComponent.JumpSpeed;
+                    }
                 }
 
-                if (isLocalPlayer)
-                {
-                    TransformInput transformInput = new TransformInput();
-                    transformInput.Position = (FixVector3)characterController.transform.position;
-                    LockstepUtility.AddInput(transformInput);
-                }
-                else if (!offline)
-                {
-                    characterController.transform.position = Vector3.Lerp(characterController.transform.position, (Vector3)currentTransform.Position, Smooth * Time.deltaTime);
-                }
-            }).AddTo(this.Disposer).AddTo(playerController.Disposer);
+                moveDirection.y -= playerControllerComponent.Gravity * Time.deltaTime;
+                characterController.Move(moveDirection * Time.deltaTime);
+            }).AddTo(this.Disposer).AddTo(playerControllerComponent.Disposer);
         }).AddTo(this.Disposer);
     }
 
-    public Vector3 GetBestInputDirection(Vector3 from, Vector3 to)
+    public override IInput[] UpdateInputs()
     {
-        var direction = Vector3.zero;
-        var angle = Vector3.Angle(from, to);
-        if (angle < InvertRange.Min || angle > InvertRange.Max)
+        var inputs = new IInput[1];
+        var axisInput = new AxisInput();
+        axisInput.Horizontal = (Fix64)Input.GetAxis(InputParameters.Horizontal);
+        axisInput.Vertical = (Fix64)Input.GetAxis(InputParameters.Vertical);
+        inputs[0] = axisInput;
+        return inputs;
+    }
+
+    public override void UpdateTimeline(IEntity entity)
+    {
+        PushUntilLastStep(entity, typeof(AxisInput));
+    }
+
+    public override void ApplyUserInput(IEntity entity, UserInputData userInputData)
+    {
+        if (userInputData.Input is AxisInput)
         {
-            direction = new Vector3(Input.GetAxis(InputParameters.Horizontal), 0, Input.GetAxis(InputParameters.Vertical));
+            var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
+            var characterController = entity.GetComponent<CharacterController>();
+            var moveDirection = Vector3.zero;
+            var axisInput = userInputData.Input as AxisInput;
+
+            if (characterController.isGrounded)
+            {
+                var angle = Vector3.Angle(characterController.transform.forward, mainCamera.transform.forward);
+                if (angle < InvertRange.Min || angle > InvertRange.Max)
+                {
+                    moveDirection = new Vector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
+                }
+                else
+                {
+                    moveDirection = new Vector3((float)axisInput.Vertical, 0, (float)axisInput.Horizontal);
+                }
+                moveDirection = playerControllerComponent.transform.TransformDirection(moveDirection);
+                moveDirection *= playerControllerComponent.Speed;
+            }
+
+            moveDirection.y -= playerControllerComponent.Gravity * (float)userInputData.DeltaTime;
+            characterController.Move(moveDirection * (float)userInputData.DeltaTime);
         }
-        else
-        {
-            direction = new Vector3(Input.GetAxis(InputParameters.Vertical), 0, Input.GetAxis(InputParameters.Horizontal));
-        }
-        return direction.normalized;
     }
 }
