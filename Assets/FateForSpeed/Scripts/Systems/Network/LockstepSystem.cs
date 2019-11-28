@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UniEasy.ECS;
+﻿using UniEasy.ECS;
 using Common;
 using UniRx;
 
@@ -18,9 +17,15 @@ public class LockstepSystem : NetworkSystemBehaviour
         {
         }).AddTo(this.Disposer);
 
-        NetworkSystem.Receive<string>(RequestCode.Lockstep).Subscribe(data =>
+        int count = 0;
+        NetworkSystem.Receive<byte[]>(RequestCode.Lockstep).Subscribe(dataBytes =>
         {
-            LockstepInputs lockstepInputs = JsonUtility.FromJson<LockstepInputs>(data);
+            if (count % 100 == 0)
+            {
+                UnityEngine.Debug.Log("#" + MessagePackUtility.ToJson(dataBytes));
+            }
+            count++;
+            LockstepInputs lockstepInputs = MessagePackUtility.Deserialize<LockstepInputs>(dataBytes);
             LockstepUtility.AddToTimeline(lockstepInputs);
         }).AddTo(this.Disposer);
     }
@@ -28,8 +33,8 @@ public class LockstepSystem : NetworkSystemBehaviour
     private void Update()
     {
         UserInputs userInputs = LockstepUtility.GetUserInputs();
-        string data = JsonUtility.ToJson(userInputs);
-        NetworkSystem.Publish(RequestCode.Input, data);
+        byte[] dataBytes = MessagePackUtility.Serialize(userInputs);
+        NetworkSystem.Publish(RequestCode.Input, dataBytes);
     }
 
     public override void OnDisable()

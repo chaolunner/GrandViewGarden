@@ -48,8 +48,8 @@ public static class LockstepUtility
                 {
                     foreach (var inputData in userInputs.InputData)
                     {
-                        var input = InputUtility.FromInputData(inputData);
-                        inputDict[inputs.TickId][userInputs.UserId].Add(input.GetType(), (IInput)input);
+                        var input = MessagePackUtility.Deserialize<IInput>(inputData);
+                        inputDict[inputs.TickId][userInputs.UserId].Add(input.GetType(), input);
                     }
                 }
             }
@@ -59,7 +59,11 @@ public static class LockstepUtility
     public static UserInputs GetUserInputs()
     {
         UserInputs userInputs = new UserInputs();
-        userInputs.InputData = InputUtility.ToInputData(inputs);
+        userInputs.InputData = new byte[inputs.Count][];
+        for (int i = 0; i < inputs.Count; i++)
+        {
+            userInputs.InputData[i] = MessagePackUtility.Serialize(inputs[i]);
+        }
         inputs.Clear();
         RealTickNow++;
         return userInputs;
