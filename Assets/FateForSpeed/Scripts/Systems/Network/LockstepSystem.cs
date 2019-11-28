@@ -17,14 +17,8 @@ public class LockstepSystem : NetworkSystemBehaviour
         {
         }).AddTo(this.Disposer);
 
-        int count = 0;
         NetworkSystem.Receive<byte[]>(RequestCode.Lockstep).Subscribe(dataBytes =>
         {
-            if (count % 100 == 0)
-            {
-                UnityEngine.Debug.Log("#" + MessagePackUtility.ToJson(dataBytes));
-            }
-            count++;
             LockstepInputs lockstepInputs = MessagePackUtility.Deserialize<LockstepInputs>(dataBytes);
             LockstepUtility.AddToTimeline(lockstepInputs);
         }).AddTo(this.Disposer);
