@@ -25,13 +25,17 @@ namespace MessagePack.Formatters.Common
 
         public IInputFormatter()
         {
-            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(1, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
+            this.typeToKeyAndJumpMap = new Dictionary<RuntimeTypeHandle, KeyValuePair<int, int>>(3, global::MessagePack.Internal.RuntimeTypeHandleEqualityComparer.Default)
             {
                 { typeof(global::Common.AxisInput).TypeHandle, new KeyValuePair<int, int>(0, 0) },
+                { typeof(global::Common.KeyInput).TypeHandle, new KeyValuePair<int, int>(1, 1) },
+                { typeof(global::Common.MouseInput).TypeHandle, new KeyValuePair<int, int>(2, 2) },
             };
-            this.keyToJumpMap = new Dictionary<int, int>(1)
+            this.keyToJumpMap = new Dictionary<int, int>(3)
             {
                 { 0, 0 },
+                { 1, 1 },
+                { 2, 2 },
             };
         }
 
@@ -46,6 +50,12 @@ namespace MessagePack.Formatters.Common
                 {
                     case 0:
                         options.Resolver.GetFormatterWithVerify<global::Common.AxisInput>().Serialize(ref writer, (global::Common.AxisInput)value, options);
+                        break;
+                    case 1:
+                        options.Resolver.GetFormatterWithVerify<global::Common.KeyInput>().Serialize(ref writer, (global::Common.KeyInput)value, options);
+                        break;
+                    case 2:
+                        options.Resolver.GetFormatterWithVerify<global::Common.MouseInput>().Serialize(ref writer, (global::Common.MouseInput)value, options);
                         break;
                     default:
                         break;
@@ -81,6 +91,12 @@ namespace MessagePack.Formatters.Common
             {
                 case 0:
                     result = (global::Common.IInput)options.Resolver.GetFormatterWithVerify<global::Common.AxisInput>().Deserialize(ref reader, options);
+                    break;
+                case 1:
+                    result = (global::Common.IInput)options.Resolver.GetFormatterWithVerify<global::Common.KeyInput>().Deserialize(ref reader, options);
+                    break;
+                case 2:
+                    result = (global::Common.IInput)options.Resolver.GetFormatterWithVerify<global::Common.MouseInput>().Deserialize(ref reader, options);
                     break;
                 default:
                     reader.Skip();

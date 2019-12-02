@@ -56,22 +56,31 @@ public class LockstepSystemBehaviour : NetworkSystemBehaviour
         var tickId = tickIdDict[userId];
         if (inputTypes != null && inputTypes.Length > 0)
         {
-            var inputType = inputTypes[0];
-            var userInputData = LockstepUtility.GetUserInputData(tickId, userId, inputType);
-            while (userInputData != null)
+            var index = 0;
+            while (index < inputTypes.Length)
             {
-                ApplyUserInput(entity, userInputData);
-                for (int i = 1; i < inputTypes.Length; i++)
+                var data = new UserInputData[inputTypes.Length];
+                var userInputData = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[index]);
+                if (userInputData != null)
                 {
-                    ApplyUserInput(entity, LockstepUtility.GetUserInputData(tickId, userId, inputTypes[i]));
+                    for (int i = 0; i < inputTypes.Length; i++)
+                    {
+                        data[i] = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[i]);
+                    }
+                    ApplyUserInput(entity, data);
+                    tickId++;
+                    index = 0;
                 }
-                userInputData = LockstepUtility.GetUserInputData(++tickId, userId, inputType);
+                else
+                {
+                    index++;
+                }
             }
         }
         tickIdDict[userId] = tickId;
     }
 
-    public virtual void ApplyUserInput(IEntity entity, UserInputData userInputData) { }
+    public virtual void ApplyUserInput(IEntity entity, UserInputData[] userInputData) { }
 
     public virtual void OnRestart()
     {

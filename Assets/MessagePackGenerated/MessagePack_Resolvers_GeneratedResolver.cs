@@ -51,18 +51,21 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(10)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(13)
             {
-                { typeof(byte[][]), 0 },
-                { typeof(global::Common.UserInputs[]), 1 },
-                { typeof(global::Common.IInput), 2 },
-                { typeof(global::Common.Fix64), 3 },
-                { typeof(global::Common.FixQuaternion), 4 },
-                { typeof(global::Common.FixVector2), 5 },
-                { typeof(global::Common.FixVector3), 6 },
-                { typeof(global::Common.AxisInput), 7 },
-                { typeof(global::Common.UserInputs), 8 },
-                { typeof(global::Common.LockstepInputs), 9 },
+                { typeof(global::System.Collections.Generic.List<int>), 0 },
+                { typeof(byte[][]), 1 },
+                { typeof(global::Common.UserInputs[]), 2 },
+                { typeof(global::Common.IInput), 3 },
+                { typeof(global::Common.Fix64), 4 },
+                { typeof(global::Common.FixQuaternion), 5 },
+                { typeof(global::Common.FixVector2), 6 },
+                { typeof(global::Common.FixVector3), 7 },
+                { typeof(global::Common.AxisInput), 8 },
+                { typeof(global::Common.KeyInput), 9 },
+                { typeof(global::Common.UserInputs), 10 },
+                { typeof(global::Common.LockstepInputs), 11 },
+                { typeof(global::Common.MouseInput), 12 },
             };
         }
 
@@ -76,16 +79,19 @@ namespace MessagePack.Resolvers
 
             switch (key)
             {
-                case 0: return new global::MessagePack.Formatters.ArrayFormatter<byte[]>();
-                case 1: return new global::MessagePack.Formatters.ArrayFormatter<global::Common.UserInputs>();
-                case 2: return new MessagePack.Formatters.Common.IInputFormatter();
-                case 3: return new MessagePack.Formatters.Common.Fix64Formatter();
-                case 4: return new MessagePack.Formatters.Common.FixQuaternionFormatter();
-                case 5: return new MessagePack.Formatters.Common.FixVector2Formatter();
-                case 6: return new MessagePack.Formatters.Common.FixVector3Formatter();
-                case 7: return new MessagePack.Formatters.Common.AxisInputFormatter();
-                case 8: return new MessagePack.Formatters.Common.UserInputsFormatter();
-                case 9: return new MessagePack.Formatters.Common.LockstepInputsFormatter();
+                case 0: return new global::MessagePack.Formatters.ListFormatter<int>();
+                case 1: return new global::MessagePack.Formatters.ArrayFormatter<byte[]>();
+                case 2: return new global::MessagePack.Formatters.ArrayFormatter<global::Common.UserInputs>();
+                case 3: return new MessagePack.Formatters.Common.IInputFormatter();
+                case 4: return new MessagePack.Formatters.Common.Fix64Formatter();
+                case 5: return new MessagePack.Formatters.Common.FixQuaternionFormatter();
+                case 6: return new MessagePack.Formatters.Common.FixVector2Formatter();
+                case 7: return new MessagePack.Formatters.Common.FixVector3Formatter();
+                case 8: return new MessagePack.Formatters.Common.AxisInputFormatter();
+                case 9: return new MessagePack.Formatters.Common.KeyInputFormatter();
+                case 10: return new MessagePack.Formatters.Common.UserInputsFormatter();
+                case 11: return new MessagePack.Formatters.Common.LockstepInputsFormatter();
+                case 12: return new MessagePack.Formatters.Common.MouseInputFormatter();
                 default: return null;
             }
         }

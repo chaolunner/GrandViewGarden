@@ -62,17 +62,18 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
 
     public override void UpdateTimeline(IEntity entity)
     {
-        PushUntilLastStep(entity, typeof(AxisInput));
+        PushUntilLastStep(entity, typeof(AxisInput), typeof(KeyInput), typeof(MouseInput));
     }
 
-    public override void ApplyUserInput(IEntity entity, UserInputData userInputData)
+    public override void ApplyUserInput(IEntity entity, UserInputData[] userInputData)
     {
-        if (userInputData.Input is AxisInput)
+        if (userInputData[0] != null && userInputData[1] != null)
         {
             var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
             var characterController = entity.GetComponent<CharacterController>();
             var moveDirection = Vector3.zero;
-            var axisInput = userInputData.Input as AxisInput;
+            var axisInput = userInputData[0].Input as AxisInput;
+            var keyInput = userInputData[1].Input as KeyInput;
 
             if (characterController.isGrounded)
             {
@@ -87,10 +88,15 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
                 }
                 moveDirection = playerControllerComponent.transform.TransformDirection(moveDirection);
                 moveDirection *= playerControllerComponent.Speed;
+
+                if (keyInput.KeyCodes.Contains((int)KeyCode.Space))
+                {
+                    moveDirection.y = playerControllerComponent.JumpSpeed;
+                }
             }
 
-            moveDirection.y -= playerControllerComponent.Gravity * (float)userInputData.DeltaTime;
-            characterController.Move(moveDirection * (float)userInputData.DeltaTime);
+            moveDirection.y -= playerControllerComponent.Gravity * (float)userInputData[0].DeltaTime;
+            characterController.Move(moveDirection * (float)userInputData[0].DeltaTime);
         }
     }
 }
