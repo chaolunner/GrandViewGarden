@@ -26,7 +26,7 @@ public class InputSystem : LockstepSystemBehaviour
         {
             if (Input.GetKey((KeyCode)obj))
             {
-                keyInput.KeyCodes.Add((KeyCode)obj);
+                keyInput.KeyCodes.Add((int)obj);
             }
         }
         inputs[1] = keyInput;
