@@ -60,16 +60,6 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
         }).AddTo(this.Disposer);
     }
 
-    public override IInput[] UpdateInputs()
-    {
-        var inputs = new IInput[1];
-        var axisInput = new AxisInput();
-        axisInput.Horizontal = (Fix64)Input.GetAxis(InputParameters.Horizontal);
-        axisInput.Vertical = (Fix64)Input.GetAxis(InputParameters.Vertical);
-        inputs[0] = axisInput;
-        return inputs;
-    }
-
     public override void UpdateTimeline(IEntity entity)
     {
         PushUntilLastStep(entity, typeof(AxisInput));
