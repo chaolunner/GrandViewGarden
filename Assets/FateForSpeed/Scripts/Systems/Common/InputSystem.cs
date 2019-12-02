@@ -5,14 +5,6 @@ using Common;
 
 public class InputSystem : LockstepSystemBehaviour
 {
-    private Vector3 lastMousePosition;
-
-    public override void OnRestart()
-    {
-        base.OnRestart();
-        lastMousePosition = Input.mousePosition;
-    }
-
     public override IInput[] UpdateInputs()
     {
         var inputs = new IInput[3];
@@ -42,8 +34,7 @@ public class InputSystem : LockstepSystemBehaviour
         }
         mouseInput.ScrollDelta = (FixVector2)Input.mouseScrollDelta;
         mouseInput.Position = (FixVector3)Input.mousePosition;
-        mouseInput.Delta = (FixVector3)(Input.mousePosition - lastMousePosition);
-        lastMousePosition = Input.mousePosition;
+        mouseInput.Delta = new FixVector2((Fix64)Input.GetAxis(InputParameters.MouseX), (Fix64)Input.GetAxis(InputParameters.MouseY));
         inputs[2] = mouseInput;
 
         return inputs;

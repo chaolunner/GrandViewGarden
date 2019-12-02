@@ -68,8 +68,8 @@ public class LockstepSystemBehaviour : NetworkSystemBehaviour
                         data[i] = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[i]);
                     }
                     ApplyUserInput(entity, data);
-                    tickId++;
                     index = 0;
+                    tickId++;
                 }
                 else
                 {

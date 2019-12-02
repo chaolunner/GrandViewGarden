@@ -30,7 +30,6 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
         {
             var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
             var characterController = entity.GetComponent<CharacterController>();
-            var moveDirection = Vector3.zero;
 
             Observable.EveryUpdate().Subscribe(_ =>
             {
@@ -39,23 +38,23 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
                     var angle = Vector3.Angle(characterController.transform.forward, mainCamera.transform.forward);
                     if (angle < InvertRange.Min || angle > InvertRange.Max)
                     {
-                        moveDirection = new Vector3(Input.GetAxis(InputParameters.Horizontal), 0, Input.GetAxis(InputParameters.Vertical));
+                        playerControllerComponent.Motion = new Vector3(Input.GetAxis(InputParameters.Horizontal), 0, Input.GetAxis(InputParameters.Vertical));
                     }
                     else
                     {
-                        moveDirection = new Vector3(Input.GetAxis(InputParameters.Vertical), 0, Input.GetAxis(InputParameters.Horizontal));
+                        playerControllerComponent.Motion = new Vector3(Input.GetAxis(InputParameters.Vertical), 0, Input.GetAxis(InputParameters.Horizontal));
                     }
-                    moveDirection = playerControllerComponent.transform.TransformDirection(moveDirection);
-                    moveDirection *= playerControllerComponent.Speed;
+                    playerControllerComponent.Motion = playerControllerComponent.transform.TransformDirection(playerControllerComponent.Motion);
+                    playerControllerComponent.Motion *= playerControllerComponent.Speed;
 
                     if (Input.GetButton(InputParameters.Jump))
                     {
-                        moveDirection.y = playerControllerComponent.JumpSpeed;
+                        playerControllerComponent.Motion.y = playerControllerComponent.JumpSpeed;
                     }
                 }
 
-                moveDirection.y -= playerControllerComponent.Gravity * Time.deltaTime;
-                characterController.Move(moveDirection * Time.deltaTime);
+                playerControllerComponent.Motion.y -= playerControllerComponent.Gravity * Time.deltaTime;
+                characterController.Move(playerControllerComponent.Motion * Time.deltaTime);
             }).AddTo(this.Disposer).AddTo(playerControllerComponent.Disposer);
         }).AddTo(this.Disposer);
     }
@@ -67,36 +66,36 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
 
     public override void ApplyUserInput(IEntity entity, UserInputData[] userInputData)
     {
-        if (userInputData[0] != null && userInputData[1] != null)
-        {
-            var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
-            var characterController = entity.GetComponent<CharacterController>();
-            var moveDirection = Vector3.zero;
-            var axisInput = userInputData[0].Input as AxisInput;
-            var keyInput = userInputData[1].Input as KeyInput;
+        var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
+        var characterController = entity.GetComponent<CharacterController>();
+        var axisInput = userInputData[0].Input as AxisInput;
+        var keyInput = userInputData[1].Input as KeyInput;
+        var mouseInput = userInputData[2].Input as MouseInput;
 
-            if (characterController.isGrounded)
+        if (characterController.isGrounded)
+        {
+            if (axisInput != null)
             {
                 var angle = Vector3.Angle(characterController.transform.forward, mainCamera.transform.forward);
                 if (angle < InvertRange.Min || angle > InvertRange.Max)
                 {
-                    moveDirection = new Vector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
+                    playerControllerComponent.Motion = new Vector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
                 }
                 else
                 {
-                    moveDirection = new Vector3((float)axisInput.Vertical, 0, (float)axisInput.Horizontal);
+                    playerControllerComponent.Motion = new Vector3((float)axisInput.Vertical, 0, (float)axisInput.Horizontal);
                 }
-                moveDirection = playerControllerComponent.transform.TransformDirection(moveDirection);
-                moveDirection *= playerControllerComponent.Speed;
-
-                if (keyInput.KeyCodes.Contains((int)KeyCode.Space))
-                {
-                    moveDirection.y = playerControllerComponent.JumpSpeed;
-                }
+                playerControllerComponent.Motion = playerControllerComponent.transform.TransformDirection(playerControllerComponent.Motion);
+                playerControllerComponent.Motion *= playerControllerComponent.Speed;
             }
 
-            moveDirection.y -= playerControllerComponent.Gravity * (float)userInputData[0].DeltaTime;
-            characterController.Move(moveDirection * (float)userInputData[0].DeltaTime);
+            if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.Space))
+            {
+                playerControllerComponent.Motion.y = playerControllerComponent.JumpSpeed;
+            }
         }
+
+        playerControllerComponent.Motion.y -= playerControllerComponent.Gravity * (float)userInputData[0].DeltaTime;
+        characterController.Move(playerControllerComponent.Motion * (float)userInputData[0].DeltaTime);
     }
 }

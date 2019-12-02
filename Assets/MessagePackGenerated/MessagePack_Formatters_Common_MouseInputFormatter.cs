@@ -36,8 +36,8 @@ namespace MessagePack.Formatters.Common
             writer.WriteArrayHeader(4);
             formatterResolver.GetFormatterWithVerify<global::System.Collections.Generic.List<int>>().Serialize(ref writer, value.MouseButtons, options);
             formatterResolver.GetFormatterWithVerify<global::Common.FixVector2>().Serialize(ref writer, value.ScrollDelta, options);
+            formatterResolver.GetFormatterWithVerify<global::Common.FixVector2>().Serialize(ref writer, value.Delta, options);
             formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Serialize(ref writer, value.Position, options);
-            formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Serialize(ref writer, value.Delta, options);
         }
 
         public global::Common.MouseInput Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -51,8 +51,8 @@ namespace MessagePack.Formatters.Common
             var length = reader.ReadArrayHeader();
             var __MouseButtons__ = default(global::System.Collections.Generic.List<int>);
             var __ScrollDelta__ = default(global::Common.FixVector2);
+            var __Delta__ = default(global::Common.FixVector2);
             var __Position__ = default(global::Common.FixVector3);
-            var __Delta__ = default(global::Common.FixVector3);
 
             for (int i = 0; i < length; i++)
             {
@@ -67,10 +67,10 @@ namespace MessagePack.Formatters.Common
                         __ScrollDelta__ = formatterResolver.GetFormatterWithVerify<global::Common.FixVector2>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Deserialize(ref reader, options);
+                        __Delta__ = formatterResolver.GetFormatterWithVerify<global::Common.FixVector2>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __Delta__ = formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Deserialize(ref reader, options);
+                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -81,8 +81,8 @@ namespace MessagePack.Formatters.Common
             var ____result = new global::Common.MouseInput();
             ____result.MouseButtons = __MouseButtons__;
             ____result.ScrollDelta = __ScrollDelta__;
-            ____result.Position = __Position__;
             ____result.Delta = __Delta__;
+            ____result.Position = __Position__;
             return ____result;
         }
     }
