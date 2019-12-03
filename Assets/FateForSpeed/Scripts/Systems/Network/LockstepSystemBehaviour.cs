@@ -59,10 +59,10 @@ public class LockstepSystemBehaviour : NetworkSystemBehaviour
             var index = 0;
             while (index < inputTypes.Length)
             {
-                var data = new UserInputData[inputTypes.Length];
                 var userInputData = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[index]);
                 if (userInputData != null)
                 {
+                    var data = new UserInputData[inputTypes.Length];
                     for (int i = 0; i < inputTypes.Length; i++)
                     {
                         data[i] = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[i]);

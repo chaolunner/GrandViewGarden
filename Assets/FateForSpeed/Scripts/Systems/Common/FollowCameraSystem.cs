@@ -12,7 +12,7 @@ public class FollowCameraSystem : SystemBehaviour
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
         FollowCameraComponents = this.Create(typeof(FollowCameraComponent), typeof(CinemachineVirtualCamera));
-        NetworkPlayerComponents = this.Create(typeof(NetworkPlayerComponent), typeof(ViewComponent));
+        NetworkPlayerComponents = this.Create(typeof(NetworkPlayerComponent), typeof(PlayerControllerComponent), typeof(ViewComponent));
     }
 
     public override void OnEnable()
@@ -22,6 +22,7 @@ public class FollowCameraSystem : SystemBehaviour
         NetworkPlayerComponents.OnAdd().Subscribe(entity1 =>
         {
             var networkPlayerComponent = entity1.GetComponent<NetworkPlayerComponent>();
+            var playerControllerComponent = entity1.GetComponent<PlayerControllerComponent>();
             var viewComponent = entity1.GetComponent<ViewComponent>();
 
             if (networkPlayerComponent.IsLocalPlayer)
@@ -32,6 +33,7 @@ public class FollowCameraSystem : SystemBehaviour
                     var virtualCamera = entity2.GetComponent<CinemachineVirtualCamera>();
 
                     virtualCamera.Follow = viewComponent.Transforms[0];
+                    virtualCamera.LookAt = playerControllerComponent.LookAt;
                 }
             }
         }).AddTo(this.Disposer);
