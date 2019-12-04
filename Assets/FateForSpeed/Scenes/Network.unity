@@ -319,10 +319,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b660737153712499b376ea746c5a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UseGlobalSettings: 1
+  useForecast: 1
+  maxForecastSteps: 10
+  fixedDeltaTime: 0.1
   InvertRange:
     Min: 35
     Max: 145
-  MouseSensivity: 200
 --- !u!1 &113493298
 GameObject:
   m_ObjectHideFlags: 0
@@ -2735,6 +2738,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d6cf6355d387ee4dabcdc14c3c8301e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UseGlobalSettings: 1
+  useForecast: 1
+  maxForecastSteps: 10
+  fixedDeltaTime: 0.02
 --- !u!1 &1528498185
 GameObject:
   m_ObjectHideFlags: 0
@@ -4439,7 +4446,7 @@ PrefabInstance:
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000051041396
+      value: 0.00007125219
       objectReference: {fileID: 0}
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}

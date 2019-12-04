@@ -2,6 +2,7 @@
 using UniEasy.ECS;
 using UniEasy;
 using Common;
+using System;
 using UniRx;
 
 public class PlayerControllerSystem : LockstepSystemBehaviour
@@ -11,6 +12,7 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
 
     private IGroup PlayerControllerComponents;
     private Camera mainCamera;
+    private Type[] InputTypes = new Type[] { typeof(AxisInput), typeof(KeyInput), typeof(MouseInput) };
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -62,10 +64,10 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
 
     public override void UpdateTimeline(IEntity entity)
     {
-        PushUntilLastStep(entity, typeof(AxisInput), typeof(KeyInput), typeof(MouseInput));
+        LerpTimeline(entity, InputTypes);
     }
 
-    public override void ApplyUserInput(IEntity entity, UserInputData[] userInputData)
+    public override void ApplyUserInput(IEntity entity, UserInputData[] userInputData, float deltaTime)
     {
         var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
         var characterController = entity.GetComponent<CharacterController>();
@@ -73,7 +75,6 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
         var axisInput = userInputData[0].Input as AxisInput;
         var keyInput = userInputData[1].Input as KeyInput;
         var mouseInput = userInputData[2].Input as MouseInput;
-        var deltaTime = (float)userInputData[0].DeltaTime;
 
         if (mouseInput != null)
         {
