@@ -12,13 +12,13 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
 
     private IGroup PlayerControllerComponents;
     private Camera mainCamera;
-    private Type[] InputTypes = new Type[] { typeof(AxisInput), typeof(KeyInput), typeof(MouseInput) };
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
         PlayerControllerComponents = this.Create(typeof(PlayerControllerComponent), typeof(CharacterController), typeof(ViewComponent));
+        this.CreateTimeline(typeof(AxisInput), typeof(KeyInput), typeof(MouseInput));
         mainCamera = Camera.main;
     }
 
@@ -62,12 +62,7 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
         }).AddTo(this.Disposer);
     }
 
-    public override void UpdateTimeline(IEntity entity)
-    {
-        LerpTimeline(entity, InputTypes);
-    }
-
-    public override void ApplyUserInput(IEntity entity, UserInputData[] userInputData, float deltaTime)
+    public override IUserInputResult[] ApplyUserInput(IEntity entity, UserInputData[] userInputData, float deltaTime)
     {
         var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
         var characterController = entity.GetComponent<CharacterController>();
@@ -75,6 +70,7 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
         var axisInput = userInputData[0].Input as AxisInput;
         var keyInput = userInputData[1].Input as KeyInput;
         var mouseInput = userInputData[2].Input as MouseInput;
+        var result = new IUserInputResult[1];
 
         if (mouseInput != null)
         {
@@ -102,7 +98,10 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
         }
 
         playerControllerComponent.Motion.y -= playerControllerComponent.Gravity * deltaTime;
-        characterController.Move(playerControllerComponent.Motion * deltaTime);
+
+        result[0] = new UserInputResult<Vector3>((v, t) => { characterController.Move(v * t); }, playerControllerComponent.Motion, deltaTime);
+
+        return result;
     }
 
     private float ClampAngle(float angle, float min, float max)

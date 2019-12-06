@@ -11,9 +11,9 @@ public class LockstepSystemBehaviour : NetworkSystemBehaviour
     [SerializeField] private bool useForecast = true;
     [SerializeField] private int maxForecastSteps = 10;
     [SerializeField] private float fixedDeltaTime = 0.1f;
-    private int forecastCount = 0;
     private IGroup NetworkPlayerComponents;
-    private Dictionary<int, Dictionary<Type[], UserInputWithLerpData>> userInputWithLerpDict = new Dictionary<int, Dictionary<Type[], UserInputWithLerpData>>();
+    private List<Type[]> timelines = new List<Type[]>();
+    private Dictionary<int, Dictionary<Type[], TimePointWithLerp>> timePointWithLerpDict = new Dictionary<int, Dictionary<Type[], TimePointWithLerp>>();
 
     public bool UseForecast
     {
@@ -73,51 +73,68 @@ public class LockstepSystemBehaviour : NetworkSystemBehaviour
                     }
                 }
 
-                UpdateTimeline(entity);
+                for (int i = 0; i < timelines.Count; i++)
+                {
+                    UpdateTimeline(entity, timelines[i]);
+                }
             }).AddTo(this.Disposer).AddTo(networkPlayerComponent.Disposer);
         }).AddTo(this.Disposer);
     }
 
     public virtual IInput[] UpdateInputs() { return null; }
 
-    public virtual void UpdateTimeline(IEntity entity) { }
+    public void CreateTimeline(params Type[] inputTypes)
+    {
+        if (!timelines.Contains(inputTypes))
+        {
+            timelines.Add(inputTypes);
+        }
+    }
 
-    public void LerpTimeline(IEntity entity, Type[] inputTypes)
+    public void UpdateTimeline(IEntity entity, Type[] inputTypes)
     {
         var networkPlayerComponent = entity.GetComponent<NetworkPlayerComponent>();
         var userId = networkPlayerComponent.UserId;
-        if (!userInputWithLerpDict.ContainsKey(userId))
+        if (!timePointWithLerpDict.ContainsKey(userId))
         {
-            userInputWithLerpDict.Add(userId, new Dictionary<Type[], UserInputWithLerpData>());
+            timePointWithLerpDict.Add(userId, new Dictionary<Type[], TimePointWithLerp>());
         }
-        if (!userInputWithLerpDict[userId].ContainsKey(inputTypes))
+        if (!timePointWithLerpDict[userId].ContainsKey(inputTypes))
         {
-            userInputWithLerpDict[userId].Add(inputTypes, new UserInputWithLerpData());
+            timePointWithLerpDict[userId].Add(inputTypes, new TimePointWithLerp());
         }
-        var tickId = userInputWithLerpDict[userId][inputTypes].TickId;
-        userInputWithLerpDict[userId][inputTypes].From = userInputWithLerpDict[userId][inputTypes].To;
-        userInputWithLerpDict[userId][inputTypes].To = Mathf.Clamp01((userInputWithLerpDict[userId][inputTypes].To * FixedDeltaTime + Time.deltaTime) / FixedDeltaTime);
+        var timePointWithLerp = timePointWithLerpDict[userId][inputTypes];
+        var beforeStep = timePointWithLerp.TickId;
+
+        timePointWithLerp.Begin(Time.deltaTime, FixedDeltaTime);
+
         PushUntilLastStep(entity, inputTypes);
-        ApplyUserInputs(entity, inputTypes);
-        userInputWithLerpDict[userId][inputTypes].Loop();
+
+        Rollback(entity, inputTypes);
+
+        Forecast(beforeStep, userId, inputTypes);
+
+        ApplyTimePoint(entity, inputTypes);
+
+        timePointWithLerp.End();
     }
 
     private int PushUntilLastStep(IEntity entity, Type[] inputTypes)
     {
         var networkPlayerComponent = entity.GetComponent<NetworkPlayerComponent>();
         var userId = networkPlayerComponent.UserId;
-        var tickId = userInputWithLerpDict[userId][inputTypes].TickId;
-        if (userInputWithLerpDict[userId][inputTypes].UserInputData == null)
+        var timePointWithLerp = timePointWithLerpDict[userId][inputTypes];
+        var tickId = timePointWithLerp.TickId;
+        if (!timePointWithLerp.IsPlaying)
         {
             var index = 0;
-            userInputWithLerpDict[userId][inputTypes].UserInputData = new List<UserInputData[]>();
             while (index < inputTypes.Length)
             {
                 var userInputData = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[index]);
                 if (userInputData != null)
                 {
-                    userInputWithLerpDict[userId][inputTypes].TotalTime += userInputData.DeltaTime;
-                    userInputWithLerpDict[userId][inputTypes].UserInputData.Add(GetUserInputDataByInputTypes(tickId, userId, inputTypes));
+                    var tracks = GetUserInputDataByInputTypes(tickId, userId, inputTypes);
+                    timePointWithLerp.AddRealtimeData(userInputData.DeltaTime, new TimePointData(userInputData.TickId, tracks));
                     index = 0;
                     tickId++;
                 }
@@ -127,7 +144,7 @@ public class LockstepSystemBehaviour : NetworkSystemBehaviour
                 }
             }
         }
-        userInputWithLerpDict[userId][inputTypes].TickId = tickId;
+        timePointWithLerp.TickId = tickId;
         return tickId;
     }
 
@@ -141,90 +158,98 @@ public class LockstepSystemBehaviour : NetworkSystemBehaviour
         return data;
     }
 
-    private void ApplyUserInputs(IEntity entity, Type[] inputTypes)
+    private void ApplyTimePoint(IEntity entity, Type[] inputTypes)
     {
         var networkPlayerComponent = entity.GetComponent<NetworkPlayerComponent>();
         var userId = networkPlayerComponent.UserId;
+        var timePointWithLerp = timePointWithLerpDict[userId][inputTypes];
+        var timePoints = timePointWithLerp.TimePoints;
+        var totalTime = timePointWithLerp.TotalTime;
+        var from = timePointWithLerp.From;
+        var to = timePointWithLerp.To;
         var time = 0f;
-        var from = userInputWithLerpDict[userId][inputTypes].From * userInputWithLerpDict[userId][inputTypes].TotalTime;
-        var to = userInputWithLerpDict[userId][inputTypes].To * userInputWithLerpDict[userId][inputTypes].TotalTime;
-        if (userInputWithLerpDict[userId][inputTypes].UserInputData != null)
+
+        for (int i = 0; i < timePoints.Count; i++)
         {
-            foreach (var userInputData in userInputWithLerpDict[userId][inputTypes].UserInputData)
+            IUserInputResult[] result = null;
+            for (int j = 0; j < timePoints[i].Tracks.Length; j++)
             {
-                foreach (var data in userInputData)
+                if (timePoints[i].Tracks[j] == null) { continue; }
+                var deltaTime = (float)timePoints[i].Tracks[j].DeltaTime;
+                var p1 = time / totalTime;
+                time += deltaTime;
+                var p2 = time / totalTime;
+                if (p1 < from && p2 > to)
                 {
-                    if (data == null) { continue; }
-                    var t = time + (float)data.DeltaTime;
-                    if (time < (float)from && t > (float)to)
-                    {
-                        ApplyUserInput(entity, userInputData, (float)(to - from));
-                    }
-                    else if (time >= (float)from && time <= (float)to && t >= (float)from && t <= (float)to)
-                    {
-                        ApplyUserInput(entity, userInputData, (float)data.DeltaTime);
-                    }
-                    else if (time >= (float)from && time <= (float)to)
-                    {
-                        ApplyUserInput(entity, userInputData, (float)to - time);
-                    }
-                    else if (t >= (float)from && t <= (float)to)
-                    {
-                        ApplyUserInput(entity, userInputData, t - (float)from);
-                    }
-                    time = t;
-                    break;
+                    result = ApplyUserInput(entity, timePoints[i].Tracks, (to - from) * totalTime);
+                }
+                else if (p1 >= from && p1 <= to && p2 >= from && p2 <= to)
+                {
+                    result = ApplyUserInput(entity, timePoints[i].Tracks, deltaTime * totalTime);
+                }
+                else if (p1 >= from && p1 <= to)
+                {
+                    result = ApplyUserInput(entity, timePoints[i].Tracks, (to - p1) * totalTime);
+                }
+                else if (p2 >= from && p2 <= to)
+                {
+                    result = ApplyUserInput(entity, timePoints[i].Tracks, (p2 - from) * totalTime);
+                }
+                break;
+            }
+            if (result != null)
+            {
+                for (int j = 0; j < result.Length; j++)
+                {
+                    result[j].Execute();
+                }
+                if (timePoints[i].ForecastCount > 0)
+                {
+                    timePointWithLerp.RollbackData.Add(result);
                 }
             }
         }
     }
 
-    public virtual void ApplyUserInput(IEntity entity, UserInputData[] userInputData, float deltaTime) { }
+    public virtual IUserInputResult[] ApplyUserInput(IEntity entity, UserInputData[] userInputData, float deltaTime)
+    {
+        throw new NotImplementedException();
+    }
 
     public virtual void OnRestart()
     {
-        userInputWithLerpDict.Clear();
-        forecastCount = 0;
+        timePointWithLerpDict.Clear();
     }
 
-    //public virtual void PushTimelineWithForecast(IEntity entity, params Type[] inputTypes)
-    //{
-    //    if (!UseForecast)
-    //    {
-    //        PushUntilLastStep(entity, inputTypes);
-    //        return;
-    //    }
+    private void Rollback(IEntity entity, Type[] inputTypes)
+    {
+        var networkPlayerComponent = entity.GetComponent<NetworkPlayerComponent>();
+        var userId = networkPlayerComponent.UserId;
+        var timePointWithLerp = timePointWithLerpDict[userId][inputTypes];
+        if (UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
+        {
+            timePointWithLerp.Rollback();
+        }
+    }
 
-    //    var networkPlayerComponent = entity.GetComponent<NetworkPlayerComponent>();
-    //    var userId = networkPlayerComponent.UserId;
-    //    var beforeStep = tickIdDict.ContainsKey(userId) ? tickIdDict[userId] : 0;
-    //    var userInputData = GetUserInputDataByInputTypes(beforeStep, userId, inputTypes);
-
-    //    int count = forecastCount;
-    //    while (count > 0)
-    //    {
-    //        Rollback(count - 1, entity, userInputData);
-    //        count--;
-    //    }
-
-    //    int afterStep = PushUntilLastStep(entity, inputTypes);
-    //    if (afterStep > beforeStep)
-    //    {
-    //        forecastCount += (beforeStep - afterStep);
-    //    }
-    //    forecastCount = Mathf.Clamp(forecastCount + 1, 0, MaxForecastSteps);
-
-    //    for (int i = 0; i < forecastCount; i++)
-    //    {
-    //        Forecast(forecastCount - 1, entity, userInputData);
-    //    }
-
-    //    Debug.Log(string.Format(@"Pushed Steps: [{0}] Forecast Count: [{1}]", (afterStep - beforeStep), forecastCount));
-    //}
-
-    //public virtual void Forecast(int index, IEntity entity, UserInputData[] userInputData) { }
-
-    //public virtual void Rollback(int index, IEntity entity, UserInputData[] userInputData) { }
+    private void Forecast(int beforeStep, int userId, Type[] inputTypes)
+    {
+        var timePointWithLerp = timePointWithLerpDict[userId][inputTypes];
+        if (UseForecast && !timePointWithLerp.IsPlaying)
+        {
+            var tracks = GetUserInputDataByInputTypes(beforeStep, userId, inputTypes);
+            var tickId = 0;
+            var deltaTime = Fix64.Zero;
+            for (int i = 0; i < tracks.Length; i++)
+            {
+                if (tracks[i] == null) { continue; }
+                tickId = tracks[i].TickId;
+                deltaTime = tracks[i].DeltaTime;
+                break;
+            }
+            timePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, tracks), MaxForecastSteps);
+        }
+    }
 
     public override void OnDisable()
     {
