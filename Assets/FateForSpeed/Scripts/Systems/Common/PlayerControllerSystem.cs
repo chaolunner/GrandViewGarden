@@ -5,12 +5,14 @@ using Common;
 using System;
 using UniRx;
 
-public class PlayerControllerSystem : LockstepSystemBehaviour
+public class PlayerControllerSystem : NetworkSystemBehaviour
 {
     [MinMaxRange(0, 180)]
     public RangedFloat InvertRange = new RangedFloat(35, 145);
 
     private IGroup PlayerControllerComponents;
+    private NetworkGroup Network;
+    private INetworkTimeline NetwrokTimeline;
     private Camera mainCamera;
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
@@ -18,7 +20,8 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
         PlayerControllerComponents = this.Create(typeof(PlayerControllerComponent), typeof(CharacterController), typeof(ViewComponent));
-        this.CreateTimeline(typeof(AxisInput), typeof(KeyInput), typeof(MouseInput));
+        Network = LockstepFactory.Create(PlayerControllerComponents);
+        NetwrokTimeline = Network.CreateTimeline(typeof(AxisInput), typeof(KeyInput), typeof(MouseInput));
         mainCamera = Camera.main;
     }
 
@@ -60,48 +63,48 @@ public class PlayerControllerSystem : LockstepSystemBehaviour
                 characterController.Move(playerControllerComponent.Motion * Time.deltaTime);
             }).AddTo(this.Disposer).AddTo(playerControllerComponent.Disposer);
         }).AddTo(this.Disposer);
-    }
 
-    public override IUserInputResult[] ApplyUserInput(IEntity entity, UserInputData[] userInputData, float deltaTime)
-    {
-        var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
-        var characterController = entity.GetComponent<CharacterController>();
-        var viewComponent = entity.GetComponent<ViewComponent>();
-        var axisInput = userInputData[0].Input as AxisInput;
-        var keyInput = userInputData[1].Input as KeyInput;
-        var mouseInput = userInputData[2].Input as MouseInput;
-        var result = new IUserInputResult[1];
-
-        if (mouseInput != null)
+        NetwrokTimeline.Subscribe((entity, userInputData, deltaTime) =>
         {
-            var rotLeftRight = (float)mouseInput.Delta.x * playerControllerComponent.MouseSensivity.x * deltaTime;
-            var rotUpDown = (float)mouseInput.Delta.y * playerControllerComponent.MouseSensivity.y * deltaTime;
-            var yAngle = ClampAngle(playerControllerComponent.Viewpoint.localEulerAngles.x, playerControllerComponent.YAngleLimit.Min, playerControllerComponent.YAngleLimit.Max);
-            yAngle = ClampAngle(yAngle - rotUpDown, playerControllerComponent.YAngleLimit.Min, playerControllerComponent.YAngleLimit.Max);
-            viewComponent.Transforms[0].Rotate(0, rotLeftRight, 0);
-            playerControllerComponent.Viewpoint.localEulerAngles = new Vector3(yAngle, 0, 0);
-        }
+            var playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
+            var characterController = entity.GetComponent<CharacterController>();
+            var viewComponent = entity.GetComponent<ViewComponent>();
+            var axisInput = userInputData[0].Input as AxisInput;
+            var keyInput = userInputData[1].Input as KeyInput;
+            var mouseInput = userInputData[2].Input as MouseInput;
+            var result = new IUserInputResult[1];
 
-        if (characterController.isGrounded)
-        {
-            if (axisInput != null)
+            if (mouseInput != null)
             {
-                playerControllerComponent.Motion = new Vector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
-                playerControllerComponent.Motion = viewComponent.Transforms[0].TransformDirection(playerControllerComponent.Motion);
-                playerControllerComponent.Motion *= playerControllerComponent.Speed;
+                var rotLeftRight = (float)mouseInput.Delta.x * playerControllerComponent.MouseSensivity.x * deltaTime;
+                var rotUpDown = (float)mouseInput.Delta.y * playerControllerComponent.MouseSensivity.y * deltaTime;
+                var yAngle = ClampAngle(playerControllerComponent.Viewpoint.localEulerAngles.x, playerControllerComponent.YAngleLimit.Min, playerControllerComponent.YAngleLimit.Max);
+                yAngle = ClampAngle(yAngle - rotUpDown, playerControllerComponent.YAngleLimit.Min, playerControllerComponent.YAngleLimit.Max);
+                viewComponent.Transforms[0].Rotate(0, rotLeftRight, 0);
+                playerControllerComponent.Viewpoint.localEulerAngles = new Vector3(yAngle, 0, 0);
             }
 
-            if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.Space))
+            if (characterController.isGrounded)
             {
-                playerControllerComponent.Motion.y = playerControllerComponent.JumpSpeed;
+                if (axisInput != null)
+                {
+                    playerControllerComponent.Motion = new Vector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
+                    playerControllerComponent.Motion = viewComponent.Transforms[0].TransformDirection(playerControllerComponent.Motion);
+                    playerControllerComponent.Motion *= playerControllerComponent.Speed;
+                }
+
+                if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.Space))
+                {
+                    playerControllerComponent.Motion.y = playerControllerComponent.JumpSpeed;
+                }
             }
-        }
 
-        playerControllerComponent.Motion.y -= playerControllerComponent.Gravity * deltaTime;
+            playerControllerComponent.Motion.y -= playerControllerComponent.Gravity * deltaTime;
 
-        result[0] = new UserInputResult<Vector3>((v, t) => { characterController.Move(v * t); }, playerControllerComponent.Motion, deltaTime);
+            result[0] = new UserInputResult<Vector3>((v, t) => { characterController.Move(v * t); }, playerControllerComponent.Motion, deltaTime);
 
-        return result;
+            return result;
+        }).AddTo(this.Disposer);
     }
 
     private float ClampAngle(float angle, float min, float max)

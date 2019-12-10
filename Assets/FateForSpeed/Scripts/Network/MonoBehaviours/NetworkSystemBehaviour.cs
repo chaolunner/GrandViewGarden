@@ -6,6 +6,10 @@ public class NetworkSystemBehaviour : SystemBehaviour
 {
     [Inject]
     protected INetworkSystem NetworkSystem;
+    [Inject]
+    protected NetworkPrefabFactory NetworkPrefabFactory;
+    [Inject]
+    protected LockstepFactory LockstepFactory;
 
     protected const char Separator = ',';
     protected const char VerticalBar = '|';

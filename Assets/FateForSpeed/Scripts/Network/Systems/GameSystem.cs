@@ -28,23 +28,7 @@ public class GameSystem : NetworkSystemBehaviour
         NetworkSystem.Receive<string>(RequestCode.StartGame).Subscribe(data =>
         {
             int userId = int.Parse(data);
-
-            foreach (var entity in UserComponents.Entities)
-            {
-                var userComponent = entity.GetComponent<UserComponent>();
-                var viewComponent = entity.GetComponent<ViewComponent>();
-
-                if (userId == userComponent.UserId)
-                {
-                    PrefabFactory.Instantiate(NetworkPlayerPrefab, viewComponent.Transforms[0], true, go =>
-                    {
-                        var networkPlayerComponent = go.GetComponent<NetworkPlayerComponent>();
-                        networkPlayerComponent.UserId = userComponent.UserId;
-                        networkPlayerComponent.IsLocalPlayer = userComponent.IsLocalPlayer;
-                    });
-                    break;
-                }
-            }
+            NetworkPrefabFactory.Instantiate(userId, NetworkPlayerPrefab, true);
         }).AddTo(this.Disposer);
 
         NetworkPlayerComponents.OnAdd().Subscribe(entity =>

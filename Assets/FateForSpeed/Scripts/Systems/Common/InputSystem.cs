@@ -1,18 +1,33 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UniEasy.ECS;
 using System;
 using Common;
 
-public class InputSystem : LockstepSystemBehaviour
+public class InputSystem : NetworkSystemBehaviour
 {
-    public override IInput[] UpdateInputs()
-    {
-        var inputs = new IInput[3];
+    private IGroup NetworkPlayerComponents;
+    private NetworkGroup Network;
 
+    public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
+    {
+        base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
+        NetworkPlayerComponents = this.Create(typeof(NetworkIdentityComponent), typeof(NetworkPlayerComponent));
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        Network = LockstepFactory.Create(NetworkPlayerComponents);
+        Network.OnUpdate += UpdateInputs;
+    }
+
+    private void UpdateInputs()
+    {
         var axisInput = new AxisInput();
         axisInput.Horizontal = (Fix64)Input.GetAxis(InputParameters.Horizontal);
         axisInput.Vertical = (Fix64)Input.GetAxis(InputParameters.Vertical);
-        inputs[0] = axisInput;
+        LockstepUtility.AddInput(axisInput);
 
         var keyInput = new KeyInput() { KeyCodes = new List<int>() };
         foreach (var obj in Enum.GetValues(typeof(KeyCode)))
@@ -22,7 +37,7 @@ public class InputSystem : LockstepSystemBehaviour
                 keyInput.KeyCodes.Add((int)obj);
             }
         }
-        inputs[1] = keyInput;
+        LockstepUtility.AddInput(keyInput);
 
         var mouseInput = new MouseInput() { MouseButtons = new List<int>() };
         for (int i = 0; i < 3; i++)
@@ -35,8 +50,6 @@ public class InputSystem : LockstepSystemBehaviour
         mouseInput.ScrollDelta = (FixVector2)Input.mouseScrollDelta;
         mouseInput.Position = (FixVector3)Input.mousePosition;
         mouseInput.Delta = new FixVector2((Fix64)Input.GetAxis(InputParameters.MouseX), (Fix64)Input.GetAxis(InputParameters.MouseY));
-        inputs[2] = mouseInput;
-
-        return inputs;
+        LockstepUtility.AddInput(mouseInput);
     }
 }

@@ -12,7 +12,7 @@ public class FollowCameraSystem : SystemBehaviour
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
 
         FollowCameraComponents = this.Create(typeof(FollowCameraComponent), typeof(CinemachineVirtualCamera));
-        NetworkPlayerComponents = this.Create(typeof(NetworkPlayerComponent), typeof(PlayerControllerComponent), typeof(ViewComponent));
+        NetworkPlayerComponents = this.Create(typeof(NetworkIdentityComponent), typeof(NetworkPlayerComponent), typeof(PlayerControllerComponent), typeof(ViewComponent));
     }
 
     public override void OnEnable()
@@ -21,11 +21,12 @@ public class FollowCameraSystem : SystemBehaviour
 
         NetworkPlayerComponents.OnAdd().Subscribe(entity1 =>
         {
+            var networkIdentityComponent = entity1.GetComponent<NetworkIdentityComponent>();
             var networkPlayerComponent = entity1.GetComponent<NetworkPlayerComponent>();
             var playerControllerComponent = entity1.GetComponent<PlayerControllerComponent>();
             var viewComponent = entity1.GetComponent<ViewComponent>();
 
-            if (networkPlayerComponent.IsLocalPlayer)
+            if (networkIdentityComponent.IsLocalPlayer)
             {
                 foreach (var entity2 in FollowCameraComponents.Entities)
                 {

@@ -1,6 +1,6 @@
-﻿public static class LockstepSettings
+﻿public class LockstepSettings
 {
-    public static bool UseForecast = true;
-    public static int MaxForecastSteps = 10;
-    public static float FixedDeltaTime = 0.1f;
+    public const bool UseForecast = true;
+    public const int MaxForecastSteps = 10;
+    public const float FixedDeltaTime = 0.1f;
 }
