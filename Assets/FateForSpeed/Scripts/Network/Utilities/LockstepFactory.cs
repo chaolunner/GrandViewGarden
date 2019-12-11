@@ -3,23 +3,24 @@ using UniEasy.ECS;
 
 public class LockstepFactory
 {
-    private Dictionary<IGroup, NetworkGroup> groupDict = new Dictionary<IGroup, NetworkGroup>();
+    private Dictionary<NetworkGroupData, NetworkGroup> groupDict = new Dictionary<NetworkGroupData, NetworkGroup>();
 
     public NetworkGroup Create(IGroup group, bool useForecast = LockstepSettings.UseForecast, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
     {
-        if (!groupDict.ContainsKey(group))
+        var data = new NetworkGroupData(group, useForecast, maxForecastSteps, fixedDeltaTime);
+        if (!groupDict.ContainsKey(data))
         {
-            groupDict.Add(group, new NetworkGroup(group, useForecast, maxForecastSteps, fixedDeltaTime));
+            groupDict.Add(data, new NetworkGroup(data));
         }
-        return groupDict[group];
+        return groupDict[data];
     }
 
-    public void Destroy(IGroup group)
+    public void Destroy(NetworkGroupData data)
     {
-        if (groupDict.ContainsKey(group))
+        if (groupDict.ContainsKey(data))
         {
-            groupDict[group].Dispose();
-            groupDict.Remove(group);
+            groupDict[data].Dispose();
+            groupDict.Remove(data);
         }
     }
 }

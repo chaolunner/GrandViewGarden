@@ -9,25 +9,19 @@ public class NetworkGroup : IDisposable
 {
     public event Action OnUpdate;
 
-    private IGroup group;
-    private bool useForecast;
-    private int maxForecastSteps;
-    private float fixedDeltaTime;
+    private NetworkGroupData networkGroupData;
     private Dictionary<Type[], INetworkTimeline> timelineDict;
     private Dictionary<NetworkId, Dictionary<INetworkTimeline, TimePointWithLerp>> timePointWithLerpDict;
 
-    public NetworkGroup(IGroup group, bool useForecast = LockstepSettings.UseForecast, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
+    public NetworkGroup(NetworkGroupData data)
     {
-        this.group = group;
-        this.useForecast = useForecast;
-        this.maxForecastSteps = maxForecastSteps;
-        this.fixedDeltaTime = fixedDeltaTime;
+        networkGroupData = data;
         timelineDict = new Dictionary<Type[], INetworkTimeline>();
         timePointWithLerpDict = new Dictionary<NetworkId, Dictionary<INetworkTimeline, TimePointWithLerp>>();
 
         LockstepUtility.OnRestart += OnRestart;
 
-        this.group.OnAdd().Subscribe(entity =>
+        networkGroupData.Group.OnAdd().Subscribe(entity =>
         {
             var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
 
@@ -70,7 +64,7 @@ public class NetworkGroup : IDisposable
         var timePointWithLerp = timePointWithLerpDict[identity][subject];
         var beforeStep = timePointWithLerp.TickId;
 
-        timePointWithLerp.Begin(Time.deltaTime, fixedDeltaTime);
+        timePointWithLerp.Begin(Time.deltaTime, networkGroupData.FixedDeltaTime);
 
         PushUntilLastStep(entity, inputTypes, subject);
 
@@ -188,7 +182,7 @@ public class NetworkGroup : IDisposable
         var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
         var identity = networkIdentityComponent.Identity;
         var timePointWithLerp = timePointWithLerpDict[identity][subject];
-        if (useForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
+        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
         {
             timePointWithLerp.Rollback();
         }
@@ -197,7 +191,7 @@ public class NetworkGroup : IDisposable
     private void Forecast(int beforeStep, NetworkId identity, Type[] inputTypes, INetworkTimeline subject)
     {
         var timePointWithLerp = timePointWithLerpDict[identity][subject];
-        if (useForecast && !timePointWithLerp.IsPlaying)
+        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying)
         {
             var tracks = GetUserInputDataByInputTypes(beforeStep, identity.UserId, inputTypes);
             var tickId = 0;
@@ -209,7 +203,7 @@ public class NetworkGroup : IDisposable
                 deltaTime = tracks[i].DeltaTime;
                 break;
             }
-            timePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, tracks), maxForecastSteps);
+            timePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, tracks), networkGroupData.MaxForecastSteps);
         }
     }
 
