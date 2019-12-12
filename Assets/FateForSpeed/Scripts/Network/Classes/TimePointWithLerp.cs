@@ -70,17 +70,14 @@ public class TimePointWithLerp
         realtimeTotalTime += deltaTime;
         RealtimeData.Add(timePointData);
     }
+
     public void Forecast(Fix64 deltaTime, TimePointData timePointData, int limit)
     {
         ForecastData.Clear();
         forecastTotalTime = Fix64.Zero;
         if (RealtimeData.Count > 0)
         {
-            forecastCount = Mathf.Clamp(forecastCount - RealtimeData.Count + 1, 0, limit);
-            for (int i = 0; i < forecastCount; i++)
-            {
-                AddForecastData(deltaTime, timePointData, i + 1);
-            }
+            forecastCount = 0;
         }
         else if (forecastCount < limit)
         {

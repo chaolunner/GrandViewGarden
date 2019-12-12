@@ -1,4 +1,7 @@
-﻿public struct NetworkId
+﻿using System;
+
+[Serializable]
+public struct NetworkId
 {
     public int UserId;
     public int InstanceId;

@@ -72,7 +72,11 @@ public class PlayerControllerSystem : NetworkSystemBehaviour
             var axisInput = userInputData[0].Input as AxisInput;
             var keyInput = userInputData[1].Input as KeyInput;
             var mouseInput = userInputData[2].Input as MouseInput;
-            var result = new IUserInputResult[1];
+            var result = new IUserInputResult[3];
+
+            result[0] = new UserInputResult<Quaternion>(rot => viewComponent.Transforms[0].rotation = rot, viewComponent.Transforms[0].rotation);
+            result[1] = new UserInputResult<Quaternion>(rot => playerControllerComponent.Viewpoint.rotation = rot, playerControllerComponent.Viewpoint.rotation);
+            result[2] = new UserInputResult<Vector3>(pos => viewComponent.Transforms[0].position = pos, viewComponent.Transforms[0].position);
 
             if (mouseInput != null)
             {
@@ -100,8 +104,7 @@ public class PlayerControllerSystem : NetworkSystemBehaviour
             }
 
             playerControllerComponent.Motion.y -= playerControllerComponent.Gravity * deltaTime;
-
-            result[0] = new UserInputResult<Vector3>((v, t) => { characterController.Move(v * t); }, playerControllerComponent.Motion, deltaTime);
+            characterController.Move(playerControllerComponent.Motion * deltaTime);
 
             return result;
         }).AddTo(this.Disposer);

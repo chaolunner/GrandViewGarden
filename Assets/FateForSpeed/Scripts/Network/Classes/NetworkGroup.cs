@@ -143,7 +143,7 @@ public class NetworkGroup : IDisposable
                 }
                 else if (p1 >= from && p1 <= to && p2 >= from && p2 <= to)
                 {
-                    result = subject.OnNext(new TimelineData(entity, timePoints[i].Tracks, deltaTime * totalTime));
+                    result = subject.OnNext(new TimelineData(entity, timePoints[i].Tracks, deltaTime));
                 }
                 else if (p1 >= from && p1 <= to)
                 {
@@ -155,18 +155,11 @@ public class NetworkGroup : IDisposable
                 }
                 break;
             }
-            if (result != null)
+            if (result != null && timePoints[i].ForecastCount > 0)
             {
                 for (int j = 0; j < result.Count; j++)
                 {
-                    for (int k = 0; k < result[j].Length; k++)
-                    {
-                        result[j][k].Execute();
-                    }
-                    if (timePoints[i].ForecastCount > 0)
-                    {
-                        timePointWithLerp.RollbackData.Add(result[j]);
-                    }
+                    timePointWithLerp.RollbackData.Add(result[j]);
                 }
             }
         }
@@ -193,7 +186,7 @@ public class NetworkGroup : IDisposable
         var timePointWithLerp = timePointWithLerpDict[identity][subject];
         if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying)
         {
-            var tracks = GetUserInputDataByInputTypes(beforeStep, identity.UserId, inputTypes);
+            var tracks = GetUserInputDataByInputTypes(timePointWithLerp.TickId - 1, identity.UserId, inputTypes);
             var tickId = 0;
             var deltaTime = Fix64.Zero;
             for (int i = 0; i < tracks.Length; i++)
