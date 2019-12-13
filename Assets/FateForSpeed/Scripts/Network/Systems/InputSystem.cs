@@ -13,13 +13,19 @@ public class InputSystem : NetworkSystemBehaviour
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
         NetworkPlayerComponents = this.Create(typeof(NetworkIdentityComponent), typeof(NetworkPlayerComponent));
+        Network = LockstepFactory.Create(NetworkPlayerComponents);
     }
 
     public override void OnEnable()
     {
         base.OnEnable();
-        Network = LockstepFactory.Create(NetworkPlayerComponents);
         Network.OnUpdate += UpdateInputs;
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        Network.OnUpdate -= UpdateInputs;
     }
 
     private void UpdateInputs()
