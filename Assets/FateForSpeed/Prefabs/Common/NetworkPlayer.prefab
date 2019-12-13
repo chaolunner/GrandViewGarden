@@ -137,6 +137,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsLocalPlayer: 0
+  Identity:
+    UserId: 0
+    InstanceId: 0
 --- !u!114 &7780703061940592912
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -92,16 +92,4 @@ public class TimePointWithLerp
         forecastTotalTime += deltaTime;
         ForecastData.Add(timePointData);
     }
-
-    public void Rollback()
-    {
-        for (int i = RollbackData.Count - 1; i >= 0; i--)
-        {
-            for (int j = 0; j < RollbackData[i].Length; j++)
-            {
-                RollbackData[i][j].Rollback();
-            }
-        }
-        RollbackData.Clear();
-    }
 }

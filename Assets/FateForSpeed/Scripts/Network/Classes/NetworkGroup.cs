@@ -21,7 +21,9 @@ public class NetworkGroup : IDisposable
 
         LockstepUtility.OnRestart += OnRestart;
 
-        networkGroupData.Group.OnAdd().Subscribe(entity =>
+        networkGroupData.Group.OnAdd()
+            .Where(entity => entity.HasComponent<NetworkIdentityComponent>())
+            .Subscribe(entity =>
         {
             var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
 
@@ -49,7 +51,7 @@ public class NetworkGroup : IDisposable
         return timelineDict[inputTypes];
     }
 
-    public void UpdateTimeline(IEntity entity, Type[] inputTypes, INetworkTimeline subject)
+    public void UpdateTimeline(IEntity entity, Type[] inputTypes, INetworkTimeline timeline)
     {
         var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
         var identity = networkIdentityComponent.Identity;
@@ -57,31 +59,31 @@ public class NetworkGroup : IDisposable
         {
             timePointWithLerpDict.Add(identity, new Dictionary<INetworkTimeline, TimePointWithLerp>());
         }
-        if (!timePointWithLerpDict[identity].ContainsKey(subject))
+        if (!timePointWithLerpDict[identity].ContainsKey(timeline))
         {
-            timePointWithLerpDict[identity].Add(subject, new TimePointWithLerp());
+            timePointWithLerpDict[identity].Add(timeline, new TimePointWithLerp());
         }
-        var timePointWithLerp = timePointWithLerpDict[identity][subject];
+        var timePointWithLerp = timePointWithLerpDict[identity][timeline];
         var beforeStep = timePointWithLerp.TickId;
 
         timePointWithLerp.Begin(Time.deltaTime, networkGroupData.FixedDeltaTime);
 
-        PushUntilLastStep(entity, inputTypes, subject);
+        PushUntilLastStep(entity, inputTypes, timeline);
 
-        Rollback(entity, subject);
+        Rollback(entity, timeline);
 
-        Forecast(beforeStep, identity, inputTypes, subject);
+        Forecast(beforeStep, identity, inputTypes, timeline);
 
-        ApplyTimePoint(entity, subject);
+        ApplyTimePoint(entity, timeline);
 
         timePointWithLerp.End();
     }
 
-    private int PushUntilLastStep(IEntity entity, Type[] inputTypes, INetworkTimeline subject)
+    private int PushUntilLastStep(IEntity entity, Type[] inputTypes, INetworkTimeline timeline)
     {
         var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
         var identity = networkIdentityComponent.Identity;
-        var timePointWithLerp = timePointWithLerpDict[identity][subject];
+        var timePointWithLerp = timePointWithLerpDict[identity][timeline];
         var tickId = timePointWithLerp.TickId;
         if (!timePointWithLerp.IsPlaying)
         {
@@ -116,11 +118,11 @@ public class NetworkGroup : IDisposable
         return data;
     }
 
-    private void ApplyTimePoint(IEntity entity, INetworkTimeline subject)
+    private void ApplyTimePoint(IEntity entity, INetworkTimeline timeline)
     {
         var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
         var identity = networkIdentityComponent.Identity;
-        var timePointWithLerp = timePointWithLerpDict[identity][subject];
+        var timePointWithLerp = timePointWithLerpDict[identity][timeline];
         var timePoints = timePointWithLerp.TimePoints;
         var totalTime = timePointWithLerp.TotalTime;
         var from = timePointWithLerp.From;
@@ -139,19 +141,19 @@ public class NetworkGroup : IDisposable
                 var p2 = time / totalTime;
                 if (p1 < from && p2 > to)
                 {
-                    result = subject.OnNext(new TimelineData(entity, timePoints[i].Tracks, (to - from) * totalTime));
+                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i].Tracks, (to - from) * totalTime));
                 }
                 else if (p1 >= from && p1 <= to && p2 >= from && p2 <= to)
                 {
-                    result = subject.OnNext(new TimelineData(entity, timePoints[i].Tracks, deltaTime));
+                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i].Tracks, deltaTime));
                 }
                 else if (p1 >= from && p1 <= to)
                 {
-                    result = subject.OnNext(new TimelineData(entity, timePoints[i].Tracks, (to - p1) * totalTime));
+                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i].Tracks, (to - p1) * totalTime));
                 }
                 else if (p2 >= from && p2 <= to)
                 {
-                    result = subject.OnNext(new TimelineData(entity, timePoints[i].Tracks, (p2 - from) * totalTime));
+                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i].Tracks, (p2 - from) * totalTime));
                 }
                 break;
             }
@@ -170,20 +172,24 @@ public class NetworkGroup : IDisposable
         timePointWithLerpDict.Clear();
     }
 
-    private void Rollback(IEntity entity, INetworkTimeline subject)
+    private void Rollback(IEntity entity, INetworkTimeline timeline)
     {
         var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
         var identity = networkIdentityComponent.Identity;
-        var timePointWithLerp = timePointWithLerpDict[identity][subject];
+        var timePointWithLerp = timePointWithLerpDict[identity][timeline];
         if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
         {
-            timePointWithLerp.Rollback();
+            for (int i = timePointWithLerp.RollbackData.Count - 1; i >= 0; i--)
+            {
+                timeline.Reverse(new ReverseTimelineData(entity, timePointWithLerp.RollbackData[i]));
+            }
+            timePointWithLerp.RollbackData.Clear();
         }
     }
 
-    private void Forecast(int beforeStep, NetworkId identity, Type[] inputTypes, INetworkTimeline subject)
+    private void Forecast(int beforeStep, NetworkId identity, Type[] inputTypes, INetworkTimeline timeline)
     {
-        var timePointWithLerp = timePointWithLerpDict[identity][subject];
+        var timePointWithLerp = timePointWithLerpDict[identity][timeline];
         if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying)
         {
             var tracks = GetUserInputDataByInputTypes(timePointWithLerp.TickId - 1, identity.UserId, inputTypes);

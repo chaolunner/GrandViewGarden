@@ -2,7 +2,7 @@
 using UniEasy.ECS;
 using UniEasy;
 
-public class PlayerControllerComponent : ComponentBehaviour
+public class PlayerControlComponent : ComponentBehaviour
 {
     public float Speed = 6;
     public float JumpSpeed = 8;

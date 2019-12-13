@@ -3,17 +3,21 @@ using System;
 
 public static class INetworkTimelineExtensions
 {
-    public static IDisposable Subscribe(this INetworkTimeline subject, Func<TimelineData, IUserInputResult[]> onNext)
+    public static IDisposable OnForward(this INetworkTimeline timeline, Func<IEntity, UserInputData[], float, IUserInputResult[]> onNext)
     {
-        return subject.Subscribe(new NetworkTimeline(onNext));
-    }
-
-    public static IDisposable Subscribe(this INetworkTimeline subject, Func<IEntity, UserInputData[], float, IUserInputResult[]> onNext)
-    {
-        Func<TimelineData, IUserInputResult[]> func = data =>
+        Func<ForwardTimelineData, IUserInputResult[]> func = data =>
         {
             return onNext(data.Entity, data.UserInputData, data.DeltaTime);
         };
-        return subject.Subscribe(new NetworkTimeline(func));
+        return timeline.OnForward(func);
+    }
+
+    public static IDisposable OnReverse(this INetworkTimeline timeline, Action<IEntity, IUserInputResult[]> onNext)
+    {
+        Action<ReverseTimelineData> action = data =>
+        {
+            onNext(data.Entity, data.UserInputResult);
+        };
+        return timeline.OnReverse(action);
     }
 }

@@ -1,12 +1,12 @@
 ﻿using UniEasy.ECS;
 
-public class TimelineData
+public struct ForwardTimelineData
 {
     public IEntity Entity;
     public UserInputData[] UserInputData;
     public float DeltaTime;
 
-    public TimelineData(IEntity entity, UserInputData[] userInputData, float deltaTime)
+    public ForwardTimelineData(IEntity entity, UserInputData[] userInputData, float deltaTime)
     {
         Entity = entity;
         UserInputData = userInputData;
