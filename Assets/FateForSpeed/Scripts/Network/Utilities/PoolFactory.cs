@@ -16,9 +16,9 @@ public interface IPoolFactory
 public class PoolFactory : IPoolFactory
 {
     [Inject]
-    public PrefabFactory PrefabFactory;
+    private PrefabFactory PrefabFactory;
     [Inject]
-    public NetworkPrefabFactory NetworkPrefabFactory;
+    private NetworkPrefabFactory NetworkPrefabFactory;
 
     private Dictionary<GameObject, IPool> poolDict = new Dictionary<GameObject, IPool>();
 

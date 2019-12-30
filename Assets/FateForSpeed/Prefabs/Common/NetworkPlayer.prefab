@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 567164432478148983}
   - component: {fileID: 7780703061940592912}
   - component: {fileID: 114649358116475250}
+  - component: {fileID: 6046258769048195094}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -58,6 +59,7 @@ MonoBehaviour:
   - {fileID: 7780703061940592912}
   - {fileID: 114649358116475250}
   - {fileID: 567164432478148983}
+  - {fileID: 6046258769048195094}
   RuntimeComponents: []
   ScriptableComponents: []
   AutoUpdate: 1
@@ -174,6 +176,20 @@ MonoBehaviour:
   Viewpoint: {fileID: 5972339958592193630}
   LookAt: {fileID: 7467058496439303121}
   Motion: {x: 0, y: 0, z: 0}
+--- !u!114 &6046258769048195094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859950253946076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14495fa00433eb741af54f891914c0b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weapon:
+  - Default
 --- !u!1 &2317769587063428509
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,9 +20,8 @@ public class Pool : IPool
     private List<GameObject> elements;
     private List<GameObject> inactiveParts;
     private List<GameObject> activeParts;
-
-    public PrefabFactory PrefabFactory;
-    public NetworkPrefabFactory NetworkPrefabFactory;
+    private PrefabFactory PrefabFactory;
+    private NetworkPrefabFactory NetworkPrefabFactory;
 
     public IEnumerable<GameObject> Elements
     {
