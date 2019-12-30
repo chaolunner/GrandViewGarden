@@ -6,5 +6,6 @@ public class NetworkInstaller : MonoInstaller
     {
         Container.Bind<NetworkPrefabFactory>().To<NetworkPrefabFactory>().AsSingle();
         Container.Bind<LockstepFactory>().To<LockstepFactory>().AsSingle();
+        Container.Bind<IPoolFactory>().To<PoolFactory>().AsSingle();
     }
 }

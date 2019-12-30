@@ -8,22 +8,11 @@ using UniRx;
 
 public class MultiBlockSetupSystem : SystemBehaviour
 {
-    private IPoolSystem poolSystem;
-
-    protected IPoolSystem PoolSystem
-    {
-        get
-        {
-            if (poolSystem == null)
-            {
-                poolSystem = ProjectContext.ProjectContainer.Resolve<PoolSystem>();
-            }
-            return poolSystem;
-        }
-    }
+    [Inject]
+    public IPoolFactory PoolFactory;
 
     protected IGroup blockSetupers;
-    private Dictionary<GameObject, Dictionary<GameObject, List<GameObject>>> AllocedPrefabs = new Dictionary<GameObject, Dictionary<GameObject, List<GameObject>>>();
+    private Dictionary<GameObject, Dictionary<GameObject, List<GameObject>>> blockDict = new Dictionary<GameObject, Dictionary<GameObject, List<GameObject>>>();
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -85,25 +74,28 @@ public class MultiBlockSetupSystem : SystemBehaviour
             {
                 foreach (var prefab in prefabs)
                 {
-                    PoolSystem.Alloc(prefab, transform, blockSetuper.MaxVisibleCount * maximum[prefab]);
+                    for (int i = 0; i < blockSetuper.MaxVisibleCount * maximum[prefab]; i++)
+                    {
+                        PoolFactory.Create(prefab, transform);
+                    }
                 }
 
                 int index = 0;
-                blocks.Add(AllocBlock(blockSetuper.Setup.Blocks[index], viewComponent.Transforms[0]));
+                blocks.Add(CreateBlock(blockSetuper.Setup.Blocks[index], viewComponent.Transforms[0]));
 
                 EventSystem.OnEvent<RequestBlockProcessingEvent>().Subscribe(evt =>
                 {
                     index++;
                     if (index < blockSetuper.Setup.Blocks.Count)
                     {
-                        var block = AllocBlock(blockSetuper.Setup.Blocks[index], viewComponent.Transforms[0]);
+                        var block = CreateBlock(blockSetuper.Setup.Blocks[index], viewComponent.Transforms[0]);
 
                         block.transform.position = new Vector3(0, 0, 50 * index);
                         blocks.Add(block);
                     }
                     while (blocks.Count > blockSetuper.MaxVisibleCount)
                     {
-                        RecycleBlock(blocks[0]);
+                        RemoveBlock(blocks[0]);
                         blocks.RemoveAt(0);
                     }
                 }).AddTo(this.Disposer).AddTo(blockSetuper.Disposer).AddTo(disposer);
@@ -114,54 +106,54 @@ public class MultiBlockSetupSystem : SystemBehaviour
                 disposer.Clear();
                 foreach (var block in blocks)
                 {
-                    RecycleBlock(block);
+                    RemoveBlock(block);
                 }
                 foreach (var prefab in prefabs)
                 {
-                    PoolSystem.Alloc(prefab, transform, 0);
+                    PoolFactory.Create(prefab, transform);
                 }
             }).AddTo(this.Disposer).AddTo(blockSetuper.Disposer);
         }).AddTo(this.Disposer);
     }
 
-    protected GameObject AllocBlock(EasyBlock easyBlock, Transform parent)
+    protected GameObject CreateBlock(EasyBlock easyBlock, Transform parent)
     {
         var block = new GameObject(easyBlock.name);
 
         block.transform.SetParent(parent);
-        AllocedPrefabs.Add(block, new Dictionary<GameObject, List<GameObject>>());
+        blockDict.Add(block, new Dictionary<GameObject, List<GameObject>>());
         foreach (var kvp in easyBlock.ToDictionary())
         {
-            var go = PoolSystem.Alloc(kvp.Value.GameObject, transform);
+            var go = PoolFactory.Pop(kvp.Value.GameObject);
 
             go.transform.SetParent(block.transform, false);
             go.transform.localPosition = kvp.Value.LocalPosition;
             go.transform.localRotation = kvp.Value.LocalRotation;
             go.transform.localScale = kvp.Value.LocalScale;
 
-            if (!AllocedPrefabs[block].ContainsKey(kvp.Value.GameObject))
+            if (!blockDict[block].ContainsKey(kvp.Value.GameObject))
             {
-                AllocedPrefabs[block].Add(kvp.Value.GameObject, new List<GameObject>());
+                blockDict[block].Add(kvp.Value.GameObject, new List<GameObject>());
             }
-            AllocedPrefabs[block][kvp.Value.GameObject].Add(go);
+            blockDict[block][kvp.Value.GameObject].Add(go);
         }
 
         return block;
     }
 
-    protected void RecycleBlock(GameObject block)
+    protected void RemoveBlock(GameObject block)
     {
-        if (AllocedPrefabs.ContainsKey(block))
+        if (blockDict.ContainsKey(block))
         {
-            foreach (var kvp in AllocedPrefabs[block])
+            foreach (var kvp in blockDict[block])
             {
                 foreach (var go in kvp.Value)
                 {
-                    PoolSystem.Recycle(kvp.Key, go, transform);
+                    PoolFactory.Push(kvp.Key, go);
                 }
             }
 
-            AllocedPrefabs.Remove(block);
+            blockDict.Remove(block);
             Destroy(block);
         }
     }
