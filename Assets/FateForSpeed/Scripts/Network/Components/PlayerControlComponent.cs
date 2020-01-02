@@ -11,9 +11,11 @@ public class PlayerControlComponent : ComponentBehaviour
     public Vector2 MouseSensivity = new Vector2(200, 100);
     [MinMaxRange(-180, 180)]
     public RangedFloat YAngleLimit = new RangedFloat(-60, 60);
-    public Transform Viewpoint;
+    public AimModeReactiveProperty Aim;
+    public Transform Follow;
     public Transform LookAt;
 
-    [HideInInspector]
-    public Vector3 Motion;
+    [HideInInspector] public float smoothTime;
+    [HideInInspector] public float aimTime;
+    [HideInInspector] public Vector3 motion;
 }
