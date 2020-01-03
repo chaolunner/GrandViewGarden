@@ -74,7 +74,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: afec2cc25e3439e4bb1b43e7c09f6503, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -138,8 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca11de85231c7143ac052e8a72e40ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 6
-  JumpSpeed: 8
+  Run: 8
+  Walk: 4
+  Jump: 12
   Gravity: 20
   MouseSensivity: {x: 200, y: 100}
   YAngleLimit:
@@ -147,10 +148,12 @@ MonoBehaviour:
     Max: 60
   Aim:
     value: 0
+  Crouched: 0
   Follow: {fileID: 5972339958592193630}
   LookAt: {fileID: 7467058496439303121}
   smoothTime: 0
   aimTime: 0
+  crouchTime: 0
   motion: {x: 0, y: 0, z: 0}
 --- !u!114 &6046258769048195094
 MonoBehaviour:

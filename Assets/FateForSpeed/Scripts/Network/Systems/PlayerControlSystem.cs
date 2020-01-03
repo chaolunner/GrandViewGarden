@@ -14,8 +14,18 @@ public class PlayerControlSystem : NetworkSystemBehaviour
     private INetworkTimeline NetwrokTimeline;
     private Camera mainCamera;
 
+    private readonly int Idle = Animator.StringToHash("Idle");
+    private readonly int Speed_f = Animator.StringToHash("Speed_f");
+    private readonly int Grounded = Animator.StringToHash("Grounded");
+    private readonly int Jump_b = Animator.StringToHash("Jump_b");
+    private readonly int Crouch_b = Animator.StringToHash("Crouch_b");
+    private readonly int Head_Vertical_f = Animator.StringToHash("Head_Vertical_f");
+    private readonly int Head_Horizontal_f = Animator.StringToHash("Head_Horizontal_f");
+    private readonly int Body_Vertical_f = Animator.StringToHash("Body_Vertical_f");
+    private readonly int Body_Horizontal_f = Animator.StringToHash("Body_Horizontal_f");
     private const float SmoothTime = 1f;
     private const float ShoulderAimTime = 0.2f;
+    private const float CrouchTime = 0.2f;
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -53,11 +63,11 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                         playerControlComponent.motion = new Vector3(Input.GetAxis(InputParameters.Vertical), 0, Input.GetAxis(InputParameters.Horizontal));
                     }
                     playerControlComponent.motion = viewComponent.Transforms[0].TransformDirection(playerControlComponent.motion);
-                    playerControlComponent.motion *= playerControlComponent.Speed;
+                    playerControlComponent.motion *= playerControlComponent.Run;
 
                     if (Input.GetButton(InputParameters.Jump))
                     {
-                        playerControlComponent.motion.y = playerControlComponent.JumpSpeed;
+                        playerControlComponent.motion.y = playerControlComponent.Jump;
                     }
                 }
 
@@ -126,6 +136,8 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                 if (playerControlComponent.Aim.Value == AimMode.Free && keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt))
                 {
                     playerControlComponent.Follow.Rotate(-rotUpDown, rotLeftRight, 0);
+                    animator.SetFloat(Head_Vertical_f, 0);
+                    animator.SetFloat(Body_Vertical_f, 0);
                     smoothTime = SmoothTime;
                 }
                 else
@@ -133,6 +145,8 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                     if (smoothTime > 0)
                     {
                         playerControlComponent.Follow.localRotation = Quaternion.Lerp(Quaternion.identity, playerControlComponent.Follow.localRotation, Mathf.Clamp01(smoothTime / SmoothTime));
+                        animator.SetFloat(Head_Vertical_f, 0);
+                        animator.SetFloat(Body_Vertical_f, 0);
                         smoothTime -= deltaTime;
                     }
                     else
@@ -140,6 +154,9 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                         yAngle = ClampAngle(playerControlComponent.Follow.localEulerAngles.x, playerControlComponent.YAngleLimit.Min, playerControlComponent.YAngleLimit.Max);
                         yAngle = ClampAngle(yAngle - rotUpDown, playerControlComponent.YAngleLimit.Min, playerControlComponent.YAngleLimit.Max);
 
+                        var vertical = 2 * (0.5f - Mathf.Abs(yAngle - playerControlComponent.YAngleLimit.Min) / Mathf.Abs(playerControlComponent.YAngleLimit.Max - playerControlComponent.YAngleLimit.Min));
+                        animator.SetFloat(Head_Vertical_f, vertical);
+                        animator.SetFloat(Body_Vertical_f, vertical);
                         viewComponent.Transforms[0].Rotate(0, rotLeftRight, 0);
                         playerControlComponent.Follow.localEulerAngles = new Vector3(yAngle, 0, 0);
                     }
@@ -152,33 +169,63 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                 {
                     playerControlComponent.motion = new Vector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
                     playerControlComponent.motion = viewComponent.Transforms[0].TransformDirection(playerControlComponent.motion);
-                    playerControlComponent.motion *= playerControlComponent.Speed;
 
-                    var speed = 1f;
+                    var t = 0.5f;
+                    var speed = playerControlComponent.Walk;
+                    var h = Mathf.Abs((float)axisInput.Horizontal);
+                    var sum = h + Mathf.Abs((float)axisInput.Vertical);
+                    var horizontal = sum == 0 ? 0 : (float)axisInput.Horizontal * (h / sum);
                     if (playerControlComponent.Aim.Value == AimMode.Shoulder)
                     {
-                        speed = 0.25f;
+                        t = 0.25f;
                     }
                     else if (playerControlComponent.Aim.Value == AimMode.AimDownSight)
                     {
-                        speed = 0.1f;
+                        t = 0.1f;
                     }
-                    playerControlComponent.motion *= speed;
-                    animator.SetFloat("Speed_f", (axisInput.Horizontal != Fix64.Zero || axisInput.Vertical != Fix64.Zero) ? Mathf.Clamp(speed, 0.3f, 1) : 0);
+                    else if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.LeftShift))
+                    {
+                        t = 1f;
+                        speed = playerControlComponent.Run;
+                    }
+
+                    if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.LeftControl))
+                    {
+                        if (playerControlComponent.crouchTime <= 0)
+                        {
+                            playerControlComponent.Crouched = !playerControlComponent.Crouched;
+                            animator.SetBool(Crouch_b, playerControlComponent.Crouched);
+                            playerControlComponent.crouchTime = CrouchTime;
+                        }
+                    }
+                    else
+                    {
+                        playerControlComponent.crouchTime -= deltaTime;
+                    }
+                    if (playerControlComponent.Crouched)
+                    {
+                        speed = 0;
+                    }
+
+                    playerControlComponent.motion *= t * speed;
+                    animator.SetFloat(Speed_f, (axisInput.Horizontal != Fix64.Zero || axisInput.Vertical != Fix64.Zero) ? Mathf.Clamp(t, 0.3f, 1f) : 0f);
+                    animator.SetFloat(Head_Horizontal_f, 0.25f * horizontal);
+                    animator.SetFloat(Body_Horizontal_f, 0.35f * horizontal);
                 }
 
-                if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.Space))
+                if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.Space) && !playerControlComponent.Crouched)
                 {
-                    playerControlComponent.motion.y = playerControlComponent.JumpSpeed;
+                    playerControlComponent.motion.y = playerControlComponent.Jump;
                 }
             }
-
-            animator.SetBool("Grounded", characterController.isGrounded || Physics.Raycast(viewComponent.Transforms[0].position, Vector3.down, 0.2f) || characterController.velocity.y >= 0);
-            animator.SetBool("Jump_b", playerControlComponent.motion.y > 0);
 
             playerControlComponent.motion.y -= playerControlComponent.Gravity * deltaTime;
             playerControlComponent.smoothTime = smoothTime;
             characterController.Move(playerControlComponent.motion * deltaTime);
+
+            animator.SetBool(Jump_b, playerControlComponent.motion.y > 0);
+            playerControlComponent.Velocity = characterController.velocity;
+            animator.SetBool(Grounded, !IsDrop(playerControlComponent, viewComponent, animator));
 
             return new IUserInputResult[] { playerControlResult };
         }).AddTo(this.Disposer);
@@ -191,5 +238,12 @@ public class PlayerControlSystem : NetworkSystemBehaviour
         if (angle > max && angle - 360 >= min) { return angle - 360; }
         if (angle < min && angle + 360 <= max) { return angle + 360; }
         return Mathf.Clamp(angle, -max, -min);
+    }
+
+    private bool IsDrop(PlayerControlComponent playerControlComponent, ViewComponent viewComponent, Animator animator)
+    {
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(3);
+        var grounded = stateInfo.shortNameHash == Idle;
+        return playerControlComponent.Velocity.y < 0 && !Physics.Raycast(viewComponent.Transforms[0].position, Vector3.down, 0.1f) && (grounded || stateInfo.normalizedTime > 0.7f);
     }
 }

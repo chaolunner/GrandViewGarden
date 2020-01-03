@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 114649358116475250}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,9 +139,13 @@ MonoBehaviour:
   YAngleLimit:
     Min: -60
     Max: 60
-  Viewpoint: {fileID: 2474133188586258530}
+  Aim:
+    value: 0
+  Follow: {fileID: 0}
   LookAt: {fileID: 8474578091537220190}
-  Motion: {x: 0, y: 0, z: 0}
+  smoothTime: 0
+  aimTime: 0
+  motion: {x: 0, y: 0, z: 0}
 --- !u!1 &653446931328337779
 GameObject:
   m_ObjectHideFlags: 0
