@@ -60,11 +60,15 @@ public class Pool : IPool
 
     public GameObject Pop()
     {
-        var go = inactiveParts[0];
-        inactiveParts.RemoveAt(0);
-        activeParts.Add(go);
-        go.SetActive(true);
-        return go;
+        if (inactiveParts.Count > 0)
+        {
+            var go = inactiveParts[0];
+            inactiveParts.RemoveAt(0);
+            activeParts.Add(go);
+            go.SetActive(true);
+            return go;
+        }
+        return null;
     }
 
     private void Push(GameObject go, bool unlimited)

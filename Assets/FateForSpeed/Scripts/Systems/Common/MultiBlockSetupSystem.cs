@@ -108,10 +108,6 @@ public class MultiBlockSetupSystem : SystemBehaviour
                 {
                     RemoveBlock(block);
                 }
-                foreach (var prefab in prefabs)
-                {
-                    PoolFactory.Create(prefab, transform);
-                }
             }).AddTo(this.Disposer).AddTo(blockSetuper.Disposer);
         }).AddTo(this.Disposer);
     }
@@ -125,6 +121,11 @@ public class MultiBlockSetupSystem : SystemBehaviour
         foreach (var kvp in easyBlock.ToDictionary())
         {
             var go = PoolFactory.Pop(kvp.Value.GameObject);
+            while (go == null)
+            {
+                PoolFactory.Create(kvp.Value.GameObject, transform);
+                go = PoolFactory.Pop(kvp.Value.GameObject);
+            }
 
             go.transform.SetParent(block.transform, false);
             go.transform.localPosition = kvp.Value.LocalPosition;

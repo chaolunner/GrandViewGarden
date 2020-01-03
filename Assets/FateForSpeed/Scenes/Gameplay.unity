@@ -599,7 +599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4534031237664962, guid: a6cc0da18689d6846a2e1e9998bb4c3c, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1674667265917214, guid: a6cc0da18689d6846a2e1e9998bb4c3c, type: 3}
       propertyPath: m_IsActive
@@ -615,6 +615,11 @@ PrefabInstance:
       propertyPath: Levels.Array.data[0]
       value: 
       objectReference: {fileID: 441608797}
+    - target: {fileID: 114570160680389680, guid: a6cc0da18689d6846a2e1e9998bb4c3c,
+        type: 3}
+      propertyPath: MaxVisibleCount
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6cc0da18689d6846a2e1e9998bb4c3c, type: 3}
 --- !u!1 &597103426
@@ -754,11 +759,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4192798367791938, guid: fb9a29644a93b14468e0548c2142df81, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114649358116475250, guid: fb9a29644a93b14468e0548c2142df81,
         type: 3}
       propertyPath: JumpSpeed
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114649358116475250, guid: fb9a29644a93b14468e0548c2142df81,
+        type: 3}
+      propertyPath: Jump
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []

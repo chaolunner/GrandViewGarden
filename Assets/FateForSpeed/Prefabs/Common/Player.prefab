@@ -132,8 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca11de85231c7143ac052e8a72e40ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 6
-  JumpSpeed: 8
+  Run: 8
+  Walk: 4
+  Jump: 16
   Gravity: 20
   MouseSensivity: {x: 200, y: 100}
   YAngleLimit:
@@ -141,10 +142,12 @@ MonoBehaviour:
     Max: 60
   Aim:
     value: 0
-  Follow: {fileID: 0}
+  Crouched: 0
+  Follow: {fileID: 2474133188586258530}
   LookAt: {fileID: 8474578091537220190}
   smoothTime: 0
   aimTime: 0
+  crouchTime: 0
   motion: {x: 0, y: 0, z: 0}
 --- !u!1 &653446931328337779
 GameObject:
@@ -156,7 +159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2474133188586258530}
   m_Layer: 0
-  m_Name: Viewpoint
+  m_Name: Follow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
