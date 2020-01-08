@@ -64,6 +64,15 @@ public class ThridPersonCameraSystem : NetworkSystemBehaviour
                                 smoothTime += Time.deltaTime;
                             }).AddTo(this.Disposer).AddTo(playerControlComponent.Disposer).AddTo(thridPersonCameraComponent.smoothDisposer);
                         }
+                        else if (mode == AimMode.AimDownSight && entity1.HasComponent<ShootComponent>())
+                        {
+                            var shootComponent = entity1.GetComponent<ShootComponent>();
+
+                            Observable.EveryUpdate().Subscribe(_ =>
+                            {
+                                transposer.m_FollowOffset = virtualCamera.Follow.InverseTransformDirection(shootComponent.weapon.transform.position - virtualCamera.Follow.position) + shootComponent.adsPosition;
+                            }).AddTo(this.Disposer).AddTo(playerControlComponent.Disposer).AddTo(thridPersonCameraComponent.smoothDisposer);
+                        }
                         else
                         {
                             transposer.m_FollowOffset = thridPersonCameraComponent.FollowOffset[index];

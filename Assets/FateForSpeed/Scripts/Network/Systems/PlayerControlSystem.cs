@@ -25,7 +25,6 @@ public class PlayerControlSystem : NetworkSystemBehaviour
     private readonly int Body_Horizontal_f = Animator.StringToHash("Body_Horizontal_f");
     private const float SmoothTime = 1f;
     private const float ShoulderAimTime = 0.2f;
-    private const float CrouchTime = 0.2f;
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -104,7 +103,7 @@ public class PlayerControlSystem : NetworkSystemBehaviour
             playerControlResult.Follow = playerControlComponent.Follow.rotation;
             playerControlResult.Position = viewComponent.Transforms[0].position;
 
-            if (mouseInput != null)
+            if (mouseInput != null && keyInput != null)
             {
                 var rotLeftRight = (float)mouseInput.Delta.x * playerControlComponent.MouseSensivity.x * deltaTime;
                 var rotUpDown = (float)mouseInput.Delta.y * playerControlComponent.MouseSensivity.y * deltaTime;
@@ -133,7 +132,7 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                     playerControlComponent.aimTime = 0;
                 }
 
-                if (playerControlComponent.Aim.Value == AimMode.Free && keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt))
+                if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt))
                 {
                     playerControlComponent.Follow.Rotate(-rotUpDown, rotLeftRight, 0);
                     animator.SetFloat(Head_Vertical_f, 0);
@@ -155,7 +154,7 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                         yAngle = ClampAngle(yAngle - rotUpDown, playerControlComponent.YAngleLimit.Min, playerControlComponent.YAngleLimit.Max);
 
                         var vertical = 2 * (0.5f - Mathf.Abs(yAngle - playerControlComponent.YAngleLimit.Min) / Mathf.Abs(playerControlComponent.YAngleLimit.Max - playerControlComponent.YAngleLimit.Min));
-                        animator.SetFloat(Head_Vertical_f, vertical);
+                        animator.SetFloat(Head_Vertical_f, 0.5f * vertical);
                         animator.SetFloat(Body_Vertical_f, vertical);
                         viewComponent.Transforms[0].Rotate(0, rotLeftRight, 0);
                         playerControlComponent.Follow.localEulerAngles = new Vector3(yAngle, 0, 0);
@@ -170,18 +169,18 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                     playerControlComponent.motion = new Vector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
                     playerControlComponent.motion = viewComponent.Transforms[0].TransformDirection(playerControlComponent.motion);
 
-                    var t = 0.5f;
+                    var t = 0.75f;
                     var speed = playerControlComponent.Walk;
                     var h = Mathf.Abs((float)axisInput.Horizontal);
                     var sum = h + Mathf.Abs((float)axisInput.Vertical);
                     var horizontal = sum == 0 ? 0 : (float)axisInput.Horizontal * (h / sum);
                     if (playerControlComponent.Aim.Value == AimMode.Shoulder)
                     {
-                        t = 0.25f;
+                        t = 0.5f;
                     }
                     else if (playerControlComponent.Aim.Value == AimMode.AimDownSight)
                     {
-                        t = 0.1f;
+                        t = 0.25f;
                     }
                     else if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.LeftShift))
                     {
@@ -189,19 +188,11 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                         speed = playerControlComponent.Run;
                     }
 
-                    if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.LeftControl))
+                    if (keyInput != null)
                     {
-                        if (playerControlComponent.crouchTime <= 0)
-                        {
-                            playerControlComponent.Crouched = !playerControlComponent.Crouched;
-                            animator.SetBool(Crouch_b, playerControlComponent.Crouched);
-                            playerControlComponent.crouchTime = CrouchTime;
-                        }
+                        playerControlComponent.Crouched = keyInput.KeyCodes.Contains((int)KeyCode.LeftControl);
                     }
-                    else
-                    {
-                        playerControlComponent.crouchTime -= deltaTime;
-                    }
+                    animator.SetBool(Crouch_b, playerControlComponent.Crouched);
                     if (playerControlComponent.Crouched)
                     {
                         speed = 0;

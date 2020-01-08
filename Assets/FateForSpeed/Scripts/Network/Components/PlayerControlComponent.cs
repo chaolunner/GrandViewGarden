@@ -20,7 +20,6 @@ public class PlayerControlComponent : ComponentBehaviour
 
     [HideInInspector] public float smoothTime;
     [HideInInspector] public float aimTime;
-    [HideInInspector] public float crouchTime;
     [HideInInspector] public Vector3 motion;
 
     private List<Vector3> velocityList = new List<Vector3>();

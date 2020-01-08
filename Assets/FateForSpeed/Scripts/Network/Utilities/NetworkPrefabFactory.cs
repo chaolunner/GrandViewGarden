@@ -39,7 +39,7 @@ public class NetworkPrefabFactory
             {
                 return PrefabFactory.Instantiate(prefab, viewComponent.Transforms[0], worldPositionStays, go =>
                 {
-                    var networkIdentityComponent = go.GetComponent<NetworkIdentityComponent>();
+                    var networkIdentityComponent = go.GetComponent<NetworkIdentityComponent>() ?? go.AddComponent<NetworkIdentityComponent>();
                     networkIdentityComponent.Identity = new NetworkId(userId, instanceId);
                     networkIdentityComponent.IsLocalPlayer = userComponent.IsLocalPlayer;
                 });
