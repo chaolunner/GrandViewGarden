@@ -12,12 +12,24 @@ public static class LockstepUtility
     private static Dictionary<Type, IInput> inputDict = new Dictionary<Type, IInput>();
     private static Dictionary<int, Dictionary<int, Dictionary<Type, IInput>>> inputTrackDict = new Dictionary<int, Dictionary<int, Dictionary<Type, IInput>>>();
 
+    private readonly static Type EventInputType = typeof(EventInput);
+
     public static void AddInput<T>(T input) where T : IInput
     {
         if (!inputDict.ContainsKey(typeof(T)))
         {
             inputDict.Add(typeof(T), input);
         }
+    }
+
+    public static void AddEventInput(EventCode type, string msg)
+    {
+        if (!inputDict.ContainsKey(EventInputType))
+        {
+            inputDict.Add(EventInputType, new EventInput());
+        }
+        var eventInput = inputDict[EventInputType] as EventInput;
+        eventInput.Write(type, msg);
     }
 
     public static void AddToTimeline(LockstepInputs inputs)
@@ -74,27 +86,60 @@ public static class LockstepUtility
         return userInputs;
     }
 
-    public static UserInputData<T> GetUserInputData<T>(int tickId, int userId) where T : IInput
+    public static bool HasTickId(int tickId)
     {
-        return GetUserInputData(tickId, userId, typeof(T)) as UserInputData<T>;
+        return inputTrackDict.ContainsKey(tickId);
+    }
+
+    public static Fix64 GetDeltaTime(int tickId)
+    {
+        if (HasTickId(tickId))
+        {
+            return lockstepInputs[tickId].DeltaTime;
+        }
+        return Fix64.Zero;
     }
 
     public static UserInputData GetUserInputData(int tickId, int userId, Type inputType)
     {
-        if (inputTrackDict.ContainsKey(tickId))
+        if (HasTickId(tickId))
         {
             var data = new UserInputData();
             data.TickId = tickId;
+            data.DeltaTime = lockstepInputs[tickId].DeltaTime;
             if (inputTrackDict[tickId].ContainsKey(userId))
             {
                 data.UserId = userId;
-                data.DeltaTime = lockstepInputs[tickId].DeltaTime;
                 if (inputTrackDict[tickId][userId].ContainsKey(inputType))
                 {
                     data.Input = inputTrackDict[tickId][userId][inputType];
                 }
             }
             return data;
+        }
+        return null;
+    }
+
+    public static UserInputData[] GetAllUserInputData(int tickId)
+    {
+        if (HasTickId(tickId))
+        {
+            var userInputData = new List<UserInputData>();
+            var e1 = inputTrackDict[tickId].GetEnumerator();
+            while (e1.MoveNext())
+            {
+                var e2 = e1.Current.Value.GetEnumerator();
+                while (e2.MoveNext())
+                {
+                    var data = new UserInputData();
+                    data.TickId = tickId;
+                    data.DeltaTime = lockstepInputs[tickId].DeltaTime;
+                    data.UserId = e1.Current.Key;
+                    data.Input = e2.Current.Value;
+                    userInputData.Add(data);
+                }
+            }
+            return userInputData.ToArray();
         }
         return null;
     }

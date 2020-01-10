@@ -5,7 +5,7 @@ public class LockstepFactory
 {
     private Dictionary<NetworkGroupData, NetworkGroup> groupDict = new Dictionary<NetworkGroupData, NetworkGroup>();
 
-    public NetworkGroup Create(IGroup group, bool useForecast = LockstepSettings.UseForecast, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
+    public NetworkGroup Create(IGroup group = null, bool useForecast = LockstepSettings.UseForecast, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
     {
         var data = new NetworkGroupData(group, useForecast, maxForecastSteps, fixedDeltaTime);
         if (!groupDict.ContainsKey(data))

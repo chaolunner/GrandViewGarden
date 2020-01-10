@@ -121,11 +121,6 @@ public class MultiBlockSetupSystem : SystemBehaviour
         foreach (var kvp in easyBlock.ToDictionary())
         {
             var go = PoolFactory.Pop(kvp.Value.GameObject);
-            while (go == null)
-            {
-                PoolFactory.Create(kvp.Value.GameObject, transform);
-                go = PoolFactory.Pop(kvp.Value.GameObject);
-            }
 
             go.transform.SetParent(block.transform, false);
             go.transform.localPosition = kvp.Value.LocalPosition;

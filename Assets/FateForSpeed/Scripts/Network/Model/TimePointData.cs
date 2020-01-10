@@ -2,9 +2,15 @@
 {
     public int TickId;
     public int ForecastCount;
-    public UserInputData[] Tracks;
+    public UserInputData[][] Tracks;
 
     public TimePointData(int tickId, UserInputData[] tracks)
+    {
+        TickId = tickId;
+        Tracks = new UserInputData[][] { tracks };
+    }
+
+    public TimePointData(int tickId, UserInputData[][] tracks)
     {
         TickId = tickId;
         Tracks = tracks;

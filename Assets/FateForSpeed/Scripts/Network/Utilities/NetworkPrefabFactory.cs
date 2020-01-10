@@ -28,7 +28,7 @@ public class NetworkPrefabFactory
         UserComponents = GroupFactory.Create(typeof(UserComponent), typeof(ViewComponent));
     }
 
-    public GameObject Instantiate(int userId, int instanceId, GameObject prefab, bool worldPositionStays = false)
+    public GameObject Instantiate(int userId, int tickId, int instanceId, GameObject prefab, bool worldPositionStays = false)
     {
         foreach (var entity in UserComponents.Entities)
         {
@@ -40,16 +40,18 @@ public class NetworkPrefabFactory
                 return PrefabFactory.Instantiate(prefab, viewComponent.Transforms[0], worldPositionStays, go =>
                 {
                     var networkIdentityComponent = go.GetComponent<NetworkIdentityComponent>() ?? go.AddComponent<NetworkIdentityComponent>();
+
                     networkIdentityComponent.Identity = new NetworkId(userId, instanceId);
                     networkIdentityComponent.IsLocalPlayer = userComponent.IsLocalPlayer;
+                    networkIdentityComponent.TickIdWhenCreated = tickId;
                 });
             }
         }
         return null;
     }
 
-    public GameObject Instantiate(int userId, GameObject prefab, bool worldPositionStays = false)
+    public GameObject Instantiate(int userId, int tickId, GameObject prefab, bool worldPositionStays = false)
     {
-        return Instantiate(userId, GenerateId(userId), prefab, worldPositionStays);
+        return Instantiate(userId, tickId, GenerateId(userId), prefab, worldPositionStays);
     }
 }

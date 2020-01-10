@@ -3,13 +3,13 @@
 public struct ForwardTimelineData
 {
     public IEntity Entity;
-    public UserInputData[] UserInputData;
+    public TimePointData TimePointData;
     public float DeltaTime;
 
-    public ForwardTimelineData(IEntity entity, UserInputData[] userInputData, float deltaTime)
+    public ForwardTimelineData(IEntity entity, TimePointData timePointData, float deltaTime)
     {
         Entity = entity;
-        UserInputData = userInputData;
+        TimePointData = timePointData;
         DeltaTime = deltaTime;
     }
 }

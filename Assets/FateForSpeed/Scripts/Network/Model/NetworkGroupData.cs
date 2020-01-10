@@ -21,7 +21,7 @@ public struct NetworkGroupData
         {
             int hashCode = 17;
 
-            hashCode = (hashCode * 23) + Group.GetHashCode();
+            if (Group != null) { hashCode = (hashCode * 23) + Group.GetHashCode(); }
 
             hashCode = (hashCode * 23) + (UseForecast ? 1 : 0);
 

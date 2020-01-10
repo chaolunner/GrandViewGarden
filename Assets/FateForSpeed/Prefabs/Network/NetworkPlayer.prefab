@@ -167,12 +167,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parent: {fileID: 2119355278168062953}
+  Cooldown: 0.5
   WeaponIndex:
     value: 0
   Weapons:
   - Pistol
   weapon: {fileID: 0}
+  bulletPrefab: {fileID: 0}
   adsPosition: {x: 0, y: 0, z: 0}
+  cooldownTime: 0
 --- !u!1 &2119355278167736499
 GameObject:
   m_ObjectHideFlags: 0

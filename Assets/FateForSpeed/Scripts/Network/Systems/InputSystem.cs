@@ -6,14 +6,12 @@ using Common;
 
 public class InputSystem : NetworkSystemBehaviour
 {
-    private IGroup NetworkPlayerComponents;
     private NetworkGroup Network;
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
-        NetworkPlayerComponents = this.Create(typeof(NetworkIdentityComponent), typeof(NetworkPlayerComponent));
-        Network = LockstepFactory.Create(NetworkPlayerComponents);
+        Network = LockstepFactory.Create();
     }
 
     public override void OnEnable()
@@ -30,6 +28,8 @@ public class InputSystem : NetworkSystemBehaviour
 
     private void UpdateInputs()
     {
+        LockstepUtility.AddEventInput(EventCode.HeartBeat, null);
+
         var axisInput = new AxisInput();
         axisInput.Horizontal = (Fix64)Input.GetAxis(InputParameters.Horizontal);
         axisInput.Vertical = (Fix64)Input.GetAxis(InputParameters.Vertical);

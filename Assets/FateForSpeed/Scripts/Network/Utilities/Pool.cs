@@ -55,7 +55,7 @@ public class Pool : IPool
 
     public void Create(int userId, bool worldPositionStays)
     {
-        Push(NetworkPrefabFactory.Instantiate(userId, prefab, worldPositionStays), true);
+        Push(NetworkPrefabFactory.Instantiate(userId, -1, prefab, worldPositionStays), true);
     }
 
     public GameObject Pop()

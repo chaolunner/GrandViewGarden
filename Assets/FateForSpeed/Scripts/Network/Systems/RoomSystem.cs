@@ -52,7 +52,7 @@ public class RoomSystem : NetworkSystemBehaviour
                     var userComponent = entity3.GetComponent<UserComponent>();
                     if (userComponent.IsLocalPlayer)
                     {
-                        NetworkSystem.Publish(RequestCode.StartGame, userComponent.UserId.ToString());
+                        LockstepUtility.AddEventInput(EventCode.GameStart, userComponent.UserId.ToString());
                         break;
                     }
                 }

@@ -50,6 +50,7 @@ public class ShootSystem : NetworkSystemBehaviour
                     PoolFactory.Create(prefab, shootComponent.Parent);
                     shootComponent.weapon = PoolFactory.Pop(prefab);
                     shootComponent.weapon.transform.localPosition = WeaponDAO.GetLocalPosition(name);
+                    shootComponent.bulletPrefab = Resources.Load<GameObject>(BulletDAO.GetPath(WeaponDAO.GetBullet(name)));
                     shootComponent.adsPosition = WeaponDAO.GetADSPosition(name);
                 }
                 else
@@ -62,9 +63,9 @@ public class ShootSystem : NetworkSystemBehaviour
             {
                 var path = BulletDAO.GetPath(WeaponDAO.GetBullet(shootComponent.Weapons[i]));
                 var prefab = Resources.Load<GameObject>(path);
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 3; j++)
                 {
-                    PoolFactory.Create(networkIdentityComponent.Identity.UserId, prefab);
+                    PoolFactory.Create(prefab, networkIdentityComponent.Identity.UserId);
                 }
             }
         }).AddTo(this.Disposer);
@@ -75,6 +76,7 @@ public class ShootSystem : NetworkSystemBehaviour
 
         NetwrokTimeline.OnForward((entity, userInputData, deltaTime) =>
         {
+            var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
             var playerControlComponent = entity.GetComponent<PlayerControlComponent>();
             var shootComponent = entity.GetComponent<ShootComponent>();
             var animator = entity.GetComponent<Animator>();
@@ -84,11 +86,19 @@ public class ShootSystem : NetworkSystemBehaviour
             if (mouseInput != null && keyInput != null)
             {
                 animator.SetBool(Shoot_b, mouseInput.MouseButtons.Contains(0));
+                if (mouseInput.MouseButtons.Contains(0) && shootComponent.cooldownTime <= 0)
+                {
+                    var bullet = PoolFactory.Pop(shootComponent.bulletPrefab);
+                    bullet.transform.position = shootComponent.weapon.transform.position;
+                    bullet.transform.rotation = Quaternion.LookRotation(shootComponent.weapon.transform.forward, shootComponent.weapon.transform.up);
+                    shootComponent.cooldownTime = shootComponent.Cooldown;
+                }
                 if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }
                 else { shootComponent.weapon.transform.LookAt(playerControlComponent.LookAt, Vector3.up); }
             }
+            shootComponent.cooldownTime -= deltaTime;
 
-            return new IUserInputResult[0];
+            return null;
         }).AddTo(this.Disposer);
     }
 }
