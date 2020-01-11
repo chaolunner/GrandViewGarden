@@ -47,8 +47,7 @@ public class ShootSystem : NetworkSystemBehaviour
                     var name = shootComponent.Weapons[index];
                     var path = WeaponDAO.GetPath(name);
                     var prefab = Resources.Load<GameObject>(path);
-                    PoolFactory.Create(prefab, shootComponent.Parent);
-                    shootComponent.weapon = PoolFactory.Pop(prefab);
+                    shootComponent.weapon = PrefabFactory.Instantiate(prefab, shootComponent.Parent);
                     shootComponent.weapon.transform.localPosition = WeaponDAO.GetLocalPosition(name);
                     shootComponent.bulletPrefab = Resources.Load<GameObject>(BulletDAO.GetPath(WeaponDAO.GetBullet(name)));
                     shootComponent.adsPosition = WeaponDAO.GetADSPosition(name);
@@ -74,12 +73,12 @@ public class ShootSystem : NetworkSystemBehaviour
         {
         }).AddTo(this.Disposer);
 
-        NetwrokTimeline.OnForward((entity, userInputData, deltaTime) =>
+        NetwrokTimeline.OnForward((entity1, userInputData, deltaTime, tickId) =>
         {
-            var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
-            var playerControlComponent = entity.GetComponent<PlayerControlComponent>();
-            var shootComponent = entity.GetComponent<ShootComponent>();
-            var animator = entity.GetComponent<Animator>();
+            var networkIdentityComponent = entity1.GetComponent<NetworkIdentityComponent>();
+            var playerControlComponent = entity1.GetComponent<PlayerControlComponent>();
+            var shootComponent = entity1.GetComponent<ShootComponent>();
+            var animator = entity1.GetComponent<Animator>();
             var mouseInput = userInputData[0].Input as MouseInput;
             var keyInput = userInputData[1].Input as KeyInput;
 
@@ -88,9 +87,10 @@ public class ShootSystem : NetworkSystemBehaviour
                 animator.SetBool(Shoot_b, mouseInput.MouseButtons.Contains(0));
                 if (mouseInput.MouseButtons.Contains(0) && shootComponent.cooldownTime <= 0)
                 {
-                    var bullet = PoolFactory.Pop(shootComponent.bulletPrefab);
-                    bullet.transform.position = shootComponent.weapon.transform.position;
-                    bullet.transform.rotation = Quaternion.LookRotation(shootComponent.weapon.transform.forward, shootComponent.weapon.transform.up);
+                    var entity2 = PoolFactory.Pop(shootComponent.bulletPrefab, tickId);
+                    var viewComponent = entity2.GetComponent<ViewComponent>();
+                    viewComponent.Transforms[0].position = shootComponent.weapon.transform.position;
+                    viewComponent.Transforms[0].rotation = Quaternion.LookRotation(shootComponent.weapon.transform.forward, shootComponent.weapon.transform.up);
                     shootComponent.cooldownTime = shootComponent.Cooldown;
                 }
                 if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }

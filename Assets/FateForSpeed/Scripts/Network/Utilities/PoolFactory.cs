@@ -8,8 +8,9 @@ public interface IPoolFactory
     void Create(PoolId id);
     PoolId Create(GameObject prefab, Transform parent, bool worldPositionStays = false);
     PoolId Create(GameObject prefab, int userId, bool worldPositionStays = false);
-    GameObject Pop(GameObject prefab, bool autoCreate = true);
-    void Push(GameObject prefab, GameObject go);
+    IEntity Pop(GameObject prefab, bool autoCreate = true);
+    IEntity Pop(GameObject prefab, int tickId, bool autoCreate = true);
+    void Push(GameObject prefab, IEntity entity);
     /// <param name="force">Whether to destroy unrecycled game objects.</param>
     void Destroy(GameObject prefab, bool force = false);
 }
@@ -63,26 +64,31 @@ public class PoolFactory : IPoolFactory
         return id;
     }
 
-    public GameObject Pop(GameObject prefab, bool autoCreate = true)
+    public IEntity Pop(GameObject prefab, bool autoCreate = true)
     {
-        GameObject go = null;
-        if (idDict.ContainsKey(prefab) && poolDict.ContainsKey(idDict[prefab][0]))
-        {
-            go = poolDict[idDict[prefab][0]].Pop();
-        }
-        if (go == null && autoCreate && idDict.ContainsKey(prefab))
-        {
-            Create(idDict[prefab][0]);
-            go = Pop(idDict[prefab][0].Prefab, autoCreate);
-        }
-        return go;
+        return Pop(prefab, -1, autoCreate);
     }
 
-    public void Push(GameObject prefab, GameObject go)
+    public IEntity Pop(GameObject prefab, int tickId, bool autoCreate = true)
+    {
+        IEntity entity = null;
+        if (idDict.ContainsKey(prefab) && poolDict.ContainsKey(idDict[prefab][0]))
+        {
+            entity = poolDict[idDict[prefab][0]].Pop(tickId);
+        }
+        if (entity == null && autoCreate && idDict.ContainsKey(prefab))
+        {
+            Create(idDict[prefab][0]);
+            entity = Pop(idDict[prefab][0].Prefab, tickId, autoCreate);
+        }
+        return entity;
+    }
+
+    public void Push(GameObject prefab, IEntity entity)
     {
         if (idDict.ContainsKey(prefab) && poolDict.ContainsKey(idDict[prefab][0]))
         {
-            poolDict[idDict[prefab][0]].Push(go);
+            poolDict[idDict[prefab][0]].Push(entity);
         }
     }
 

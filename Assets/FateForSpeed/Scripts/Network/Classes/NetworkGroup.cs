@@ -120,6 +120,10 @@ public class NetworkGroup : IDisposable
         var identity = networkIdentityComponent.Identity;
         var timePointWithLerp = timePointWithLerpDict[identity][timeline];
         var tickId = timePointWithLerp.TickId;
+        if (tickId < networkIdentityComponent.TickIdWhenCreated)
+        {
+            tickId = networkIdentityComponent.TickIdWhenCreated;
+        }
         if (!timePointWithLerp.IsPlaying)
         {
             var index = 0;

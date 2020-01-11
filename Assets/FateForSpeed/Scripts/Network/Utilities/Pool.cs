@@ -4,12 +4,12 @@ using UniEasy.ECS;
 
 public interface IPool
 {
-    IEnumerable<GameObject> Elements { get; }
+    IEnumerable<IEntity> Entities { get; }
     GameObject Prefab { get; }
     void Create(Transform parent, bool worldPositionStays);
     void Create(int userId, bool worldPositionStays);
-    GameObject Pop();
-    void Push(GameObject go);
+    IEntity Pop(int tickId);
+    void Push(IEntity entity);
     /// <param name="force">Whether to destroy unrecycled game objects.</param>
     void Destroy(bool force);
 }
@@ -17,20 +17,20 @@ public interface IPool
 public class Pool : IPool
 {
     private GameObject prefab;
-    private List<GameObject> elements;
-    private List<GameObject> inactiveParts;
-    private List<GameObject> activeParts;
+    private List<IEntity> entities;
+    private List<IEntity> inactiveParts;
+    private List<IEntity> activeParts;
     private PrefabFactory PrefabFactory;
     private NetworkPrefabFactory NetworkPrefabFactory;
 
-    public IEnumerable<GameObject> Elements
+    public IEnumerable<IEntity> Entities
     {
         get
         {
-            elements.Clear();
-            elements.AddRange(inactiveParts);
-            elements.AddRange(activeParts);
-            return elements;
+            entities.Clear();
+            entities.AddRange(inactiveParts);
+            entities.AddRange(activeParts);
+            return entities;
         }
     }
 
@@ -41,8 +41,8 @@ public class Pool : IPool
 
     public Pool(GameObject prefab, PrefabFactory prefabFactory, NetworkPrefabFactory networkPrefabFactory)
     {
-        inactiveParts = new List<GameObject>();
-        activeParts = new List<GameObject>();
+        inactiveParts = new List<IEntity>();
+        activeParts = new List<IEntity>();
         this.prefab = prefab;
         PrefabFactory = prefabFactory;
         NetworkPrefabFactory = networkPrefabFactory;
@@ -50,59 +50,77 @@ public class Pool : IPool
 
     public void Create(Transform parent, bool worldPositionStays)
     {
-        Push(PrefabFactory.Instantiate(prefab, parent, worldPositionStays), true);
+        var go = PrefabFactory.Instantiate(prefab, parent, worldPositionStays);
+        var eb = go.GetComponent<EntityBehaviour>() ?? go.AddComponent<EntityBehaviour>();
+        Push(eb.Entity, true);
     }
 
     public void Create(int userId, bool worldPositionStays)
     {
-        Push(NetworkPrefabFactory.Instantiate(userId, -1, prefab, worldPositionStays), true);
+        var go = NetworkPrefabFactory.Instantiate(userId, -1, prefab, worldPositionStays);
+        var eb = go.GetComponent<EntityBehaviour>() ?? go.AddComponent<EntityBehaviour>();
+        Push(eb.Entity, true);
     }
 
-    public GameObject Pop()
+    public IEntity Pop(int tickId)
     {
         if (inactiveParts.Count > 0)
         {
-            var go = inactiveParts[0];
+            var entity = inactiveParts[0];
+            var viewComponent = entity.GetComponent<ViewComponent>();
+            if (entity.HasComponent<NetworkIdentityComponent>())
+            {
+                var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
+                networkIdentityComponent.TickIdWhenCreated = tickId;
+            }
             inactiveParts.RemoveAt(0);
-            activeParts.Add(go);
-            go.SetActive(true);
-            return go;
+            activeParts.Add(entity);
+            viewComponent.Transforms[0].gameObject.SetActive(true);
+            return entity;
         }
         return null;
     }
 
-    private void Push(GameObject go, bool unlimited)
+    private void Push(IEntity entity, bool unlimited)
     {
-        if (activeParts.Contains(go))
+        var viewComponent = entity.GetComponent<ViewComponent>();
+        if (entity.HasComponent<NetworkIdentityComponent>())
         {
-            go.SetActive(false);
-            inactiveParts.Add(go);
-            activeParts.Remove(go);
+            var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
+            networkIdentityComponent.TickIdWhenCreated = -1;
+        }
+        if (activeParts.Contains(entity))
+        {
+            viewComponent.Transforms[0].gameObject.SetActive(false);
+            inactiveParts.Add(entity);
+            activeParts.Remove(entity);
         }
         else if (unlimited)
         {
-            go.SetActive(false);
-            inactiveParts.Add(go);
+            viewComponent.Transforms[0].gameObject.SetActive(false);
+            inactiveParts.Add(entity);
         }
     }
 
-    public void Push(GameObject go)
+    public void Push(IEntity entity)
     {
-        Push(go, false);
+        Push(entity, false);
     }
 
     public void Destroy(bool force)
     {
         while (inactiveParts.Count > 0)
         {
-            Destroy(inactiveParts[0]);
+            var viewComponent = inactiveParts[0].GetComponent<ViewComponent>();
+            Destroy(viewComponent.Transforms[0].gameObject);
             inactiveParts.RemoveAt(0);
         }
         if (force)
         {
             while (activeParts.Count > 0)
             {
-                Destroy(activeParts[0]);
+                var viewComponent = activeParts[0].GetComponent<ViewComponent>();
+                Destroy(viewComponent.Transforms[0].gameObject);
                 activeParts.RemoveAt(0);
             }
         }

@@ -12,7 +12,7 @@ public class MultiBlockSetupSystem : SystemBehaviour
     public IPoolFactory PoolFactory;
 
     protected IGroup blockSetupers;
-    private Dictionary<GameObject, Dictionary<GameObject, List<GameObject>>> blockDict = new Dictionary<GameObject, Dictionary<GameObject, List<GameObject>>>();
+    private Dictionary<GameObject, Dictionary<GameObject, List<IEntity>>> blockDict = new Dictionary<GameObject, Dictionary<GameObject, List<IEntity>>>();
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -117,21 +117,22 @@ public class MultiBlockSetupSystem : SystemBehaviour
         var block = new GameObject(easyBlock.name);
 
         block.transform.SetParent(parent);
-        blockDict.Add(block, new Dictionary<GameObject, List<GameObject>>());
+        blockDict.Add(block, new Dictionary<GameObject, List<IEntity>>());
         foreach (var kvp in easyBlock.ToDictionary())
         {
-            var go = PoolFactory.Pop(kvp.Value.GameObject);
+            var entity = PoolFactory.Pop(kvp.Value.GameObject);
+            var viewComponent = entity.GetComponent<ViewComponent>();
 
-            go.transform.SetParent(block.transform, false);
-            go.transform.localPosition = kvp.Value.LocalPosition;
-            go.transform.localRotation = kvp.Value.LocalRotation;
-            go.transform.localScale = kvp.Value.LocalScale;
+            viewComponent.Transforms[0].SetParent(block.transform, false);
+            viewComponent.Transforms[0].localPosition = kvp.Value.LocalPosition;
+            viewComponent.Transforms[0].localRotation = kvp.Value.LocalRotation;
+            viewComponent.Transforms[0].localScale = kvp.Value.LocalScale;
 
             if (!blockDict[block].ContainsKey(kvp.Value.GameObject))
             {
-                blockDict[block].Add(kvp.Value.GameObject, new List<GameObject>());
+                blockDict[block].Add(kvp.Value.GameObject, new List<IEntity>());
             }
-            blockDict[block][kvp.Value.GameObject].Add(go);
+            blockDict[block][kvp.Value.GameObject].Add(entity);
         }
 
         return block;
@@ -143,9 +144,9 @@ public class MultiBlockSetupSystem : SystemBehaviour
         {
             foreach (var kvp in blockDict[block])
             {
-                foreach (var go in kvp.Value)
+                foreach (var entity in kvp.Value)
                 {
-                    PoolFactory.Push(kvp.Key, go);
+                    PoolFactory.Push(kvp.Key, entity);
                 }
             }
 
