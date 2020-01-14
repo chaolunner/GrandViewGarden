@@ -11,8 +11,6 @@ public static class LockstepUtility
     private static Dictionary<Type, List<IInput>> inputDict = new Dictionary<Type, List<IInput>>();
     private static Dictionary<int, List<Dictionary<int, Dictionary<Type, List<IInput>>>>> inputTrackDict = new Dictionary<int, List<Dictionary<int, Dictionary<Type, List<IInput>>>>>();
 
-    private readonly static Type EventInputType = typeof(EventInput);
-
     public static void AddInput<T>(T input) where T : IInput
     {
         var type = typeof(T);
@@ -25,20 +23,13 @@ public static class LockstepUtility
 
     public static void AddToTimeline(LockstepInputs inputs)
     {
-        if (lockstepInputs.Count > inputs.TickId)
-        {
-            for (int i = inputs.TickId; i < lockstepInputs.Count; i++)
-            {
-                inputTrackDict.Remove(i);
-            }
-            lockstepInputs.RemoveRange(inputs.TickId, lockstepInputs.Count - inputs.TickId);
-        }
-        if (lockstepInputs.Count == 0)
+        if (inputs.TickId < 0)
         {
             Index = 0;
+            lockstepInputs.Clear();
             OnRestart?.Invoke();
         }
-        if (inputs.TickId > lockstepInputs.Count)
+        if (inputs.TickId != lockstepInputs.Count)
         {
             return;
         }
