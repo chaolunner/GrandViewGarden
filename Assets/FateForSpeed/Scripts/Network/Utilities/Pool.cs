@@ -89,16 +89,14 @@ public class Pool : IPool
             var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
             networkIdentityComponent.TickIdWhenCreated = -1;
         }
+        if (unlimited || activeParts.Contains(entity))
+        {
+            viewComponent.Transforms[0].gameObject.SetActive(false);
+            inactiveParts.Add(entity);
+        }
         if (activeParts.Contains(entity))
         {
-            viewComponent.Transforms[0].gameObject.SetActive(false);
-            inactiveParts.Add(entity);
             activeParts.Remove(entity);
-        }
-        else if (unlimited)
-        {
-            viewComponent.Transforms[0].gameObject.SetActive(false);
-            inactiveParts.Add(entity);
         }
     }
 

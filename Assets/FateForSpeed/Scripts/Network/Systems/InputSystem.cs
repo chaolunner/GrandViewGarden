@@ -28,7 +28,7 @@ public class InputSystem : NetworkSystemBehaviour
 
     private void UpdateInputs()
     {
-        LockstepUtility.AddEventInput(EventCode.HeartBeat, null);
+        LockstepUtility.AddInput(new EventInput(EventCode.HeartBeat, null));
 
         var axisInput = new AxisInput();
         axisInput.Horizontal = (Fix64)Input.GetAxis(InputParameters.Horizontal);

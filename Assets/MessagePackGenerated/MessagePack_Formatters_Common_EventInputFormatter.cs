@@ -33,8 +33,9 @@ namespace MessagePack.Formatters.Common
             }
 
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(1);
-            formatterResolver.GetFormatterWithVerify<global::System.Collections.Generic.Dictionary<global::Common.EventCode, string>>().Serialize(ref writer, value.Events, options);
+            writer.WriteArrayHeader(2);
+            formatterResolver.GetFormatterWithVerify<global::Common.EventCode>().Serialize(ref writer, value.Type, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Message, options);
         }
 
         public global::Common.EventInput Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -46,7 +47,8 @@ namespace MessagePack.Formatters.Common
 
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Events__ = default(global::System.Collections.Generic.Dictionary<global::Common.EventCode, string>);
+            var __Type__ = default(global::Common.EventCode);
+            var __Message__ = default(string);
 
             for (int i = 0; i < length; i++)
             {
@@ -55,7 +57,10 @@ namespace MessagePack.Formatters.Common
                 switch (key)
                 {
                     case 0:
-                        __Events__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Generic.Dictionary<global::Common.EventCode, string>>().Deserialize(ref reader, options);
+                        __Type__ = formatterResolver.GetFormatterWithVerify<global::Common.EventCode>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __Message__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -63,8 +68,9 @@ namespace MessagePack.Formatters.Common
                 }
             }
 
-            var ____result = new global::Common.EventInput();
-            ____result.Events = __Events__;
+            var ____result = new global::Common.EventInput(__Type__, __Message__);
+            ____result.Type = __Type__;
+            ____result.Message = __Message__;
             return ____result;
         }
     }

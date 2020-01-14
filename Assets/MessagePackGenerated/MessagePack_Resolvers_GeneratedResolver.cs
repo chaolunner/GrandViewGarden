@@ -53,10 +53,10 @@ namespace MessagePack.Resolvers
         {
             lookup = new global::System.Collections.Generic.Dictionary<Type, int>(16)
             {
-                { typeof(global::System.Collections.Generic.Dictionary<global::Common.EventCode, string>), 0 },
-                { typeof(global::System.Collections.Generic.List<int>), 1 },
-                { typeof(byte[][]), 2 },
-                { typeof(global::Common.UserInputs[]), 3 },
+                { typeof(global::System.Collections.Generic.List<int>), 0 },
+                { typeof(byte[][]), 1 },
+                { typeof(global::Common.UserInputs[]), 2 },
+                { typeof(global::Common.UserInputs[][]), 3 },
                 { typeof(global::Common.EventCode), 4 },
                 { typeof(global::Common.IInput), 5 },
                 { typeof(global::Common.Fix64), 6 },
@@ -82,10 +82,10 @@ namespace MessagePack.Resolvers
 
             switch (key)
             {
-                case 0: return new global::MessagePack.Formatters.DictionaryFormatter<global::Common.EventCode, string>();
-                case 1: return new global::MessagePack.Formatters.ListFormatter<int>();
-                case 2: return new global::MessagePack.Formatters.ArrayFormatter<byte[]>();
-                case 3: return new global::MessagePack.Formatters.ArrayFormatter<global::Common.UserInputs>();
+                case 0: return new global::MessagePack.Formatters.ListFormatter<int>();
+                case 1: return new global::MessagePack.Formatters.ArrayFormatter<byte[]>();
+                case 2: return new global::MessagePack.Formatters.ArrayFormatter<global::Common.UserInputs>();
+                case 3: return new global::MessagePack.Formatters.ArrayFormatter<global::Common.UserInputs[]>();
                 case 4: return new MessagePack.Formatters.Common.EventCodeFormatter();
                 case 5: return new MessagePack.Formatters.Common.IInputFormatter();
                 case 6: return new MessagePack.Formatters.Common.Fix64Formatter();

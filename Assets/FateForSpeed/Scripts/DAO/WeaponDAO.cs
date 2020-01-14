@@ -10,6 +10,8 @@ public class WeaponDAO
     private const string PositionStr = "Position";
     private const string ADSStr = "ADS";
     private const string BulletStr = "Bullet";
+    private const string SpeedStr = "Speed";
+    private const string CooldownStr = "Cooldown";
 
     public WeaponDAO(TextAsset textAsset)
     {
@@ -52,5 +54,15 @@ public class WeaponDAO
     public string GetBullet(string name)
     {
         return reader.GetValue(NameStr, name, BulletStr);
+    }
+
+    public float GetSpeed(string name)
+    {
+        return float.Parse(reader.GetValue(NameStr, name, SpeedStr));
+    }
+
+    public float GetCooldown(string name)
+    {
+        return float.Parse(reader.GetValue(NameStr, name, CooldownStr));
     }
 }

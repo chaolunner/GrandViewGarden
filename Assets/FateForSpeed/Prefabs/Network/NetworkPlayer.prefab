@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsLocalPlayer: 0
+  TickIdWhenCreated: 0
   Identity:
     UserId: 0
     InstanceId: 0
@@ -167,7 +168,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parent: {fileID: 2119355278168062953}
-  Cooldown: 0.5
   WeaponIndex:
     value: 0
   Weapons:
@@ -175,6 +175,8 @@ MonoBehaviour:
   weapon: {fileID: 0}
   bulletPrefab: {fileID: 0}
   adsPosition: {x: 0, y: 0, z: 0}
+  speed: 0
+  cooldown: 0
   cooldownTime: 0
 --- !u!1 &2119355278167736499
 GameObject:

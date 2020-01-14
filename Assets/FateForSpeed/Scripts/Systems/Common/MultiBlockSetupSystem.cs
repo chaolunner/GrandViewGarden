@@ -146,7 +146,7 @@ public class MultiBlockSetupSystem : SystemBehaviour
             {
                 foreach (var entity in kvp.Value)
                 {
-                    PoolFactory.Push(kvp.Key, entity);
+                    PoolFactory.Push(entity);
                 }
             }
 

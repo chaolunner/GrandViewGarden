@@ -30,7 +30,7 @@ namespace MessagePack.Formatters.Common
             writer.WriteArrayHeader(3);
             writer.Write(value.TickId);
             formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Serialize(ref writer, value.DeltaTime, options);
-            formatterResolver.GetFormatterWithVerify<global::Common.UserInputs[]>().Serialize(ref writer, value.UserInputs, options);
+            formatterResolver.GetFormatterWithVerify<global::Common.UserInputs[][]>().Serialize(ref writer, value.UserInputs, options);
         }
 
         public global::Common.LockstepInputs Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -44,7 +44,7 @@ namespace MessagePack.Formatters.Common
             var length = reader.ReadArrayHeader();
             var __TickId__ = default(int);
             var __DeltaTime__ = default(global::Common.Fix64);
-            var __UserInputs__ = default(global::Common.UserInputs[]);
+            var __UserInputs__ = default(global::Common.UserInputs[][]);
 
             for (int i = 0; i < length; i++)
             {
@@ -59,7 +59,7 @@ namespace MessagePack.Formatters.Common
                         __DeltaTime__ = formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __UserInputs__ = formatterResolver.GetFormatterWithVerify<global::Common.UserInputs[]>().Deserialize(ref reader, options);
+                        __UserInputs__ = formatterResolver.GetFormatterWithVerify<global::Common.UserInputs[][]>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

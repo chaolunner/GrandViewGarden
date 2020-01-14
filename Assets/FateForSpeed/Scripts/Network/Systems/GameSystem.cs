@@ -32,18 +32,31 @@ public class GameSystem : NetworkSystemBehaviour
         {
         }).AddTo(this.Disposer);
 
-        NetwrokTimeline.OnForward((UserInputData[][] userInputData, float deltaTime, int tickId) =>
+        NetwrokTimeline.OnForward(data =>
         {
-            for (int i = 0; i < userInputData.Length; i++)
+            for (int i = 0; i < data.UserInputData[0].Length; i++)
             {
-                for (int j = 0; j < userInputData[i].Length; j++)
+                for (int j = 0; j < data.UserInputData[0][i].Inputs.Length; j++)
                 {
-                    var eventInput = userInputData[i][j].Input as EventInput;
-                    var strs = eventInput.Read(EventCode.GameStart);
-                    if (strs != null)
+                    var userId = data.UserInputData[0][i].UserId;
+                    var eventInput = data.UserInputData[0][i].GetInput<EventInput>(j);
+                    if (eventInput.Type == EventCode.GameStart)
                     {
-                        int userId = int.Parse(strs[0]);
-                        NetworkPrefabFactory.Instantiate(userId, tickId, NetworkPlayerPrefab, true);
+                        var isRoomOwner = bool.Parse(eventInput.Message);
+                        if (!HasUser(userId))
+                        {
+                            var go = NetworkPrefabFactory.Instantiate(userId, data.TickId, NetworkPlayerPrefab, true);
+                            if (isRoomOwner)
+                            {
+                                go.transform.position += new Vector3(-1, 0, -5);
+                                go.transform.rotation = Quaternion.Euler(0, -90, 0);
+                            }
+                            else
+                            {
+                                go.transform.position += new Vector3(1, 0, -5);
+                                go.transform.rotation = Quaternion.Euler(0, 90, 0);
+                            }
+                        }
                     }
                 }
             }
@@ -60,5 +73,17 @@ public class GameSystem : NetworkSystemBehaviour
                 EventSystem.Send(evt);
             }
         }).AddTo(this.Disposer);
+    }
+
+    private bool HasUser(int userId)
+    {
+        for (int i = 0; i < NetworkPlayerComponents.Entities.Count; i++)
+        {
+            if (NetworkPlayerComponents.Entities[i].GetComponent<NetworkIdentityComponent>().Identity.UserId == userId)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

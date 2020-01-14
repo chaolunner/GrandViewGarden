@@ -27,7 +27,9 @@ namespace MessagePack.Formatters.Common
         public void Serialize(ref MessagePackWriter writer, global::Common.UserInputs value, global::MessagePack.MessagePackSerializerOptions options)
         {
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
+            writer.WriteArrayHeader(4);
+            writer.Write(value.Index);
+            writer.Write(value.TickId);
             writer.Write(value.UserId);
             formatterResolver.GetFormatterWithVerify<byte[][]>().Serialize(ref writer, value.InputData, options);
         }
@@ -41,6 +43,8 @@ namespace MessagePack.Formatters.Common
 
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
+            var __Index__ = default(int);
+            var __TickId__ = default(int);
             var __UserId__ = default(int);
             var __InputData__ = default(byte[][]);
 
@@ -51,9 +55,15 @@ namespace MessagePack.Formatters.Common
                 switch (key)
                 {
                     case 0:
-                        __UserId__ = reader.ReadInt32();
+                        __Index__ = reader.ReadInt32();
                         break;
                     case 1:
+                        __TickId__ = reader.ReadInt32();
+                        break;
+                    case 2:
+                        __UserId__ = reader.ReadInt32();
+                        break;
+                    case 3:
                         __InputData__ = formatterResolver.GetFormatterWithVerify<byte[][]>().Deserialize(ref reader, options);
                         break;
                     default:
@@ -63,6 +73,8 @@ namespace MessagePack.Formatters.Common
             }
 
             var ____result = new global::Common.UserInputs();
+            ____result.Index = __Index__;
+            ____result.TickId = __TickId__;
             ____result.UserId = __UserId__;
             ____result.InputData = __InputData__;
             return ____result;

@@ -4,32 +4,24 @@ using Common;
 
 public static class LockstepUtility
 {
-    public static int RealTickNow { get; private set; } = 0;
+    public static int Index;
     public static event Action OnRestart;
     public static event Action<int> OnSyncTimeline;
 
     private static List<LockstepInputs> lockstepInputs = new List<LockstepInputs>();
-    private static Dictionary<Type, IInput> inputDict = new Dictionary<Type, IInput>();
-    private static Dictionary<int, Dictionary<int, Dictionary<Type, IInput>>> inputTrackDict = new Dictionary<int, Dictionary<int, Dictionary<Type, IInput>>>();
+    private static Dictionary<Type, List<IInput>> inputDict = new Dictionary<Type, List<IInput>>();
+    private static Dictionary<int, List<Dictionary<int, Dictionary<Type, List<IInput>>>>> inputTrackDict = new Dictionary<int, List<Dictionary<int, Dictionary<Type, List<IInput>>>>>();
 
     private readonly static Type EventInputType = typeof(EventInput);
 
     public static void AddInput<T>(T input) where T : IInput
     {
-        if (!inputDict.ContainsKey(typeof(T)))
+        var type = typeof(T);
+        if (!inputDict.ContainsKey(type))
         {
-            inputDict.Add(typeof(T), input);
+            inputDict.Add(type, new List<IInput>());
         }
-    }
-
-    public static void AddEventInput(EventCode type, string msg)
-    {
-        if (!inputDict.ContainsKey(EventInputType))
-        {
-            inputDict.Add(EventInputType, new EventInput());
-        }
-        var eventInput = inputDict[EventInputType] as EventInput;
-        eventInput.Write(type, msg);
+        inputDict[type].Add(input);
     }
 
     public static void AddToTimeline(LockstepInputs inputs)
@@ -44,7 +36,7 @@ public static class LockstepUtility
         }
         if (lockstepInputs.Count == 0)
         {
-            RealTickNow = 0;
+            Index = 0;
             OnRestart?.Invoke();
         }
         if (inputs.TickId > lockstepInputs.Count)
@@ -53,36 +45,52 @@ public static class LockstepUtility
             return;
         }
         lockstepInputs.Add(inputs);
-        inputTrackDict.Add(inputs.TickId, new Dictionary<int, Dictionary<Type, IInput>>());
-        if (inputs.UserInputs != null)
+        inputTrackDict.Add(inputs.TickId, new List<Dictionary<int, Dictionary<Type, List<IInput>>>>());
+        if (inputs.UserInputs != null && inputs.UserInputs.Length > 0)
         {
-            foreach (var userInputs in inputs.UserInputs)
+            for (int i = 0; i < inputs.UserInputs.Length; i++)
             {
-                inputTrackDict[inputs.TickId].Add(userInputs.UserId, new Dictionary<Type, IInput>());
-                if (userInputs.InputData != null)
+                var dict = new Dictionary<int, Dictionary<Type, List<IInput>>>();
+                for (int j = 0; j < inputs.UserInputs[i].Length; j++)
                 {
-                    foreach (var inputData in userInputs.InputData)
+                    var userInputs = inputs.UserInputs[i][j];
+                    dict.Add(userInputs.UserId, new Dictionary<Type, List<IInput>>());
+                    if (userInputs.InputData != null)
                     {
-                        var input = MessagePackUtility.Deserialize<IInput>(inputData);
-                        inputTrackDict[inputs.TickId][userInputs.UserId].Add(input.GetType(), input);
+                        for (int k = 0; k < userInputs.InputData.Length; k++)
+                        {
+                            var input = MessagePackUtility.Deserialize<IInput>(userInputs.InputData[k]);
+                            var type = input.GetType();
+                            if (!dict[userInputs.UserId].ContainsKey(type))
+                            {
+                                dict[userInputs.UserId].Add(type, new List<IInput>());
+                            }
+                            dict[userInputs.UserId][type].Add(input);
+                        }
                     }
                 }
+                inputTrackDict[inputs.TickId].Add(dict);
             }
         }
     }
 
     public static UserInputs GetUserInputs()
     {
-        int index = 0;
-        UserInputs userInputs = new UserInputs();
-        userInputs.InputData = new byte[inputDict.Count][];
-        foreach (var kvp in inputDict)
+        var bytes = new List<byte[]>();
+        var e = inputDict.GetEnumerator();
+        while (e.MoveNext())
         {
-            userInputs.InputData[index] = MessagePackUtility.Serialize(kvp.Value);
-            index++;
+            for (int i = 0; i < e.Current.Value.Count; i++)
+            {
+                bytes.Add(MessagePackUtility.Serialize(e.Current.Value[i]));
+            }
         }
+        UserInputs userInputs = new UserInputs();
+        userInputs.Index = Index;
+        userInputs.TickId = lockstepInputs.Count;
+        userInputs.InputData = bytes.ToArray();
         inputDict.Clear();
-        RealTickNow++;
+        Index++;
         return userInputs;
     }
 
@@ -100,46 +108,61 @@ public static class LockstepUtility
         return Fix64.Zero;
     }
 
-    public static UserInputData GetUserInputData(int tickId, int userId, Type inputType)
+    public static UserInputData[] GetUserInputData(int tickId, int userId, Type inputType)
     {
         if (HasTickId(tickId))
         {
-            var data = new UserInputData();
-            data.TickId = tickId;
-            data.DeltaTime = lockstepInputs[tickId].DeltaTime;
-            if (inputTrackDict[tickId].ContainsKey(userId))
+            var dataList = new List<UserInputData>();
+            for (int i = 0; i < inputTrackDict[tickId].Count; i++)
             {
-                data.UserId = userId;
-                if (inputTrackDict[tickId][userId].ContainsKey(inputType))
+                if (inputTrackDict[tickId][i].ContainsKey(userId))
                 {
-                    data.Input = inputTrackDict[tickId][userId][inputType];
+                    var data = new UserInputData();
+                    var dict = inputTrackDict[tickId][i][userId];
+                    data.TickId = tickId;
+                    data.DeltaTime = lockstepInputs[tickId].DeltaTime;
+                    data.UserId = userId;
+                    if (dict.ContainsKey(inputType))
+                    {
+                        data.Inputs = dict[inputType].ToArray();
+                    }
+                    dataList.Add(data);
                 }
             }
-            return data;
+            return dataList.ToArray();
         }
         return null;
     }
 
-    public static UserInputData[] GetAllUserInputData(int tickId)
+    public static UserInputData[][] GetAllUserInputData(int tickId, Type inputType)
     {
         if (HasTickId(tickId))
         {
-            var userInputData = new List<UserInputData>();
-            var e1 = inputTrackDict[tickId].GetEnumerator();
-            while (e1.MoveNext())
+            var dataList = new List<List<UserInputData>>();
+            for (int i = 0; i < inputTrackDict[tickId].Count; i++)
             {
-                var e2 = e1.Current.Value.GetEnumerator();
-                while (e2.MoveNext())
+                dataList.Add(new List<UserInputData>());
+                var e1 = inputTrackDict[tickId][i].GetEnumerator();
+                while (e1.MoveNext())
                 {
-                    var data = new UserInputData();
-                    data.TickId = tickId;
-                    data.DeltaTime = lockstepInputs[tickId].DeltaTime;
-                    data.UserId = e1.Current.Key;
-                    data.Input = e2.Current.Value;
-                    userInputData.Add(data);
+                    if (e1.Current.Value.ContainsKey(inputType))
+                    {
+                        var data = new UserInputData();
+                        data.TickId = tickId;
+                        data.DeltaTime = lockstepInputs[tickId].DeltaTime;
+                        data.UserId = e1.Current.Key;
+                        data.Inputs = e1.Current.Value[inputType].ToArray();
+                        dataList[i].Add(data);
+                    }
                 }
             }
-            return userInputData.ToArray();
+            var result = new UserInputData[dataList.Count][];
+            for (int i = 0; i < dataList.Count; i++)
+            {
+                result[i] = new UserInputData[dataList[i].Count];
+                dataList[i].CopyTo(result[i]);
+            }
+            return result;
         }
         return null;
     }

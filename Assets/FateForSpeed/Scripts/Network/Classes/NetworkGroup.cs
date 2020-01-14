@@ -129,11 +129,13 @@ public class NetworkGroup : IDisposable
             var index = 0;
             while (index < inputTypes.Length)
             {
-                var userInputData = LockstepUtility.GetUserInputData(tickId, identity.UserId, inputTypes[index]);
-                if (userInputData != null)
+                if (LockstepUtility.HasTickId(tickId))
                 {
-                    var tracks = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
-                    timePointWithLerp.AddRealtimeData(userInputData.DeltaTime, new TimePointData(userInputData.TickId, tracks));
+                    var userInputData = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
+                    for (int i = 0; i < userInputData.Length; i++)
+                    {
+                        timePointWithLerp.AddRealtimeData(LockstepUtility.GetDeltaTime(tickId), new TimePointData(tickId, userInputData[i]));
+                    }
                     index = 0;
                     tickId++;
                 }
@@ -147,14 +149,22 @@ public class NetworkGroup : IDisposable
         return tickId;
     }
 
-    private UserInputData[] GetUserInputDataByInputTypes(int tickId, int userId, Type[] inputTypes)
+    private UserInputData[][] GetUserInputDataByInputTypes(int tickId, int userId, Type[] inputTypes)
     {
-        var data = new UserInputData[inputTypes.Length];
+        var dataList = new List<UserInputData[]>();
         for (int i = 0; i < inputTypes.Length; i++)
         {
-            data[i] = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[i]);
+            var userInputData = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[i]);
+            for (int j = 0; j < userInputData.Length; j++)
+            {
+                while (j >= dataList.Count)
+                {
+                    dataList.Add(new UserInputData[inputTypes.Length]);
+                }
+                dataList[j][i] = userInputData[j];
+            }
         }
-        return data;
+        return dataList.ToArray();
     }
 
     private int PushUntilLastStep(Type[] inputTypes)
@@ -164,8 +174,11 @@ public class NetworkGroup : IDisposable
         {
             while (LockstepUtility.HasTickId(tickId))
             {
-                var tracks = GetUserInputDataByInputTypes(tickId, inputTypes);
-                defaultTimePointWithLerp.AddRealtimeData(LockstepUtility.GetDeltaTime(tickId), new TimePointData(tickId, tracks));
+                var userInputData = GetUserInputDataByInputTypes(tickId, inputTypes);
+                for (int i = 0; i < userInputData.Length; i++)
+                {
+                    defaultTimePointWithLerp.AddRealtimeData(LockstepUtility.GetDeltaTime(tickId), new TimePointData(tickId, userInputData[i]));
+                }
                 tickId++;
             }
         }
@@ -173,39 +186,22 @@ public class NetworkGroup : IDisposable
         return tickId;
     }
 
-    private UserInputData[][] GetUserInputDataByInputTypes(int tickId, Type[] inputTypes)
+    private UserInputData[][][] GetUserInputDataByInputTypes(int tickId, Type[] inputTypes)
     {
-        var userInputData = LockstepUtility.GetAllUserInputData(tickId);
-        var dataDict = new Dictionary<Type, List<UserInputData>>();
-
-        for (int i = 0; i < userInputData.Length; i++)
-        {
-            var type = userInputData[i].Input.GetType();
-            if (!dataDict.ContainsKey(type))
-            {
-                dataDict.Add(type, new List<UserInputData>());
-            }
-            dataDict[type].Add(userInputData[i]);
-        }
-
-        var data = new UserInputData[inputTypes.Length][];
+        var dataList = new List<UserInputData[][]>();
         for (int i = 0; i < inputTypes.Length; i++)
         {
-            if (dataDict.ContainsKey(inputTypes[i]))
+            var userInputData = LockstepUtility.GetAllUserInputData(tickId, inputTypes[i]);
+            for (int j = 0; j < userInputData.Length; j++)
             {
-                data[i] = new UserInputData[dataDict[inputTypes[i]].Count];
-                for (int j = 0; j < dataDict[inputTypes[i]].Count; j++)
+                while (j >= dataList.Count)
                 {
-                    data[i][j] = dataDict[inputTypes[i]][j];
+                    dataList.Add(new UserInputData[inputTypes.Length][]);
                 }
-            }
-            else
-            {
-                data[i] = new UserInputData[0];
+                dataList[j][i] = userInputData[j];
             }
         }
-
-        return data;
+        return dataList.ToArray();
     }
 
     private void ApplyTimePoint(IEntity entity, INetworkTimeline timeline)
@@ -223,29 +219,14 @@ public class NetworkGroup : IDisposable
         {
             List<IUserInputResult[]> result = null;
             if (networkIdentityComponent.TickIdWhenCreated < 0 || networkIdentityComponent.TickIdWhenCreated > timePoints[i].TickId) { continue; }
-            for (int j = 0; j < timePoints[i].Tracks[0].Length; j++)
+            for (int j = 0; j < timePoints[i].UserInputData[0].Length; j++)
             {
-                if (timePoints[i].Tracks[0][j] == null) { continue; }
-                var deltaTime = (float)timePoints[i].Tracks[0][j].DeltaTime;
-                var p1 = time / totalTime;
+                if (timePoints[i].UserInputData[0][j] == null) { continue; }
+                var deltaTime = (float)timePoints[i].UserInputData[0][j].DeltaTime;
+                var start = time / totalTime;
                 time += deltaTime;
-                var p2 = time / totalTime;
-                if (p1 < from && p2 > to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i], (to - from) * totalTime));
-                }
-                else if (p1 >= from && p1 <= to && p2 >= from && p2 <= to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i], deltaTime));
-                }
-                else if (p1 >= from && p1 <= to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i], (to - p1) * totalTime));
-                }
-                else if (p2 >= from && p2 <= to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(entity, timePoints[i], (p2 - from) * totalTime));
-                }
+                var end = time / totalTime;
+                result = DoForward(timeline, entity, timePoints[i], from, to, start, end, deltaTime, totalTime);
                 break;
             }
             if (result != null && timePoints[i].ForecastCount > 0)
@@ -269,29 +250,14 @@ public class NetworkGroup : IDisposable
         for (int i = 0; i < timePoints.Count; i++)
         {
             List<IUserInputResult[]> result = null;
-            for (int j = 0; j < timePoints[i].Tracks[0].Length; j++)
+            for (int j = 0; j < timePoints[i].UserInputData[0].Length; j++)
             {
-                if (timePoints[i].Tracks[0][j] == null) { continue; }
-                var deltaTime = (float)timePoints[i].Tracks[0][j].DeltaTime;
-                var p1 = time / totalTime;
+                if (timePoints[i].UserInputData[0][j] == null) { continue; }
+                var deltaTime = (float)timePoints[i].UserInputData[0][j].DeltaTime;
+                var start = time / totalTime;
                 time += deltaTime;
-                var p2 = time / totalTime;
-                if (p1 < from && p2 > to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(null, timePoints[i], (to - from) * totalTime));
-                }
-                else if (p1 >= from && p1 <= to && p2 >= from && p2 <= to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(null, timePoints[i], deltaTime));
-                }
-                else if (p1 >= from && p1 <= to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(null, timePoints[i], (to - p1) * totalTime));
-                }
-                else if (p2 >= from && p2 <= to)
-                {
-                    result = timeline.Forward(new ForwardTimelineData(null, timePoints[i], (p2 - from) * totalTime));
-                }
+                var end = time / totalTime;
+                result = DoForward(timeline, null, timePoints[i], from, to, start, end, deltaTime, totalTime);
                 break;
             }
             if (result != null && timePoints[i].ForecastCount > 0)
@@ -302,6 +268,30 @@ public class NetworkGroup : IDisposable
                 }
             }
         }
+    }
+
+    private List<IUserInputResult[]> DoForward(INetworkTimeline timeline, IEntity entity, TimePointData timePoint, float from, float to, float start, float end, float deltaTime, float totalTime)
+    {
+        var timelineData = new ForwardTimelineData(entity, timePoint);
+        timePoint.Start = start;
+        timePoint.End = end;
+        if (start < from && end > to)
+        {
+            timePoint.DeltaTime = (to - from) * totalTime;
+        }
+        else if (start >= from && start <= to && end >= from && end <= to)
+        {
+            timePoint.DeltaTime = deltaTime;
+        }
+        else if (start >= from && start <= to)
+        {
+            timePoint.DeltaTime = (to - start) * totalTime;
+        }
+        else if (end >= from && end <= to)
+        {
+            timePoint.DeltaTime = (end - from) * totalTime;
+        }
+        return timeline.Forward(timelineData);
     }
 
     private void OnRestart()
@@ -345,9 +335,12 @@ public class NetworkGroup : IDisposable
             var tickId = timePointWithLerp.TickId - 1;
             if (LockstepUtility.HasTickId(tickId))
             {
-                var tracks = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
                 var deltaTime = LockstepUtility.GetDeltaTime(tickId);
-                timePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, tracks), networkGroupData.MaxForecastSteps);
+                var userInputData = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
+                for (int i = 0; i < userInputData.Length; i++)
+                {
+                    timePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, userInputData[i]), networkGroupData.MaxForecastSteps);
+                }
             }
         }
     }
@@ -359,9 +352,12 @@ public class NetworkGroup : IDisposable
             var tickId = defaultTimePointWithLerp.TickId - 1;
             if (LockstepUtility.HasTickId(tickId))
             {
-                var tracks = GetUserInputDataByInputTypes(tickId, inputTypes);
                 var deltaTime = LockstepUtility.GetDeltaTime(tickId);
-                defaultTimePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, tracks), networkGroupData.MaxForecastSteps);
+                var userInputData = GetUserInputDataByInputTypes(tickId, inputTypes);
+                for (int i = 0; i < userInputData.Length; i++)
+                {
+                    defaultTimePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, userInputData[i]), networkGroupData.MaxForecastSteps);
+                }
             }
         }
     }

@@ -5,12 +5,12 @@ using UniEasy.DI;
 
 public interface IPoolFactory
 {
-    void Create(PoolId id);
-    PoolId Create(GameObject prefab, Transform parent, bool worldPositionStays = false);
-    PoolId Create(GameObject prefab, int userId, bool worldPositionStays = false);
+    void Create(PoolData id);
+    PoolData Create(GameObject prefab, Transform parent, bool worldPositionStays = false);
+    PoolData Create(GameObject prefab, int userId, bool worldPositionStays = false);
     IEntity Pop(GameObject prefab, bool autoCreate = true);
     IEntity Pop(GameObject prefab, int tickId, bool autoCreate = true);
-    void Push(GameObject prefab, IEntity entity);
+    void Push(IEntity entity);
     /// <param name="force">Whether to destroy unrecycled game objects.</param>
     void Destroy(GameObject prefab, bool force = false);
 }
@@ -22,44 +22,41 @@ public class PoolFactory : IPoolFactory
     [Inject]
     private NetworkPrefabFactory NetworkPrefabFactory;
 
-    private Dictionary<PoolId, IPool> poolDict = new Dictionary<PoolId, IPool>();
-    private Dictionary<GameObject, List<PoolId>> idDict = new Dictionary<GameObject, List<PoolId>>();
+    private Dictionary<GameObject, IPool> poolDict = new Dictionary<GameObject, IPool>();
+    private Dictionary<GameObject, PoolData> dataDict = new Dictionary<GameObject, PoolData>();
+    private Dictionary<IEntity, GameObject> prefabDict = new Dictionary<IEntity, GameObject>();
 
-    public void Create(PoolId id)
+    public void Create(PoolData data)
     {
-        if (!poolDict.ContainsKey(id))
+        if (!poolDict.ContainsKey(data.Prefab))
         {
-            var pool = new Pool(id.Prefab, PrefabFactory, NetworkPrefabFactory);
-            poolDict.Add(id, pool);
+            var pool = new Pool(data.Prefab, PrefabFactory, NetworkPrefabFactory);
+            poolDict.Add(data.Prefab, pool);
         }
-        if (!idDict.ContainsKey(id.Prefab))
+        if (!dataDict.ContainsKey(data.Prefab))
         {
-            idDict.Add(id.Prefab, new List<PoolId>());
+            dataDict.Add(data.Prefab, data);
         }
-        if (!idDict[id.Prefab].Contains(id))
+        if (data.UserId >= 0)
         {
-            idDict[id.Prefab].Add(id);
-        }
-        if (id.UserId >= 0)
-        {
-            poolDict[id].Create(id.UserId, id.WorldPositionStays);
+            poolDict[data.Prefab].Create(data.UserId, data.WorldPositionStays);
         }
         else
         {
-            poolDict[id].Create(id.Parent, id.WorldPositionStays);
+            poolDict[data.Prefab].Create(data.Parent, data.WorldPositionStays);
         }
     }
 
-    public PoolId Create(GameObject prefab, Transform parent, bool worldPositionStays = false)
+    public PoolData Create(GameObject prefab, Transform parent, bool worldPositionStays = false)
     {
-        var id = new PoolId(prefab, parent, worldPositionStays);
+        var id = new PoolData(prefab, parent, worldPositionStays);
         Create(id);
         return id;
     }
 
-    public PoolId Create(GameObject prefab, int userId, bool worldPositionStays = false)
+    public PoolData Create(GameObject prefab, int userId, bool worldPositionStays = false)
     {
-        var id = new PoolId(prefab, userId, worldPositionStays);
+        var id = new PoolData(prefab, userId, worldPositionStays);
         Create(id);
         return id;
     }
@@ -72,31 +69,42 @@ public class PoolFactory : IPoolFactory
     public IEntity Pop(GameObject prefab, int tickId, bool autoCreate = true)
     {
         IEntity entity = null;
-        if (idDict.ContainsKey(prefab) && poolDict.ContainsKey(idDict[prefab][0]))
+        if (poolDict.ContainsKey(prefab))
         {
-            entity = poolDict[idDict[prefab][0]].Pop(tickId);
+            entity = poolDict[prefab].Pop(tickId);
         }
-        if (entity == null && autoCreate && idDict.ContainsKey(prefab))
+        if (entity == null && autoCreate && dataDict.ContainsKey(prefab))
         {
-            Create(idDict[prefab][0]);
-            entity = Pop(idDict[prefab][0].Prefab, tickId, autoCreate);
+            Create(dataDict[prefab]);
+            entity = poolDict[prefab].Pop(tickId);
+        }
+        if (entity != null)
+        {
+            prefabDict.Add(entity, prefab);
         }
         return entity;
     }
 
-    public void Push(GameObject prefab, IEntity entity)
+    public void Push(IEntity entity)
     {
-        if (idDict.ContainsKey(prefab) && poolDict.ContainsKey(idDict[prefab][0]))
+        if (prefabDict.ContainsKey(entity))
         {
-            poolDict[idDict[prefab][0]].Push(entity);
+            var prefab = prefabDict[entity];
+
+            prefabDict.Remove(entity);
+
+            if (poolDict.ContainsKey(prefab))
+            {
+                poolDict[prefab].Push(entity);
+            }
         }
     }
 
     public void Destroy(GameObject prefab, bool force = false)
     {
-        if (idDict.ContainsKey(prefab) && poolDict.ContainsKey(idDict[prefab][0]))
+        if (poolDict.ContainsKey(prefab))
         {
-            poolDict[idDict[prefab][0]].Destroy(force);
+            poolDict[prefab].Destroy(force);
         }
     }
 }

@@ -92,9 +92,9 @@ public class PlayerControlSystem : NetworkSystemBehaviour
             var characterController = entity.GetComponent<CharacterController>();
             var viewComponent = entity.GetComponent<ViewComponent>();
             var animator = entity.GetComponent<Animator>();
-            var axisInput = userInputData[0].Input as AxisInput;
-            var keyInput = userInputData[1].Input as KeyInput;
-            var mouseInput = userInputData[2].Input as MouseInput;
+            var axisInput = userInputData[0].GetInput<AxisInput>();
+            var keyInput = userInputData[1].GetInput<KeyInput>();
+            var mouseInput = userInputData[2].GetInput<MouseInput>();
             var playerControlResult = new PlayerControlResult();
             var smoothTime = playerControlComponent.smoothTime;
             var yAngle = 0f;
