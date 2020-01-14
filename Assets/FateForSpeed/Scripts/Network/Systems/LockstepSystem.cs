@@ -7,13 +7,8 @@ public class LockstepSystem : NetworkSystemBehaviour
     public override void OnEnable()
     {
         base.OnEnable();
-        LockstepUtility.OnSyncTimeline += OnSyncTimeline;
 
         NetworkSystem.Receive<string>(RequestCode.Input).Subscribe(data =>
-        {
-        }).AddTo(this.Disposer);
-
-        NetworkSystem.Receive<string>(RequestCode.Timeline).Subscribe(data =>
         {
         }).AddTo(this.Disposer);
 
@@ -34,11 +29,5 @@ public class LockstepSystem : NetworkSystemBehaviour
     public override void OnDisable()
     {
         base.OnDisable();
-        LockstepUtility.OnSyncTimeline -= OnSyncTimeline;
-    }
-
-    private void OnSyncTimeline(int index)
-    {
-        NetworkSystem.Publish(RequestCode.Timeline, index.ToString());
     }
 }

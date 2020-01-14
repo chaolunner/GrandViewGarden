@@ -6,7 +6,6 @@ public static class LockstepUtility
 {
     public static int Index;
     public static event Action OnRestart;
-    public static event Action<int> OnSyncTimeline;
 
     private static List<LockstepInputs> lockstepInputs = new List<LockstepInputs>();
     private static Dictionary<Type, List<IInput>> inputDict = new Dictionary<Type, List<IInput>>();
@@ -41,7 +40,6 @@ public static class LockstepUtility
         }
         if (inputs.TickId > lockstepInputs.Count)
         {
-            OnSyncTimeline?.Invoke(lockstepInputs.Count);
             return;
         }
         lockstepInputs.Add(inputs);
