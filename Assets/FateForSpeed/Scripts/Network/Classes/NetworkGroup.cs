@@ -272,9 +272,9 @@ public class NetworkGroup : IDisposable
 
     private List<IUserInputResult[]> DoForward(INetworkTimeline timeline, IEntity entity, TimePointData timePoint, float from, float to, float start, float end, float deltaTime, float totalTime)
     {
-        var timelineData = new ForwardTimelineData(entity, timePoint);
         timePoint.Start = start;
         timePoint.End = end;
+        timePoint.DeltaTime = 0;
         if (start < from && end > to)
         {
             timePoint.DeltaTime = (to - from) * totalTime;
@@ -291,7 +291,11 @@ public class NetworkGroup : IDisposable
         {
             timePoint.DeltaTime = (end - from) * totalTime;
         }
-        return timeline.Forward(timelineData);
+        if (timePoint.DeltaTime > 0)
+        {
+            return timeline.Forward(new ForwardTimelineData(entity, timePoint));
+        }
+        return null;
     }
 
     private void OnRestart()
