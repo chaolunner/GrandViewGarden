@@ -65,13 +65,13 @@ public class TimePointWithLerp
         }
     }
 
-    public void AddRealtimeData(Fix64 deltaTime, TimePointData timePointData)
+    public void AddRealtimeData(TimePointData timePointData)
     {
-        realtimeTotalTime += deltaTime;
+        realtimeTotalTime += timePointData.RealTime;
         RealtimeData.Add(timePointData);
     }
 
-    public void Forecast(Fix64 deltaTime, TimePointData timePointData, int limit)
+    public void Forecast(TimePointData timePointData, int limit)
     {
         ForecastData.Clear();
         forecastTotalTime = Fix64.Zero;
@@ -82,14 +82,14 @@ public class TimePointWithLerp
         else if (forecastCount < limit)
         {
             forecastCount++;
-            AddForecastData(deltaTime, timePointData, forecastCount);
+            AddForecastData(timePointData, forecastCount);
         }
     }
 
-    private void AddForecastData(Fix64 deltaTime, TimePointData timePointData, int count)
+    private void AddForecastData(TimePointData timePointData, int count)
     {
         timePointData.ForecastCount = count;
-        forecastTotalTime += deltaTime;
+        forecastTotalTime += timePointData.RealTime;
         ForecastData.Add(timePointData);
     }
 }

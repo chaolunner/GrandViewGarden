@@ -133,7 +133,7 @@ public class NetworkGroup : IDisposable
                     var userInputData = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
                     for (int i = 0; i < userInputData.Length; i++)
                     {
-                        timePointWithLerp.AddRealtimeData(LockstepUtility.GetDeltaTime(tickId), new TimePointData(tickId, userInputData[i]));
+                        timePointWithLerp.AddRealtimeData(new TimePointData(tickId, LockstepUtility.GetDeltaTime(tickId), userInputData[i]));
                     }
                     index = 0;
                     tickId++;
@@ -154,6 +154,7 @@ public class NetworkGroup : IDisposable
         for (int i = 0; i < inputTypes.Length; i++)
         {
             var userInputData = LockstepUtility.GetUserInputData(tickId, userId, inputTypes[i]);
+            if (userInputData == null) { continue; }
             for (int j = 0; j < userInputData.Length; j++)
             {
                 while (j >= dataList.Count)
@@ -162,6 +163,15 @@ public class NetworkGroup : IDisposable
                 }
                 dataList[j][i] = userInputData[j];
             }
+        }
+        if (dataList.Count <= 0)
+        {
+            var data = new UserInputData[inputTypes.Length];
+            for (int i = 0; i < inputTypes.Length; i++)
+            {
+                data[i] = LockstepUtility.CreateUesrInputData(tickId);
+            }
+            dataList.Add(data);
         }
         return dataList.ToArray();
     }
@@ -176,7 +186,7 @@ public class NetworkGroup : IDisposable
                 var userInputData = GetUserInputDataByInputTypes(tickId, inputTypes);
                 for (int i = 0; i < userInputData.Length; i++)
                 {
-                    defaultTimePointWithLerp.AddRealtimeData(LockstepUtility.GetDeltaTime(tickId), new TimePointData(tickId, userInputData[i]));
+                    defaultTimePointWithLerp.AddRealtimeData(new TimePointData(tickId, LockstepUtility.GetDeltaTime(tickId), userInputData[i]));
                 }
                 tickId++;
             }
@@ -191,6 +201,7 @@ public class NetworkGroup : IDisposable
         for (int i = 0; i < inputTypes.Length; i++)
         {
             var userInputData = LockstepUtility.GetAllUserInputData(tickId, inputTypes[i]);
+            if (userInputData == null) { continue; }
             for (int j = 0; j < userInputData.Length; j++)
             {
                 while (j >= dataList.Count)
@@ -199,6 +210,15 @@ public class NetworkGroup : IDisposable
                 }
                 dataList[j][i] = userInputData[j];
             }
+        }
+        if (dataList.Count <= 0)
+        {
+            var data = new UserInputData[inputTypes.Length][];
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = new UserInputData[1] { LockstepUtility.CreateUesrInputData(tickId) };
+            }
+            dataList.Add(data);
         }
         return dataList.ToArray();
     }
@@ -216,18 +236,12 @@ public class NetworkGroup : IDisposable
 
         for (int i = 0; i < timePoints.Count; i++)
         {
-            List<IUserInputResult[]> result = null;
             if (networkIdentityComponent.TickIdWhenCreated < 0 || networkIdentityComponent.TickIdWhenCreated > timePoints[i].TickId) { continue; }
-            for (int j = 0; j < timePoints[i].UserInputData[0].Length; j++)
-            {
-                if (timePoints[i].UserInputData[0][j] == null) { continue; }
-                var deltaTime = (float)timePoints[i].UserInputData[0][j].DeltaTime;
-                var start = time / totalTime;
-                time += deltaTime;
-                var end = time / totalTime;
-                result = DoForward(timeline, entity, timePoints[i], from, to, start, end, deltaTime, totalTime);
-                break;
-            }
+            var realTime = (float)timePoints[i].RealTime;
+            var start = time / totalTime;
+            time += realTime;
+            var end = time / totalTime;
+            var result = DoForward(timeline, entity, timePoints[i], from, to, start, end, realTime, totalTime);
             if (result != null && timePoints[i].ForecastCount > 0)
             {
                 for (int j = 0; j < result.Count; j++)
@@ -248,17 +262,11 @@ public class NetworkGroup : IDisposable
 
         for (int i = 0; i < timePoints.Count; i++)
         {
-            List<IUserInputResult[]> result = null;
-            for (int j = 0; j < timePoints[i].UserInputData[0].Length; j++)
-            {
-                if (timePoints[i].UserInputData[0][j] == null) { continue; }
-                var deltaTime = (float)timePoints[i].UserInputData[0][j].DeltaTime;
-                var start = time / totalTime;
-                time += deltaTime;
-                var end = time / totalTime;
-                result = DoForward(timeline, null, timePoints[i], from, to, start, end, deltaTime, totalTime);
-                break;
-            }
+            var realTime = (float)timePoints[i].RealTime;
+            var start = time / totalTime;
+            time += realTime;
+            var end = time / totalTime;
+            var result = DoForward(timeline, null, timePoints[i], from, to, start, end, realTime, totalTime);
             if (result != null && timePoints[i].ForecastCount > 0)
             {
                 for (int j = 0; j < result.Count; j++)
@@ -342,7 +350,7 @@ public class NetworkGroup : IDisposable
                 var userInputData = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
                 for (int i = 0; i < userInputData.Length; i++)
                 {
-                    timePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, userInputData[i]), networkGroupData.MaxForecastSteps);
+                    timePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), networkGroupData.MaxForecastSteps);
                 }
             }
         }
@@ -359,7 +367,7 @@ public class NetworkGroup : IDisposable
                 var userInputData = GetUserInputDataByInputTypes(tickId, inputTypes);
                 for (int i = 0; i < userInputData.Length; i++)
                 {
-                    defaultTimePointWithLerp.Forecast(deltaTime, new TimePointData(tickId, userInputData[i]), networkGroupData.MaxForecastSteps);
+                    defaultTimePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), networkGroupData.MaxForecastSteps);
                 }
             }
         }

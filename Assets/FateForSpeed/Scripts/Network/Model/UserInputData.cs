@@ -12,7 +12,7 @@ public class UserInputData : UserInputData<IInput>
 {
     public T[] GetInputs<T>() where T : IInput
     {
-        if (Inputs != null)
+        if (Inputs != null && Inputs.Length > 0)
         {
             T[] inputs = new T[Inputs.Length];
             Inputs.CopyTo(inputs, 0);
