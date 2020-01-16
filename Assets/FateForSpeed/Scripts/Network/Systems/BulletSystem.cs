@@ -39,13 +39,15 @@ public class BulletSystem : NetworkSystemBehaviour
 
             bulletComponent.OnDisableAsObservable().Subscribe(_ =>
             {
-                rigidbody.Sleep();
                 bulletComponent.Collision = null;
+                rigidbody.isKinematic = false;
+                rigidbody.Sleep();
             }).AddTo(this.Disposer).AddTo(bulletComponent.Disposer);
 
             bulletComponent.OnCollisionEnterAsObservable().Subscribe(col =>
             {
                 bulletComponent.Collision = col;
+                rigidbody.isKinematic = true;
             }).AddTo(this.Disposer).AddTo(bulletComponent.Disposer);
         }).AddTo(this.Disposer);
 
@@ -65,7 +67,6 @@ public class BulletSystem : NetworkSystemBehaviour
                 //{
                 //    PoolFactory.Push(data.Entity);
                 //}
-                rigidbody.isKinematic = true;
             }
             else
             {

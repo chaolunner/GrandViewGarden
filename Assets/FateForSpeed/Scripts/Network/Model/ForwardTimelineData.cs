@@ -21,16 +21,6 @@ public struct ForwardTimelineData
         get { return TimePointData.ForecastCount; }
     }
 
-    public float Start
-    {
-        get { return TimePointData.Start; }
-    }
-
-    public float End
-    {
-        get { return TimePointData.End; }
-    }
-
     public float DeltaTime
     {
         get { return TimePointData.DeltaTime; }

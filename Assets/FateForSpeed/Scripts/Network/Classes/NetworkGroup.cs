@@ -237,11 +237,11 @@ public class NetworkGroup : IDisposable
         for (int i = 0; i < timePoints.Count; i++)
         {
             if (networkIdentityComponent.TickIdWhenCreated < 0 || networkIdentityComponent.TickIdWhenCreated > timePoints[i].TickId) { continue; }
-            var realTime = (float)timePoints[i].RealTime;
+            var duration = (float)timePoints[i].Duration;
             var start = time / totalTime;
-            time += realTime;
+            time += duration;
             var end = time / totalTime;
-            var result = DoForward(timeline, entity, timePoints[i], from, to, start, end, realTime, totalTime);
+            var result = DoForward(timeline, entity, timePoints[i], from, to, start, end, duration, totalTime);
             if (result != null && timePoints[i].ForecastCount > 0)
             {
                 for (int j = 0; j < result.Count; j++)
@@ -262,11 +262,11 @@ public class NetworkGroup : IDisposable
 
         for (int i = 0; i < timePoints.Count; i++)
         {
-            var realTime = (float)timePoints[i].RealTime;
+            var duration = (float)timePoints[i].Duration;
             var start = time / totalTime;
-            time += realTime;
+            time += duration;
             var end = time / totalTime;
-            var result = DoForward(timeline, null, timePoints[i], from, to, start, end, realTime, totalTime);
+            var result = DoForward(timeline, null, timePoints[i], from, to, start, end, duration, totalTime);
             if (result != null && timePoints[i].ForecastCount > 0)
             {
                 for (int j = 0; j < result.Count; j++)
@@ -279,8 +279,6 @@ public class NetworkGroup : IDisposable
 
     private List<IUserInputResult[]> DoForward(INetworkTimeline timeline, IEntity entity, TimePointData timePoint, float from, float to, float start, float end, float deltaTime, float totalTime)
     {
-        timePoint.Start = start;
-        timePoint.End = end;
         timePoint.DeltaTime = 0;
         if (start < from && end > to)
         {
@@ -288,6 +286,7 @@ public class NetworkGroup : IDisposable
         }
         else if (start >= from && start <= to && end >= from && end <= to)
         {
+            timePoint.Physics = true;
             timePoint.DeltaTime = deltaTime;
         }
         else if (start >= from && start <= to)
@@ -296,6 +295,7 @@ public class NetworkGroup : IDisposable
         }
         else if (end >= from && end <= to)
         {
+            timePoint.Physics = true;
             timePoint.DeltaTime = (end - from) * totalTime;
         }
         if (timePoint.DeltaTime > 0)

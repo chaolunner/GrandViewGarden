@@ -67,7 +67,7 @@ public class TimePointWithLerp
 
     public void AddRealtimeData(TimePointData timePointData)
     {
-        realtimeTotalTime += timePointData.RealTime;
+        realtimeTotalTime += timePointData.Duration;
         RealtimeData.Add(timePointData);
     }
 
@@ -89,7 +89,7 @@ public class TimePointWithLerp
     private void AddForecastData(TimePointData timePointData, int count)
     {
         timePointData.ForecastCount = count;
-        forecastTotalTime += timePointData.RealTime;
+        forecastTotalTime += timePointData.Duration;
         ForecastData.Add(timePointData);
     }
 }
