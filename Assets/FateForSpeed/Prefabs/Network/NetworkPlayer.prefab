@@ -152,9 +152,6 @@ MonoBehaviour:
   Crouched: 0
   Follow: {fileID: 5972339958592193630}
   LookAt: {fileID: 7467058496439303121}
-  smoothTime: 0
-  aimTime: 0
-  motion: {x: 0, y: 0, z: 0}
 --- !u!114 &6046258769048195094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +174,6 @@ MonoBehaviour:
   adsPosition: {x: 0, y: 0, z: 0}
   speed: 0
   cooldown: 0
-  cooldownTime: 0
 --- !u!1 &2119355278167736499
 GameObject:
   m_ObjectHideFlags: 0
