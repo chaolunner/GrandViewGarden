@@ -70,7 +70,8 @@ public class BulletSystem : NetworkSystemBehaviour
             }
             else
             {
-                rigidbody.MovePosition(viewComponent.Transforms[0].position + bulletComponent.Velocity * data.DeltaTime);
+                var position = (FixVector3)viewComponent.Transforms[0].position + bulletComponent.Velocity * data.DeltaTime;
+                rigidbody.MovePosition((Vector3)position);
             }
 
             return null;

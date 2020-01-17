@@ -2,6 +2,7 @@
 using UnityEngine;
 using UniEasy.ECS;
 using UniEasy;
+using Common;
 using UniRx;
 
 public class ShootComponent : ComponentBehaviour
@@ -16,5 +17,5 @@ public class ShootComponent : ComponentBehaviour
     [HideInInspector] public Vector3 adsPosition;
     [HideInInspector] public float speed;
     [HideInInspector] public float cooldown;
-    [HideInInspector] public float cooldownTime;
+    [HideInInspector] public Fix64 cooldownTime;
 }

@@ -1,9 +1,10 @@
 ﻿using UniEasy.ECS;
 using System;
+using Common;
 
 public static class INetworkTimelineExtensions
 {
-    public static IDisposable OnForward(this INetworkTimeline timeline, Func<IEntity, UserInputData[], float, IUserInputResult[]> onNext)
+    public static IDisposable OnForward(this INetworkTimeline timeline, Func<IEntity, UserInputData[], Fix64, IUserInputResult[]> onNext)
     {
         Func<ForwardTimelineData, IUserInputResult[]> func = data =>
         {
@@ -12,7 +13,7 @@ public static class INetworkTimelineExtensions
         return timeline.OnForward(func);
     }
 
-    public static IDisposable OnForward(this INetworkTimeline timeline, Func<UserInputData[][], float, IUserInputResult[]> onNext)
+    public static IDisposable OnForward(this INetworkTimeline timeline, Func<UserInputData[][], Fix64, IUserInputResult[]> onNext)
     {
         Func<ForwardTimelineData, IUserInputResult[]> func = data =>
         {

@@ -20,18 +20,21 @@ namespace MessagePack.Formatters.Common
     using System.Buffers;
     using MessagePack;
 
-    public sealed class Fix64Formatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Common.Fix64>
+    public sealed class FixVector4Formatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Common.FixVector4>
     {
 
 
-        public void Serialize(ref MessagePackWriter writer, global::Common.Fix64 value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Common.FixVector4 value, global::MessagePack.MessagePackSerializerOptions options)
         {
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(1);
-            writer.Write(value.RawValue);
+            writer.WriteArrayHeader(4);
+            formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Serialize(ref writer, value.x, options);
+            formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Serialize(ref writer, value.y, options);
+            formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Serialize(ref writer, value.z, options);
+            formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Serialize(ref writer, value.w, options);
         }
 
-        public global::Common.Fix64 Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Common.FixVector4 Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -40,7 +43,10 @@ namespace MessagePack.Formatters.Common
 
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __RawValue__ = default(long);
+            var __x__ = default(global::Common.Fix64);
+            var __y__ = default(global::Common.Fix64);
+            var __z__ = default(global::Common.Fix64);
+            var __w__ = default(global::Common.Fix64);
 
             for (int i = 0; i < length; i++)
             {
@@ -49,7 +55,16 @@ namespace MessagePack.Formatters.Common
                 switch (key)
                 {
                     case 0:
-                        __RawValue__ = reader.ReadInt64();
+                        __x__ = formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __y__ = formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __z__ = formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __w__ = formatterResolver.GetFormatterWithVerify<global::Common.Fix64>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -57,8 +72,11 @@ namespace MessagePack.Formatters.Common
                 }
             }
 
-            var ____result = new global::Common.Fix64(__RawValue__);
-            ____result.RawValue = __RawValue__;
+            var ____result = new global::Common.FixVector4(__x__, __y__, __z__, __w__);
+            ____result.x = __x__;
+            ____result.y = __y__;
+            ____result.z = __z__;
+            ____result.w = __w__;
             return ____result;
         }
     }

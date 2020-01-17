@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UniEasy.ECS;
+using Common;
 
 public class BulletComponent : ComponentBehaviour
 {
-    public Vector3 Velocity;
+    public FixVector3 Velocity;
     public Collision Collision;
 }

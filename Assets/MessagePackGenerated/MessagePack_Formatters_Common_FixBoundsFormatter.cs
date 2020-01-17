@@ -20,18 +20,19 @@ namespace MessagePack.Formatters.Common
     using System.Buffers;
     using MessagePack;
 
-    public sealed class Fix64Formatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Common.Fix64>
+    public sealed class FixBoundsFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Common.FixBounds>
     {
 
 
-        public void Serialize(ref MessagePackWriter writer, global::Common.Fix64 value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Common.FixBounds value, global::MessagePack.MessagePackSerializerOptions options)
         {
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(1);
-            writer.Write(value.RawValue);
+            writer.WriteArrayHeader(2);
+            formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Serialize(ref writer, value.Position, options);
+            formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Serialize(ref writer, value.Size, options);
         }
 
-        public global::Common.Fix64 Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Common.FixBounds Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -40,7 +41,8 @@ namespace MessagePack.Formatters.Common
 
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __RawValue__ = default(long);
+            var __Position__ = default(global::Common.FixVector3);
+            var __Size__ = default(global::Common.FixVector3);
 
             for (int i = 0; i < length; i++)
             {
@@ -49,7 +51,10 @@ namespace MessagePack.Formatters.Common
                 switch (key)
                 {
                     case 0:
-                        __RawValue__ = reader.ReadInt64();
+                        __Position__ = formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __Size__ = formatterResolver.GetFormatterWithVerify<global::Common.FixVector3>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -57,8 +62,9 @@ namespace MessagePack.Formatters.Common
                 }
             }
 
-            var ____result = new global::Common.Fix64(__RawValue__);
-            ____result.RawValue = __RawValue__;
+            var ____result = new global::Common.FixBounds(__Position__, __Size__);
+            ____result.Position = __Position__;
+            ____result.Size = __Size__;
             return ____result;
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Common;
 
 public class TimePointWithLerp
 {
@@ -13,16 +12,6 @@ public class TimePointWithLerp
     public List<IUserInputResult[]> RollbackData = new List<IUserInputResult[]>();
 
     private int forecastCount;
-    private Fix64 realtimeTotalTime;
-    private Fix64 forecastTotalTime;
-
-    public float TotalTime
-    {
-        get
-        {
-            return (float)(realtimeTotalTime + forecastTotalTime);
-        }
-    }
 
     public List<TimePointData> TimePoints
     {
@@ -55,7 +44,6 @@ public class TimePointWithLerp
         {
             From = 0;
             To = 0;
-            realtimeTotalTime = Fix64.Zero;
             RealtimeData.Clear();
             IsPlaying = false;
         }
@@ -67,14 +55,12 @@ public class TimePointWithLerp
 
     public void AddRealtimeData(TimePointData timePointData)
     {
-        realtimeTotalTime += timePointData.Duration;
         RealtimeData.Add(timePointData);
     }
 
     public void Forecast(TimePointData timePointData, int limit)
     {
         ForecastData.Clear();
-        forecastTotalTime = Fix64.Zero;
         if (RealtimeData.Count > 0)
         {
             forecastCount = 0;
@@ -89,7 +75,6 @@ public class TimePointWithLerp
     private void AddForecastData(TimePointData timePointData, int count)
     {
         timePointData.ForecastCount = count;
-        forecastTotalTime += timePointData.Duration;
         ForecastData.Add(timePointData);
     }
 }

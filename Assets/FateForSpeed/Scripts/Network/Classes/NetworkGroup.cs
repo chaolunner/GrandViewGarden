@@ -2,6 +2,7 @@
 using UnityEngine;
 using UniEasy.ECS;
 using System;
+using Common;
 using UniRx;
 
 public class NetworkGroup : IDisposable
@@ -125,23 +126,14 @@ public class NetworkGroup : IDisposable
         }
         if (!timePointWithLerp.IsPlaying)
         {
-            var index = 0;
-            while (index < inputTypes.Length)
+            while (LockstepUtility.HasTickId(tickId))
             {
-                if (LockstepUtility.HasTickId(tickId))
+                var userInputData = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
+                for (int i = 0; i < userInputData.Length; i++)
                 {
-                    var userInputData = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
-                    for (int i = 0; i < userInputData.Length; i++)
-                    {
-                        timePointWithLerp.AddRealtimeData(new TimePointData(tickId, LockstepUtility.GetDeltaTime(tickId), userInputData[i]));
-                    }
-                    index = 0;
-                    tickId++;
+                    timePointWithLerp.AddRealtimeData(new TimePointData(tickId, LockstepUtility.GetDeltaTime(tickId), userInputData[i]));
                 }
-                else
-                {
-                    index++;
-                }
+                tickId++;
             }
         }
         timePointWithLerp.TickId = tickId;
@@ -229,19 +221,14 @@ public class NetworkGroup : IDisposable
         var identity = networkIdentityComponent.Identity;
         var timePointWithLerp = timePointWithLerpDict[identity][timeline];
         var timePoints = timePointWithLerp.TimePoints;
-        var totalTime = timePointWithLerp.TotalTime;
         var from = timePointWithLerp.From;
         var to = timePointWithLerp.To;
-        var time = 0f;
 
         for (int i = 0; i < timePoints.Count; i++)
         {
             if (networkIdentityComponent.TickIdWhenCreated < 0 || networkIdentityComponent.TickIdWhenCreated > timePoints[i].TickId) { continue; }
-            var duration = (float)timePoints[i].Duration;
-            var start = time / totalTime;
-            time += duration;
-            var end = time / totalTime;
-            var result = DoForward(timeline, entity, timePoints[i], from, to, start, end, duration, totalTime);
+            var duration = timePoints[i].Duration;
+            var result = DoForward(timeline, entity, timePoints[i], from, to, duration, i / (float)timePoints.Count);
             if (result != null && timePoints[i].ForecastCount > 0)
             {
                 for (int j = 0; j < result.Count; j++)
@@ -255,18 +242,13 @@ public class NetworkGroup : IDisposable
     private void ApplyTimePoint(INetworkTimeline timeline)
     {
         var timePoints = defaultTimePointWithLerp.TimePoints;
-        var totalTime = defaultTimePointWithLerp.TotalTime;
         var from = defaultTimePointWithLerp.From;
         var to = defaultTimePointWithLerp.To;
-        var time = 0f;
 
         for (int i = 0; i < timePoints.Count; i++)
         {
-            var duration = (float)timePoints[i].Duration;
-            var start = time / totalTime;
-            time += duration;
-            var end = time / totalTime;
-            var result = DoForward(timeline, null, timePoints[i], from, to, start, end, duration, totalTime);
+            var duration = timePoints[i].Duration;
+            var result = DoForward(timeline, null, timePoints[i], from, to, duration, i / (float)timePoints.Count);
             if (result != null && timePoints[i].ForecastCount > 0)
             {
                 for (int j = 0; j < result.Count; j++)
@@ -277,29 +259,11 @@ public class NetworkGroup : IDisposable
         }
     }
 
-    private List<IUserInputResult[]> DoForward(INetworkTimeline timeline, IEntity entity, TimePointData timePoint, float from, float to, float start, float end, float deltaTime, float totalTime)
+    private List<IUserInputResult[]> DoForward(INetworkTimeline timeline, IEntity entity, TimePointData timePoint, float from, float to, Fix64 deltaTime, float t)
     {
-        timePoint.DeltaTime = 0;
-        if (start < from && end > to)
+        if (t >= from && t <= to)
         {
-            timePoint.DeltaTime = (to - from) * totalTime;
-        }
-        else if (start >= from && start <= to && end >= from && end <= to)
-        {
-            timePoint.Physics = true;
             timePoint.DeltaTime = deltaTime;
-        }
-        else if (start >= from && start <= to)
-        {
-            timePoint.DeltaTime = (to - start) * totalTime;
-        }
-        else if (end >= from && end <= to)
-        {
-            timePoint.Physics = true;
-            timePoint.DeltaTime = (end - from) * totalTime;
-        }
-        if (timePoint.DeltaTime > 0)
-        {
             return timeline.Forward(new ForwardTimelineData(entity, timePoint));
         }
         return null;

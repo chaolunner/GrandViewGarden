@@ -96,7 +96,7 @@ public class ShootSystem : NetworkSystemBehaviour
 
                     viewComponent.Transforms[0].position = shootComponent.weapon.transform.position;
                     viewComponent.Transforms[0].rotation = Quaternion.LookRotation(shootComponent.weapon.transform.forward, shootComponent.weapon.transform.up);
-                    bulletComponent.Velocity = shootComponent.speed * viewComponent.Transforms[0].forward;
+                    bulletComponent.Velocity = shootComponent.speed * (FixVector3)viewComponent.Transforms[0].forward;
                     shootComponent.cooldownTime = shootComponent.cooldown;
                 }
                 if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }

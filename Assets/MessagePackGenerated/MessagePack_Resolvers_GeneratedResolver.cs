@@ -51,7 +51,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(16)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(20)
             {
                 { typeof(global::System.Collections.Generic.List<int>), 0 },
                 { typeof(byte[][]), 1 },
@@ -68,7 +68,11 @@ namespace MessagePack.Resolvers
                 { typeof(global::Common.FixVector2), 12 },
                 { typeof(global::Common.FixVector3), 13 },
                 { typeof(global::Common.MouseInput), 14 },
-                { typeof(global::Common.FixQuaternion), 15 },
+                { typeof(global::Common.FixBounds), 15 },
+                { typeof(global::Common.FixMatrix3x3), 16 },
+                { typeof(global::Common.FixMatrix4x4), 17 },
+                { typeof(global::Common.FixQuaternion), 18 },
+                { typeof(global::Common.FixVector4), 19 },
             };
         }
 
@@ -97,7 +101,11 @@ namespace MessagePack.Resolvers
                 case 12: return new MessagePack.Formatters.Common.FixVector2Formatter();
                 case 13: return new MessagePack.Formatters.Common.FixVector3Formatter();
                 case 14: return new MessagePack.Formatters.Common.MouseInputFormatter();
-                case 15: return new MessagePack.Formatters.Common.FixQuaternionFormatter();
+                case 15: return new MessagePack.Formatters.Common.FixBoundsFormatter();
+                case 16: return new MessagePack.Formatters.Common.FixMatrix3x3Formatter();
+                case 17: return new MessagePack.Formatters.Common.FixMatrix4x4Formatter();
+                case 18: return new MessagePack.Formatters.Common.FixQuaternionFormatter();
+                case 19: return new MessagePack.Formatters.Common.FixVector4Formatter();
                 default: return null;
             }
         }

@@ -2,11 +2,10 @@
 
 public class TimePointData
 {
-    public bool Physics;
     public int TickId;
     public int ForecastCount;
     public Fix64 Duration;
-    public float DeltaTime;
+    public Fix64 DeltaTime;
     public UserInputData[][] UserInputData;
 
     public TimePointData(int tickId, Fix64 duration, UserInputData[] userInputData)

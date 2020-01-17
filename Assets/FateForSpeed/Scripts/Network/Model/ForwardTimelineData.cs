@@ -1,4 +1,5 @@
 ﻿using UniEasy.ECS;
+using Common;
 
 public struct ForwardTimelineData
 {
@@ -16,12 +17,12 @@ public struct ForwardTimelineData
         get { return TimePointData.TickId; }
     }
 
-    public float ForecastCount
+    public int ForecastCount
     {
         get { return TimePointData.ForecastCount; }
     }
 
-    public float DeltaTime
+    public Fix64 DeltaTime
     {
         get { return TimePointData.DeltaTime; }
     }

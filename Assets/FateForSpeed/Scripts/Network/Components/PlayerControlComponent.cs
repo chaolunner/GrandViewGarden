@@ -2,6 +2,7 @@
 using UnityEngine;
 using UniEasy.ECS;
 using UniEasy;
+using Common;
 
 public class PlayerControlComponent : ComponentBehaviour
 {
@@ -18,23 +19,23 @@ public class PlayerControlComponent : ComponentBehaviour
     public Transform Follow;
     public Transform LookAt;
 
-    [HideInInspector] public float smoothTime;
-    [HideInInspector] public float aimTime;
-    [HideInInspector] public Vector3 motion;
+    [HideInInspector] public Fix64 smoothTime;
+    [HideInInspector] public Fix64 aimTime;
+    [HideInInspector] public FixVector3 motion;
 
-    private List<Vector3> velocityList = new List<Vector3>();
+    private List<FixVector3> velocityList = new List<FixVector3>();
     private const int MaxVelocityCount = 5;
 
-    public Vector3 Velocity
+    public FixVector3 Velocity
     {
         get
         {
-            var sum = Vector3.zero;
+            var sum = FixVector3.zero;
             for (int i = 0; i < velocityList.Count; i++)
             {
                 sum += velocityList[i];
             }
-            return new Vector3(sum.x / velocityList.Count, sum.y / velocityList.Count, sum.z / velocityList.Count);
+            return new FixVector3(sum.x / velocityList.Count, sum.y / velocityList.Count, sum.z / velocityList.Count);
         }
         set
         {
