@@ -23,7 +23,6 @@ public class ShootSystem : NetworkSystemBehaviour
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
-
         ShootComponents = this.Create(typeof(PlayerControlComponent), typeof(NetworkIdentityComponent), typeof(ShootComponent), typeof(Animator));
         Network = LockstepFactory.Create(ShootComponents);
         NetwrokTimeline = Network.CreateTimeline(typeof(MouseInput), typeof(KeyInput));
@@ -34,7 +33,6 @@ public class ShootSystem : NetworkSystemBehaviour
     public override void OnEnable()
     {
         base.OnEnable();
-
         ShootComponents.OnAdd().Subscribe(entity =>
         {
             var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
@@ -69,10 +67,6 @@ public class ShootSystem : NetworkSystemBehaviour
                     PoolFactory.Create(prefab, networkIdentityComponent.Identity.UserId);
                 }
             }
-        }).AddTo(this.Disposer);
-
-        NetwrokTimeline.OnReverse((entity, result) =>
-        {
         }).AddTo(this.Disposer);
 
         NetwrokTimeline.OnForward(data =>

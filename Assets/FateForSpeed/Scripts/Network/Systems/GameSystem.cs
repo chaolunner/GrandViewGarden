@@ -27,11 +27,6 @@ public class GameSystem : NetworkSystemBehaviour
     public override void OnEnable()
     {
         base.OnEnable();
-
-        NetwrokTimeline.OnReverse(result =>
-        {
-        }).AddTo(this.Disposer);
-
         NetwrokTimeline.OnForward(data =>
         {
             for (int i = 0; i < data.UserInputData[0].Length; i++)

@@ -9,7 +9,6 @@ public class BulletSystem : NetworkSystemBehaviour
 {
     [Inject]
     private IPoolFactory PoolFactory;
-
     private IGroup BulletComponents;
     private NetworkGroup Network;
     private INetworkTimeline NetwrokTimeline;
@@ -17,7 +16,6 @@ public class BulletSystem : NetworkSystemBehaviour
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
-
         BulletComponents = this.Create(typeof(BulletComponent), typeof(NetworkIdentityComponent), typeof(ViewComponent), typeof(Rigidbody));
         Network = LockstepFactory.Create(BulletComponents);
         NetwrokTimeline = Network.CreateTimeline(typeof(EventInput));
@@ -26,7 +24,6 @@ public class BulletSystem : NetworkSystemBehaviour
     public override void OnEnable()
     {
         base.OnEnable();
-
         BulletComponents.OnAdd().Subscribe(entity =>
         {
             var bulletComponent = entity.GetComponent<BulletComponent>();
@@ -51,10 +48,6 @@ public class BulletSystem : NetworkSystemBehaviour
             }).AddTo(this.Disposer).AddTo(bulletComponent.Disposer);
         }).AddTo(this.Disposer);
 
-        NetwrokTimeline.OnReverse((entity, result) =>
-        {
-        }).AddTo(this.Disposer);
-
         NetwrokTimeline.OnForward(data =>
         {
             var bulletComponent = data.Entity.GetComponent<BulletComponent>();
@@ -73,7 +66,6 @@ public class BulletSystem : NetworkSystemBehaviour
                 var position = (FixVector3)viewComponent.Transforms[0].position + bulletComponent.Velocity * data.DeltaTime;
                 rigidbody.MovePosition((Vector3)position);
             }
-
             return null;
         }).AddTo(this.Disposer);
     }
