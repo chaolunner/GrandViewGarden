@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public struct NetworkId
+public struct NetworkId : IComparable<NetworkId>
 {
     public int UserId;
     public int InstanceId;
@@ -39,5 +39,15 @@ public struct NetworkId
     public static bool operator !=(NetworkId lhs, NetworkId rhs)
     {
         return lhs.UserId != rhs.UserId || lhs.InstanceId != rhs.InstanceId;
+    }
+
+    public int CompareTo(NetworkId other)
+    {
+        int val = 0;
+        if (UserId > other.UserId) { val += 2; }
+        else if (UserId < other.UserId) { val -= 2; }
+        if (InstanceId > other.InstanceId) { val += 1; }
+        else if (InstanceId < other.InstanceId) { val -= 1; }
+        return val;
     }
 }

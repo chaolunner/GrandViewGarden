@@ -26885,7 +26885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04f4a0dbe7670345b4b28a5c26d8dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Interval: 1000
+  Interval: 200
 --- !u!4 &1789547061
 Transform:
   m_ObjectHideFlags: 0
@@ -32735,7 +32735,7 @@ PrefabInstance:
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000017884142
+      value: -0.000035945388
       objectReference: {fileID: 0}
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}

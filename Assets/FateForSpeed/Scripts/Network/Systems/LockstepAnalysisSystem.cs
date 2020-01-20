@@ -37,63 +37,47 @@ public class LockstepAnalysisSystem : NetworkSystemBehaviour
         {
             if (data.TickId % Interval == 0)
             {
-                string msg = PackMessage(data.TickId);
+                string msg = PackMessage();
                 analyzedDataDict.Add(data.TickId, msg);
-                NetworkSystem.Publish(RequestCode.LockstepAnalysis, msg);
+                NetworkSystem.Publish(RequestCode.LockstepAnalysis, data.TickId.ToString() + VerticalBar + msg);
             }
             return null;
         }).AddTo(this.Disposer);
         NetworkSystem.Receive<string>(RequestCode.LockstepAnalysis).Subscribe(data =>
         {
-            string[] str1s = data.Split(VerticalBar);
             int tickId;
-            if (str1s.Length == 2 && int.TryParse(str1s[0], out tickId))
+            int returnCode;
+            string[] strs = data.Split(VerticalBar);
+            if (strs.Length == 2 && int.TryParse(strs[0], out tickId))
             {
                 if (analyzedDataDict.ContainsKey(tickId))
                 {
-                    if (analyzedDataDict[tickId] == str1s[1])
-                    {
-                        Debug.Log(DataMatchSuccess);
-                    }
-                    else
-                    {
-                        Debug.LogError(DataMatchFailed);
-                    }
+                    if (analyzedDataDict[tickId] == strs[1]) { Debug.Log(DataMatchSuccess); }
+                    else { Debug.LogError(DataMatchFailed); }
                 }
-                else
-                {
-                    Debug.LogWarning(InsufficientDataWarning);
-                }
+                else { Debug.LogWarning(InsufficientDataWarning); }
             }
-            else
-            {
-                Debug.LogError(DataError);
-            }
+            else if (int.TryParse(data, out returnCode) && (ReturnCode)returnCode == ReturnCode.Success) { }
+            else { Debug.LogError(DataError); }
         }).AddTo(this.Disposer);
     }
 
-    private string PackMessage(int tickId)
+    private string PackMessage()
     {
-        var msgBuilder = new StringBuilder(tickId.ToString() + VerticalBar);
+        var msgBuilder = new StringBuilder();
         var dict = new Dictionary<NetworkId, string>();
         for (int i = 0; i < NetworkIdentities.Entities.Count; i++)
         {
             var networkIdentityComponent = NetworkIdentities.Entities[i].GetComponent<NetworkIdentityComponent>();
             var viewComponent = NetworkIdentities.Entities[i].GetComponent<ViewComponent>();
             if (networkIdentityComponent.TickIdWhenCreated < 0) { continue; }
-            if (!dict.ContainsKey(networkIdentityComponent.Identity))
-            {
-                dict.Add(networkIdentityComponent.Identity, EmptyStr);
-            }
+            if (!dict.ContainsKey(networkIdentityComponent.Identity)) { dict.Add(networkIdentityComponent.Identity, EmptyStr); }
             dict[networkIdentityComponent.Identity] += viewComponent.Transforms[0].position.x.ToString() + Separator + viewComponent.Transforms[0].position.y.ToString() + Separator + viewComponent.Transforms[0].position.z.ToString() + Separator + viewComponent.Transforms[0].eulerAngles.x.ToString() + Separator + viewComponent.Transforms[0].eulerAngles.y.ToString() + Separator + viewComponent.Transforms[0].eulerAngles.z.ToString();
         }
         var list = new List<NetworkId>(dict.Keys);
         list.Sort();
-        for (int i = 0; i < list.Count; i++)
-        {
-            msgBuilder.Append(dict[list[i]] + Separator);
-        }
-        msgBuilder.Remove(msgBuilder.Length - 1, 1);
+        for (int i = 0; i < list.Count; i++) { msgBuilder.Append(dict[list[i]] + Separator); }
+        if (msgBuilder.Length > 0) { msgBuilder.Remove(msgBuilder.Length - 1, 1); }
         return msgBuilder.ToString();
     }
 }

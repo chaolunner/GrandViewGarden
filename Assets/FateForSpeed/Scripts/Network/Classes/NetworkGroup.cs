@@ -10,15 +10,16 @@ public class NetworkGroup : IDisposable
     public event Action OnUpdate;
 
     private NetworkGroupData networkGroupData;
-    private TimePointWithLerp defaultTimePointWithLerp;
     private Dictionary<Type[], INetworkTimeline> timelineDict;
     private Dictionary<NetworkId, Dictionary<INetworkTimeline, TimePointWithLerp>> timePointWithLerpDict;
+    private Dictionary<INetworkTimeline, TimePointWithLerp> defaultTimePointWithLerpDict;
 
     public NetworkGroup(NetworkGroupData data)
     {
         networkGroupData = data;
         timelineDict = new Dictionary<Type[], INetworkTimeline>();
         timePointWithLerpDict = new Dictionary<NetworkId, Dictionary<INetworkTimeline, TimePointWithLerp>>();
+        defaultTimePointWithLerpDict = new Dictionary<INetworkTimeline, TimePointWithLerp>();
 
         LockstepUtility.OnRestart += OnRestart;
 
@@ -96,22 +97,23 @@ public class NetworkGroup : IDisposable
 
     private void UpdateTimeline(Type[] inputTypes, INetworkTimeline timeline)
     {
-        if (defaultTimePointWithLerp == null)
+        if (!defaultTimePointWithLerpDict.ContainsKey(timeline))
         {
-            defaultTimePointWithLerp = new TimePointWithLerp();
+            defaultTimePointWithLerpDict.Add(timeline, new TimePointWithLerp());
         }
+        var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
 
-        defaultTimePointWithLerp.Begin(Time.deltaTime, networkGroupData.FixedDeltaTime);
+        timePointWithLerp.Begin(Time.deltaTime, networkGroupData.FixedDeltaTime);
 
-        PushUntilLastStep(inputTypes);
+        PushUntilLastStep(inputTypes, timeline);
 
         Rollback(timeline);
 
-        Forecast(inputTypes);
+        Forecast(inputTypes, timeline);
 
         ApplyTimePoint(timeline);
 
-        defaultTimePointWithLerp.End();
+        timePointWithLerp.End();
     }
 
     private int PushUntilLastStep(IEntity entity, Type[] inputTypes, INetworkTimeline timeline)
@@ -168,22 +170,23 @@ public class NetworkGroup : IDisposable
         return dataList.ToArray();
     }
 
-    private int PushUntilLastStep(Type[] inputTypes)
+    private int PushUntilLastStep(Type[] inputTypes, INetworkTimeline timeline)
     {
-        var tickId = defaultTimePointWithLerp.TickId;
-        if (!defaultTimePointWithLerp.IsPlaying)
+        var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
+        var tickId = timePointWithLerp.TickId;
+        if (!timePointWithLerp.IsPlaying)
         {
             while (LockstepUtility.HasTickId(tickId))
             {
                 var userInputData = GetUserInputDataByInputTypes(tickId, inputTypes);
                 for (int i = 0; i < userInputData.Length; i++)
                 {
-                    defaultTimePointWithLerp.AddRealtimeData(new TimePointData(tickId, LockstepUtility.GetDeltaTime(tickId), userInputData[i]));
+                    timePointWithLerp.AddRealtimeData(new TimePointData(tickId, LockstepUtility.GetDeltaTime(tickId), userInputData[i]));
                 }
                 tickId++;
             }
         }
-        defaultTimePointWithLerp.TickId = tickId;
+        timePointWithLerp.TickId = tickId;
         return tickId;
     }
 
@@ -241,9 +244,10 @@ public class NetworkGroup : IDisposable
 
     private void ApplyTimePoint(INetworkTimeline timeline)
     {
-        var timePoints = defaultTimePointWithLerp.TimePoints;
-        var from = defaultTimePointWithLerp.From;
-        var to = defaultTimePointWithLerp.To;
+        var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
+        var timePoints = timePointWithLerp.TimePoints;
+        var from = timePointWithLerp.From;
+        var to = timePointWithLerp.To;
 
         for (int i = 0; i < timePoints.Count; i++)
         {
@@ -253,7 +257,7 @@ public class NetworkGroup : IDisposable
             {
                 for (int j = 0; j < result.Count; j++)
                 {
-                    defaultTimePointWithLerp.RollbackData.Add(result[j]);
+                    timePointWithLerp.RollbackData.Add(result[j]);
                 }
             }
         }
@@ -272,7 +276,7 @@ public class NetworkGroup : IDisposable
     private void OnRestart()
     {
         timePointWithLerpDict.Clear();
-        defaultTimePointWithLerp = null;
+        defaultTimePointWithLerpDict.Clear();
     }
 
     private void Rollback(IEntity entity, INetworkTimeline timeline)
@@ -292,13 +296,14 @@ public class NetworkGroup : IDisposable
 
     private void Rollback(INetworkTimeline timeline)
     {
-        if (networkGroupData.UseForecast && !defaultTimePointWithLerp.IsPlaying && defaultTimePointWithLerp.ForecastData.Count > 0 && defaultTimePointWithLerp.RealtimeData.Count > 0)
+        var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
+        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
         {
-            for (int i = defaultTimePointWithLerp.RollbackData.Count - 1; i >= 0; i--)
+            for (int i = timePointWithLerp.RollbackData.Count - 1; i >= 0; i--)
             {
-                timeline.Reverse(new ReverseTimelineData(null, defaultTimePointWithLerp.RollbackData[i]));
+                timeline.Reverse(new ReverseTimelineData(null, timePointWithLerp.RollbackData[i]));
             }
-            defaultTimePointWithLerp.RollbackData.Clear();
+            timePointWithLerp.RollbackData.Clear();
         }
     }
 
@@ -320,18 +325,19 @@ public class NetworkGroup : IDisposable
         }
     }
 
-    private void Forecast(Type[] inputTypes)
+    private void Forecast(Type[] inputTypes, INetworkTimeline timeline)
     {
-        if (networkGroupData.UseForecast && !defaultTimePointWithLerp.IsPlaying)
+        var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
+        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying)
         {
-            var tickId = defaultTimePointWithLerp.TickId - 1;
+            var tickId = timePointWithLerp.TickId - 1;
             if (LockstepUtility.HasTickId(tickId))
             {
                 var deltaTime = LockstepUtility.GetDeltaTime(tickId);
                 var userInputData = GetUserInputDataByInputTypes(tickId, inputTypes);
                 for (int i = 0; i < userInputData.Length; i++)
                 {
-                    defaultTimePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), networkGroupData.MaxForecastSteps);
+                    timePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), networkGroupData.MaxForecastSteps);
                 }
             }
         }
