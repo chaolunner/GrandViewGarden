@@ -20,7 +20,7 @@ public class GameSystem : NetworkSystemBehaviour
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
         UserComponents = this.Create(typeof(UserComponent), typeof(ViewComponent));
         NetworkPlayerComponents = this.Create(typeof(NetworkPlayerComponent), typeof(NetworkIdentityComponent));
-        Network = LockstepFactory.Create(fixedDeltaTime: 0);
+        Network = LockstepFactory.Create();
         NetwrokTimeline = Network.CreateTimeline(typeof(EventInput));
     }
 
