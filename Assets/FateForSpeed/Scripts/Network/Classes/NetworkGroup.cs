@@ -3,9 +3,8 @@ using UnityEngine;
 using UniEasy.ECS;
 using System;
 using Common;
-using UniRx;
 
-public class NetworkGroup : IDisposable
+public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
 {
     public event Action OnUpdate;
 
@@ -22,40 +21,37 @@ public class NetworkGroup : IDisposable
         defaultTimePointWithLerpDict = new Dictionary<INetworkTimeline, TimePointWithLerp>();
 
         LockstepUtility.OnRestart += OnRestart;
+    }
 
+    public void Update()
+    {
         if (networkGroupData.Group != null)
         {
-            networkGroupData.Group.OnAdd()
-               .Where(entity => entity.HasComponent<NetworkIdentityComponent>())
-               .Subscribe(entity =>
-           {
-               var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
-
-               Observable.EveryUpdate().Subscribe(_ =>
-               {
-                   if (networkIdentityComponent.IsLocalPlayer)
-                   {
-                       OnUpdate?.Invoke();
-                   }
-                   var e = timelineDict.GetEnumerator();
-                   while (e.MoveNext())
-                   {
-                       UpdateTimeline(entity, e.Current.Key, e.Current.Value);
-                   }
-               }).AddTo(networkIdentityComponent.Disposer);
-           });
-        }
-        else
-        {
-            Observable.EveryUpdate().Subscribe(_ =>
+            for (int i = 0; i < networkGroupData.Group.Entities.Count; i++)
             {
-                OnUpdate?.Invoke();
+                if (networkGroupData.Group.Entities[i] == null) { continue; }
+                var entity = networkGroupData.Group.Entities[i];
+                if (!entity.HasComponent<NetworkIdentityComponent>()) { continue; }
+                var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
+                if (networkIdentityComponent.IsLocalPlayer)
+                {
+                    OnUpdate?.Invoke();
+                }
                 var e = timelineDict.GetEnumerator();
                 while (e.MoveNext())
                 {
-                    UpdateTimeline(e.Current.Key, e.Current.Value);
+                    UpdateTimeline(entity, e.Current.Key, e.Current.Value);
                 }
-            });
+            }
+        }
+        else
+        {
+            OnUpdate?.Invoke();
+            var e = timelineDict.GetEnumerator();
+            while (e.MoveNext())
+            {
+                UpdateTimeline(e.Current.Key, e.Current.Value);
+            }
         }
     }
 
@@ -346,5 +342,12 @@ public class NetworkGroup : IDisposable
     public void Dispose()
     {
         LockstepUtility.OnRestart -= OnRestart;
+    }
+
+    public int CompareTo(NetworkGroup other)
+    {
+        if (networkGroupData.Priority > other.networkGroupData.Priority) { return 1; }
+        else if (networkGroupData.Priority < other.networkGroupData.Priority) { return -1; }
+        return 0;
     }
 }

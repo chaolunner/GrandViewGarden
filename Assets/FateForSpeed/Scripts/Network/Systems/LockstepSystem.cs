@@ -21,13 +21,9 @@ public class LockstepSystem : NetworkSystemBehaviour
 
     private void Update()
     {
+        LockstepFactory.Update();
         UserInputs userInputs = LockstepUtility.GetUserInputs();
         byte[] dataBytes = MessagePackUtility.Serialize(userInputs);
         NetworkSystem.Publish(RequestCode.Input, dataBytes);
-    }
-
-    public override void OnDisable()
-    {
-        base.OnDisable();
     }
 }

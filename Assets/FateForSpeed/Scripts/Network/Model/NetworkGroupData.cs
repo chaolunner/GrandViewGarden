@@ -4,13 +4,15 @@ public struct NetworkGroupData
 {
     public IGroup Group;
     public bool UseForecast;
+    public int Priority;
     public int MaxForecastSteps;
     public float FixedDeltaTime;
 
-    public NetworkGroupData(IGroup group, bool useForecast = LockstepSettings.UseForecast, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
+    public NetworkGroupData(IGroup group, bool useForecast = LockstepSettings.UseForecast, int priority = (int)LockstepSettings.Priority.Middle, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
     {
         Group = group;
         UseForecast = useForecast;
+        Priority = priority;
         MaxForecastSteps = maxForecastSteps;
         FixedDeltaTime = fixedDeltaTime;
     }
@@ -24,6 +26,8 @@ public struct NetworkGroupData
             if (Group != null) { hashCode = (hashCode * 23) + Group.GetHashCode(); }
 
             hashCode = (hashCode * 23) + (UseForecast ? 1 : 0);
+
+            hashCode = (hashCode * 23) + Priority;
 
             hashCode = (hashCode * 23) + MaxForecastSteps;
 
@@ -40,11 +44,11 @@ public struct NetworkGroupData
 
     public static bool operator ==(NetworkGroupData lhs, NetworkGroupData rhs)
     {
-        return lhs.Group == rhs.Group && lhs.UseForecast == rhs.UseForecast && lhs.MaxForecastSteps == rhs.MaxForecastSteps && lhs.FixedDeltaTime == rhs.FixedDeltaTime;
+        return lhs.Group == rhs.Group && lhs.UseForecast == rhs.UseForecast && lhs.Priority == rhs.Priority && lhs.MaxForecastSteps == rhs.MaxForecastSteps && lhs.FixedDeltaTime == rhs.FixedDeltaTime;
     }
 
     public static bool operator !=(NetworkGroupData lhs, NetworkGroupData rhs)
     {
-        return lhs.Group != rhs.Group || lhs.UseForecast != rhs.UseForecast || lhs.MaxForecastSteps != rhs.MaxForecastSteps || lhs.FixedDeltaTime != rhs.FixedDeltaTime;
+        return lhs.Group != rhs.Group || lhs.UseForecast != rhs.UseForecast || lhs.Priority != rhs.Priority || lhs.MaxForecastSteps != rhs.MaxForecastSteps || lhs.FixedDeltaTime != rhs.FixedDeltaTime;
     }
 }
