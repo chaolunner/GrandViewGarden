@@ -393,51 +393,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainMenuPanel
       objectReference: {fileID: 0}
-    - target: {fileID: 114451668501570720, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[0].Target
-      value: 
-      objectReference: {fileID: 1079928149}
-    - target: {fileID: 114451668501570720, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[1].Target
-      value: 
-      objectReference: {fileID: 354836999}
-    - target: {fileID: 114451668501570720, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[2].Target
-      value: 
-      objectReference: {fileID: 1628423591}
-    - target: {fileID: 114451668501570720, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[3].Target
-      value: 
-      objectReference: {fileID: 1025084824}
-    - target: {fileID: 114459908671370816, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114526093503652138, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114526093503652138, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114918328551067384, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: Components.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114918328551067384, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: Components.Array.data[3]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 224194023051777302, guid: b6cf654f70efcab44a7a97ad81647906,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -476,6 +431,21 @@ PrefabInstance:
     - target: {fileID: 224194023051777302, guid: b6cf654f70efcab44a7a97ad81647906,
         type: 3}
       propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224194023051777302, guid: b6cf654f70efcab44a7a97ad81647906,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224194023051777302, guid: b6cf654f70efcab44a7a97ad81647906,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224194023051777302, guid: b6cf654f70efcab44a7a97ad81647906,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224194023051777302, guid: b6cf654f70efcab44a7a97ad81647906,
@@ -527,31 +497,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4938742672576750715, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4938742672576750715, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[0].EventType
-      value: FSMButtonClickedEvent
-      objectReference: {fileID: 0}
-    - target: {fileID: 4938742672576750715, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[1].EventType
-      value: FSMButtonClickedEvent
-      objectReference: {fileID: 0}
-    - target: {fileID: 4938742672576750715, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[2].EventType
-      value: FSMButtonClickedEvent
-      objectReference: {fileID: 0}
-    - target: {fileID: 4938742672576750715, guid: b6cf654f70efcab44a7a97ad81647906,
-        type: 3}
-      propertyPath: targets.Array.data[3].EventType
-      value: FSMButtonClickedEvent
       objectReference: {fileID: 0}
     - target: {fileID: 4938742672576750715, guid: b6cf654f70efcab44a7a97ad81647906,
         type: 3}
@@ -1252,7 +1197,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 0.5
+  m_padding: 0
   m_canvasRenderer: {fileID: 1134274762}
   m_TextComponent: {fileID: 1879712942}
   m_materialReferenceIndex: 1
