@@ -1,12 +1,12 @@
-# FateForSpeed
+# Grand View Garden
 
 Created by chaolun
 
-It's a game project based on the [UnityFramework](https://github.com/chaolunner/UnityFramework) framework to show some features and usage of the framework.
+Let's see what you can do in Unity and how to use [UnityFramework](https://github.com/chaolunner/UnityFramework) and [UnityFramework](https://github.com/chaolunner/ServerFramework).
 
 Reference
 ---
 
-* [FateForSpeed/wiki](https://github.com/chaolunner/FateForSpeed/wiki)
+* [GrandViewGarden/wiki](https://github.com/chaolunner/GrandViewGarden/wiki)
 
-  FateForSpeed documents.
+  GrandViewGarden documents.

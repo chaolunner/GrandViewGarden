@@ -7,7 +7,7 @@ public class BuildUtility
 {
     private static string[] Scenes = FindEnabledEditorScenes();
 
-    private static string FileNameWithoutExtension = "FateForSpeed";
+    private static string FileNameWithoutExtension = "GrandViewGarden";
     private static string Path = "Builds";
 
     [MenuItem("Tools/Builds/Build Android")]
