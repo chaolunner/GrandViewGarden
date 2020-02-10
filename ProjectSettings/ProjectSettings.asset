@@ -156,9 +156,9 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.upsurge.fateforspeed
-    Standalone: com.Upsurge.FateForSpeed
-    iOS: com.upsurge.fateforspeed
+    Android: com.upsurge.grandviewgarden
+    Standalone: com.upsurge.grandviewgarden
+    iOS: com.upsurge.grandviewgarden
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
@@ -754,14 +754,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: FateForSpeed
+  metroPackageName: GrandViewGarden
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: FateForSpeed
+  metroApplicationDescription: GrandViewGarden
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -835,7 +835,7 @@ PlayerSettings:
   apiCompatibilityLevel: 3
   cloudProjectId: 39a0628b-7d80-4a8f-b089-b88fe949137d
   framebufferDepthMemorylessMode: 0
-  projectName: FateForSpeed
+  projectName: GrandViewGarden
   organizationId: unieasy
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0

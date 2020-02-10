@@ -2,7 +2,7 @@
 
 Created by chaolun
 
-Let's see what you can do in Unity and how to use [UnityFramework](https://github.com/chaolunner/UnityFramework) and [UnityFramework](https://github.com/chaolunner/ServerFramework).
+Let's see what you can do in Unity and how to use [UnityFramework](https://github.com/chaolunner/UnityFramework) and [ServerFramework](https://github.com/chaolunner/ServerFramework).
 
 Reference
 ---
