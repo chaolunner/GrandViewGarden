@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/FateForSpeed/Scenes/Overview.unity
+    path: Assets/GrandViewGarden/Scenes/Overview.unity
     guid: a11184a1c9e77fb408a4ed56e3918dea
   - enabled: 1
-    path: Assets/FateForSpeed/Scenes/Gameplay.unity
+    path: Assets/GrandViewGarden/Scenes/Gameplay.unity
     guid: 6bbbcdf515627ec4c82927f4dbecd2a6
   - enabled: 1
-    path: Assets/FateForSpeed/Scenes/Network.unity
+    path: Assets/GrandViewGarden/Scenes/Network.unity
     guid: 12b58c31b721cbb4891de270880f24f9
   m_configObjects: {}
