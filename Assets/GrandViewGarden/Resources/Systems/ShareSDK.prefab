@@ -1,0 +1,342 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4395117203047192311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2751278442010468152}
+  - component: {fileID: 5670560657157727824}
+  - component: {fileID: 9062585285506274642}
+  m_Layer: 0
+  m_Name: ShareSDK
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2751278442010468152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4395117203047192311}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 985969936632981644}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5670560657157727824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4395117203047192311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce741a935e6eca44692af4174752d2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Components:
+  - {fileID: 9062585285506274642}
+  RuntimeComponents: []
+  ScriptableComponents: []
+  AutoUpdate: 1
+--- !u!114 &9062585285506274642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4395117203047192311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4830ec2df6a42bd9bedf82f294ba96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  appKey: 2e00a2d3bf260
+  appSecret: c7f3baf02fc99b69e481e18718f6e4a5
+  customAssociatedDomains: []
+  devInfo:
+    sinaweibo:
+      Enable: 0
+      app_key: 568898243
+      app_secret: 38a4f8204cc784f81f9f0daaf31e02e3
+      redirect_uri: http://www.sharesdk.cn
+    tencentweibo:
+      Enable: 0
+      app_key: 801307650
+      app_secret: ae36f4ee3946e1cbb98d6965b0b2ff5c
+      redirect_uri: http://sharesdk.cn
+    facebook:
+      Enable: 0
+      api_key: 107704292745179
+      app_secret: 38053202e1a5fe26c80c753071f0b573
+      display_name: ShareSDK
+    twitter:
+      Enable: 0
+      consumer_key: viOnkeLpHBKs6KXV7MPpeGyzE
+      consumer_secret: NJEglQUy2rqZ9Io9FcAU9p17omFqbORknUpRrCDOK46aAbIiey
+      redirect_uri: http://mob.com
+    email:
+      Enable: 1
+    shortMessage:
+      Enable: 1
+    douban:
+      Enable: 0
+      api_key: 02e2cbe5ca06de5908a863b15e149b0b
+      secret: 9f1e7b4f71304f2f
+      redirect_uri: http://www.sharesdk.cn
+    renren:
+      Enable: 0
+      app_id: 226427
+      app_key: fc5b8aed373c4c27a05b712acba0f8c3
+      secret_key: f29df781abdd4f49beca5a2194676ca4
+    googlePlus:
+      Enable: 0
+      client_id: 232554794995.apps.googleusercontent.com
+      client_secret: PEdFgtrMw97aCvf0joQj7EMk
+      redirect_uri: http://localhost
+    kaiXin:
+      Enable: 0
+      api_key: 358443394194887cee81ff5890870c7c
+      secret_key: da32179d859c016169f66d90b6db2a23
+      redirect_uri: http://www.sharesdk.cn
+    pocket:
+      Enable: 0
+      consumer_key: 11496-de7c8c5eb25b2c9fcdc2b627
+      redirect_uri: pocketapp1234
+    instagram:
+      Enable: 0
+      client_id: ff68e3216b4f4f989121aa1c2962d058
+      client_secret: 1b2e82f110264869b3505c3fe34e31a1
+      redirect_uri: http://sharesdk.cn
+    linkedIn:
+      Enable: 0
+      api_key: ejo5ibkye3vo
+      secret_key: cC7B2jpxITqPLZ5M
+      redirect_url: http://sharesdk.cn
+    tumblr:
+      Enable: 0
+      consumer_key: 2QUXqO9fcgGdtGG1FcvML6ZunIQzAEL8xY6hIaxdJnDti2DYwM
+      consumer_secret: 3Rt0sPFj7u2g39mEVB3IBpOzKnM3JnTtxX2bao2JKk4VV1gtNo
+      callback_url: http://sharesdk.cn
+    youDao:
+      Enable: 0
+      consumer_key: dcde25dca105bcc36884ed4534dab940
+      consumer_secret: d98217b4020e7f1874263795f44838fe
+      oauth_callback: http://www.sharesdk.cn/
+    flickr:
+      Enable: 0
+      api_key: 33d833ee6b6fca49943363282dd313dd
+      api_secret: 3a2c5b42a8fbb8bb
+    evernote:
+      Enable: 0
+      consumer_key: sharesdk-7807
+      consumer_secret: d05bf86993836004
+      isSandBox: 1
+    whatsApp:
+      Enable: 0
+    line:
+      Enable: 0
+      channel_id: 1521201864
+    dropbox:
+      Enable: 0
+      app_key: i5vw2mex1zcgjcj
+      app_secret: 3i9xifsgb4omr0s
+      oauth_callback: https://www.sharesdk.cn
+    vkontakte:
+      Enable: 0
+      application_id: 3921561
+      secret_key: 6Qf883ukLDyz4OBepYF1
+    pinterest:
+      Enable: 0
+      client_id: 4797078908495202393
+    mingdao:
+      Enable: 0
+      app_key: EEEE9578D1D431D3215D8C21BF5357E3
+      app_secret: 5EDE59F37B3EFA8F65EEFB9976A4E933
+      redirect_uri: http://sharesdk.cn
+    kakaoTalk:
+      Enable: 0
+      app_key: 48d3f524e4a636b08d81b3ceb50f1003
+      rest_api_key: ac360fa50b5002637590d24108e6cb10
+      redirect_uri: http://www.mob.com/oauth
+    kakaoStory:
+      Enable: 0
+      app_key: 48d3f524e4a636b08d81b3ceb50f1003
+      rest_api_key: ac360fa50b5002637590d24108e6cb10
+      redirect_uri: http://www.mob.com/oauth
+    qq:
+      Enable: 1
+      app_id: 100371282
+      app_key: aed9b0303e3ed1e27bae87c33761161d
+    qzone:
+      Enable: 1
+      app_id: 100371282
+      app_key: aed9b0303e3ed1e27bae87c33761161d
+    wechat:
+      Enable: 1
+      app_id: wxfdec0b2b3959fa49
+      app_secret: dea9d98d033f4e8d8f10e9e93a390167
+      app_universalLink: https://ayw0.t4m.cn/
+    wechatMoments:
+      Enable: 1
+      app_id: wxfdec0b2b3959fa49
+      app_secret: dea9d98d033f4e8d8f10e9e93a390167
+      app_universalLink: https://ayw0.t4m.cn/
+    wechatFavorites:
+      Enable: 1
+      app_id: wxfdec0b2b3959fa49
+      app_secret: dea9d98d033f4e8d8f10e9e93a390167
+      app_universalLink: https://ayw0.t4m.cn/
+    yixin:
+      Enable: 0
+      app_id: yx0d9a9f9088ea44d78680f3274da1765f
+      app_secret: 1a5bd421ae089c3
+      redirect_uri: https://open.yixin.im/resource/oauth2_callback.html
+    yixinMoments:
+      Enable: 0
+      app_id: yx0d9a9f9088ea44d78680f3274da1765f
+      app_secret: 1a5bd421ae089c3
+      redirect_uri: https://open.yixin.im/resource/oauth2_callback.html
+    facebookMessenger:
+      Enable: 0
+      api_key: 107704292745179
+    instapaper:
+      Enable: 0
+      consumer_key: 4rDJORmcOcSAZL1YpqGHRI605xUvrLbOhkJ07yO0wWrYrc61FA
+      consumer_secret: GNr1GespOQbrm8nvd7rlUsyRQsIo3boIbMguAl9gfpdL0aKZWe
+    aliSocial:
+      Enable: 1
+      app_id: 2015072400185895
+    aliSocialMoments:
+      Enable: 1
+      app_id: 2015072400185895
+    dingTalk:
+      Enable: 0
+      app_id: dingoanxyrpiscaovl4qlw
+    youtube:
+      Enable: 1
+      client_id: 906418427202-jinnbqal1niq4s8isbg2ofsqc5ddkcgr.apps.googleusercontent.com
+      client_secret: 
+      redirect_uri: http://localhost
+    meiPai:
+      Enable: 0
+      app_key: 1089867596
+    cmcc:
+      Enable: 0
+      app_id: 300011862498
+      app_key: 38D9CA1CC280C5F207E2C343745D4A4B
+      displayUI: 1
+    reddit:
+      Enable: 0
+      app_key: ObzXn50T7Cg0Xw
+      redirect_uri: https://www.mob.com/reddit_callback
+    telegram:
+      Enable: 0
+      bot_token: 600852601:AAElp9J93JiYevLocDIEYPhEYulnMFuB_nQ
+      bot_domain: http://127.0.0.1
+    eSurfing:
+      Enable: 0
+      app_key: 8148612606
+      app_secret: mCltrhUqwshFa86egDTs0491ibaAulKA
+      app_name: shareSDK
+    facebookAccount:
+      Enable: 1
+      app_id: 1412473428822331
+      client_token: c30c08723aa8c48fbd5e01d1c3103891
+    douyin:
+      Enable: 1
+      app_key: aw9ivykfjvi4hpwo
+      app_secret: 42b4caa6bda60bd49f05f06d0a4956e1
+    wework:
+      Enable: 0
+      corp_id: wwa21eaecf93f0e3ba
+      app_secret: dW7e27P7Hc8NiYdRxnbTeOLgfI1ugR72e-PM8uusq2s
+      agent_id: 1000012
+      app_key: wwautha21eaecf93f0e3ba000012
+    copy:
+      Enable: 1
+    yixinFavorites:
+      Enable: 0
+      app_id: yx0d9a9f9088ea44d78680f3274da1765f
+      app_secret: 1a5bd421ae089c3
+      redirect_uri: https://open.yixin.im/resource/oauth2_callback.html
+    yixinSeries:
+      Enable: 0
+      app_id: yx0d9a9f9088ea44d78680f3274da1765f
+      app_secret: 1a5bd421ae089c3
+      redirect_uri: https://open.yixin.im/resource/oauth2_callback.html
+    wechatSeries:
+      Enable: 1
+      app_id: wxfdec0b2b3959fa49
+      app_secret: dea9d98d033f4e8d8f10e9e93a390167
+      app_universalLink: https://ayw0.t4m.cn/
+    qqSeries:
+      Enable: 1
+      app_id: 100371282
+      app_key: aed9b0303e3ed1e27bae87c33761161d
+    kakaoSeries:
+      Enable: 0
+      app_key: 48d3f524e4a636b08d81b3ceb50f1003
+      rest_api_key: ac360fa50b5002637590d24108e6cb10
+      redirect_uri: http://www.mob.com/oauth
+    evernoteInternational:
+      Enable: 0
+      consumer_key: sharesdk-7807
+      consumer_secret: d05bf86993836004
+      isSandBox: 0
+    apple:
+      Enable: 1
+--- !u!1 &8087968762547636045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 985969936632981644}
+  - component: {fileID: 3637239081535911626}
+  m_Layer: 0
+  m_Name: ShareSDKSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &985969936632981644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8087968762547636045}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2751278442010468152}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3637239081535911626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8087968762547636045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612996dc6f0304443810a2159961e621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

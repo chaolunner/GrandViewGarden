@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Upsurge
+  companyName: unieasy
   productName: GrandViewGarden
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -47,7 +47,7 @@ PlayerSettings:
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
-  m_ActiveColorSpace: 1
+  m_ActiveColorSpace: 0
   m_MTRendering: 1
   m_StackTraceTypes: 010000000100000001000000010000000100000001000000
   iosShowActivityIndicatorOnLoading: -1
@@ -156,9 +156,9 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.upsurge.grandviewgarden
-    Standalone: com.upsurge.grandviewgarden
-    iOS: com.upsurge.grandviewgarden
+    Android: com.unieasy.grandviewgarden
+    Standalone: com.unieasy.grandviewgarden
+    iOS: com.unieasy.grandviewgarden
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
@@ -295,6 +295,13 @@ PlayerSettings:
       m_Icon: {fileID: 2800000, guid: d853126a1e4dd9645b3fb7ffff5c5a54, type: 3}
       m_Width: 36
       m_Height: 36
+      m_Kind: 0
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 128
+      m_Height: 128
       m_Kind: 0
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: Android
@@ -813,6 +820,10 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 0
+    Collab: 0
+    ErrorHub: 0
+    Hub: 0
     UNet: 1
   luminIcon:
     m_Name: 
@@ -833,7 +844,7 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 3
-  cloudProjectId: 39a0628b-7d80-4a8f-b089-b88fe949137d
+  cloudProjectId: 3755cf45-8631-488a-b409-93ceded40d2f
   framebufferDepthMemorylessMode: 0
   projectName: GrandViewGarden
   organizationId: unieasy
