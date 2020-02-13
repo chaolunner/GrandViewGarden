@@ -39,20 +39,20 @@ public class UserSystem : NetworkSystemBehaviour
                 userComponent.IsLocalPlayer = evt.IsLocalPlayer;
                 userComponent.IsRoomOwner.Value = evt.IsRoomOwner;
                 userComponent.UserId = evt.UserId;
-                userComponent.Username.Value = evt.Username;
+                userComponent.UserName.Value = evt.Username;
                 userComponent.TotalCount.Value = evt.TotalCount;
                 userComponent.WinCount.Value = evt.WinCount;
             });
         }).AddTo(this.Disposer);
 
-        NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
+        NetworkSystem.Receive(RequestCode.QuitRoom).Subscribe(data =>
         {
             foreach (var entity in UserComponents.Entities)
             {
                 var userComponent = entity.GetComponent<UserComponent>();
                 var viewComponent = entity.GetComponent<ViewComponent>();
 
-                if (userComponent.UserId == int.Parse(data))
+                if (userComponent.UserId == int.Parse(data.StringValue))
                 {
                     if (userComponent.IsLocalPlayer || userComponent.IsRoomOwner.Value)
                     {

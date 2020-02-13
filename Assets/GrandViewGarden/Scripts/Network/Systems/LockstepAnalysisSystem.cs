@@ -38,7 +38,7 @@ public class LockstepAnalysisSystem : NetworkSystemBehaviour
         base.OnEnable();
         NetwrokTimeline.OnForward(data =>
         {
-            if (data.TickId % Interval == 0)
+            if (NetworkSystem.Mode != SessionMode.Offline && data.TickId % Interval == 0)
             {
                 string msg = PackMessage();
                 analyzedDataDict.Add(data.TickId, msg);
@@ -46,11 +46,11 @@ public class LockstepAnalysisSystem : NetworkSystemBehaviour
             }
             return null;
         }).AddTo(this.Disposer);
-        NetworkSystem.Receive<string>(RequestCode.LockstepAnalysis).Subscribe(data =>
+        NetworkSystem.Receive(RequestCode.LockstepAnalysis).Subscribe(data =>
         {
             int tickId;
             int returnCode;
-            string[] strs = data.Split(VerticalBar);
+            string[] strs = data.StringValue.Split(VerticalBar);
             if (strs.Length == 2 && int.TryParse(strs[0], out tickId))
             {
                 if (analyzedDataDict.ContainsKey(tickId))
@@ -60,7 +60,7 @@ public class LockstepAnalysisSystem : NetworkSystemBehaviour
                 }
                 else { Debug.LogWarning(InsufficientDataWarning); }
             }
-            else if (int.TryParse(data, out returnCode) && (ReturnCode)returnCode == ReturnCode.Success) { }
+            else if (int.TryParse(data.StringValue, out returnCode) && (ReturnCode)returnCode == ReturnCode.Success) { }
             else { Debug.LogError(DataError); }
         }).AddTo(this.Disposer);
     }

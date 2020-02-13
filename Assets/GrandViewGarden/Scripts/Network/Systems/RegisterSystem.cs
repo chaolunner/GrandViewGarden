@@ -50,12 +50,12 @@ public class RegisterSystem : NetworkSystemBehaviour
             }
         }).AddTo(this.Disposer);
 
-        NetworkSystem.Receive<string>(RequestCode.Register).Subscribe(OnRegister).AddTo(this.Disposer);
+        NetworkSystem.Receive(RequestCode.Register).Subscribe(OnRegister).AddTo(this.Disposer);
     }
 
-    private void OnRegister(string data)
+    private void OnRegister(ReceiveData data)
     {
-        ReturnCode returnCode = (ReturnCode)int.Parse(data);
+        ReturnCode returnCode = (ReturnCode)int.Parse(data.StringValue);
         if (returnCode == ReturnCode.Success)
         {
             EventSystem.Send(new MessageEvent(RegisterSuccessFeedback, LogType.Log));

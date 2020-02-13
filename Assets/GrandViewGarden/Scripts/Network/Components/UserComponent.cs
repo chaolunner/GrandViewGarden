@@ -6,7 +6,7 @@ public class UserComponent : ComponentBehaviour
     public bool IsLocalPlayer;
     public BoolReactiveProperty IsRoomOwner;
     public int UserId;
-    public StringReactiveProperty Username;
+    public StringReactiveProperty UserName;
     public IntReactiveProperty TotalCount;
     public IntReactiveProperty WinCount;
 }

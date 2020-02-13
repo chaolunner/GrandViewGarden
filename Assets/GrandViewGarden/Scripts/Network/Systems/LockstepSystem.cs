@@ -8,13 +8,20 @@ public class LockstepSystem : NetworkSystemBehaviour
     {
         base.OnEnable();
 
-        NetworkSystem.Receive<string>(RequestCode.Input).Subscribe(data =>
+        NetworkSystem.Receive(RequestCode.Input).Subscribe(data =>
         {
+            if (data.Mode == SessionMode.Offline)
+            {
+                UserInputs userInputs = MessagePackUtility.Deserialize<UserInputs>(data.Value);
+                userInputs.UserId = 0;
+                LockstepInputs lockstepInputs = LockstepUtility.CreateLockstepInputs(userInputs);
+                NetworkSystem.Publish(RequestCode.Lockstep, MessagePackUtility.Serialize(lockstepInputs));
+            }
         }).AddTo(this.Disposer);
 
-        NetworkSystem.Receive<byte[]>(RequestCode.Lockstep).Subscribe(dataBytes =>
+        NetworkSystem.Receive(RequestCode.Lockstep).Subscribe(data =>
         {
-            LockstepInputs lockstepInputs = MessagePackUtility.Deserialize<LockstepInputs>(dataBytes);
+            LockstepInputs lockstepInputs = MessagePackUtility.Deserialize<LockstepInputs>(data.Value);
             LockstepUtility.AddToTimeline(lockstepInputs);
         }).AddTo(this.Disposer);
     }

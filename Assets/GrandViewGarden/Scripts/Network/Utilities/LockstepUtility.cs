@@ -167,4 +167,13 @@ public static class LockstepUtility
         }
         return null;
     }
+
+    public static LockstepInputs CreateLockstepInputs(UserInputs userInputs)
+    {
+        LockstepInputs lockstepInputs = new LockstepInputs();
+        lockstepInputs.UserInputs = new UserInputs[1][] { new UserInputs[] { userInputs } };
+        lockstepInputs.TickId = userInputs.TickId;
+        lockstepInputs.DeltaTime = (Fix64)0.02f;
+        return lockstepInputs;
+    }
 }

@@ -41,12 +41,12 @@ public class LoginSystem : NetworkSystemBehaviour
             }
         }).AddTo(this.Disposer);
 
-        NetworkSystem.Receive<string>(RequestCode.Login).Subscribe(OnLogin).AddTo(this.Disposer);
+        NetworkSystem.Receive(RequestCode.Login).Subscribe(OnLogin).AddTo(this.Disposer);
     }
 
-    private void OnLogin(string data)
+    private void OnLogin(ReceiveData data)
     {
-        string[] strs = data.Split(Separator);
+        string[] strs = data.StringValue.Split(Separator);
         ReturnCode returnCode = (ReturnCode)int.Parse(strs[0]);
         if (returnCode == ReturnCode.Success)
         {

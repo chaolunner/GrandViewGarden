@@ -88,7 +88,7 @@ public class RoomSystem : NetworkSystemBehaviour
 
             if (userComponent.IsRoomOwner.Value)
             {
-                userComponent.Username.DistinctUntilChanged().Where(_ => roomComponent.User1NameText).Subscribe(name =>
+                userComponent.UserName.DistinctUntilChanged().Where(_ => roomComponent.User1NameText).Subscribe(name =>
                 {
                     roomComponent.User1NameText.text = name;
                 }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);
@@ -105,7 +105,7 @@ public class RoomSystem : NetworkSystemBehaviour
             }
             else if (UserComponents.Entities.Count > 1)
             {
-                userComponent.Username.DistinctUntilChanged().Where(_ => roomComponent.User2NameText).Subscribe(name =>
+                userComponent.UserName.DistinctUntilChanged().Where(_ => roomComponent.User2NameText).Subscribe(name =>
                 {
                     roomComponent.User2NameText.text = name;
                 }).AddTo(this.Disposer).AddTo(roomComponent.Disposer).AddTo(userComponent.Disposer);

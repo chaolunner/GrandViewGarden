@@ -58,7 +58,7 @@ public class LobbySystem : NetworkSystemBehaviour
 
                 if (userComponent.IsLocalPlayer)
                 {
-                    userComponent.Username.DistinctUntilChanged().Where(_ => lobbyComponent.UsernameText).Subscribe(name =>
+                    userComponent.UserName.DistinctUntilChanged().Where(_ => lobbyComponent.UsernameText).Subscribe(name =>
                     {
                         lobbyComponent.UsernameText.text = name;
                     }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
@@ -74,9 +74,9 @@ public class LobbySystem : NetworkSystemBehaviour
                     }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
                 }
 
-                NetworkSystem.Receive<string>(RequestCode.QuitRoom).Subscribe(data =>
+                NetworkSystem.Receive(RequestCode.QuitRoom).Subscribe(data =>
                 {
-                    if (userComponent.UserId == int.Parse(data) && (userComponent.IsLocalPlayer || userComponent.IsRoomOwner.Value))
+                    if (userComponent.UserId == int.Parse(data.StringValue) && (userComponent.IsLocalPlayer || userComponent.IsRoomOwner.Value))
                     {
                         var evt = new TriggerEnterEvent();
                         evt.Source = LobbyId;
@@ -85,9 +85,9 @@ public class LobbySystem : NetworkSystemBehaviour
                 }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer).AddTo(userComponent.Disposer);
             }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
-            NetworkSystem.Receive<string>(RequestCode.CreateRoom).Subscribe(data =>
+            NetworkSystem.Receive(RequestCode.CreateRoom).Subscribe(data =>
             {
-                string[] strs = data.Split(Separator);
+                string[] strs = data.StringValue.Split(Separator);
                 ReturnCode returnCode = (ReturnCode)int.Parse(strs[0]);
                 if (returnCode == ReturnCode.Success)
                 {
@@ -102,7 +102,7 @@ public class LobbySystem : NetworkSystemBehaviour
                 }
             }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
-            NetworkSystem.Receive<string>(RequestCode.ListRooms).Subscribe(data =>
+            NetworkSystem.Receive(RequestCode.ListRooms).Subscribe(data =>
             {
                 foreach (var entity3 in RoomItemComponents.Entities)
                 {
@@ -110,9 +110,9 @@ public class LobbySystem : NetworkSystemBehaviour
                     Destroy(viewComponent.Transforms[0].gameObject);
                 }
 
-                if (!string.IsNullOrEmpty(data))
+                if (!string.IsNullOrEmpty(data.StringValue))
                 {
-                    string[] str1s = data.Split(VerticalBar);
+                    string[] str1s = data.StringValue.Split(VerticalBar);
                     foreach (var str1 in str1s)
                     {
                         string[] str2s = str1.Split(Separator);
@@ -129,9 +129,9 @@ public class LobbySystem : NetworkSystemBehaviour
                 }
             }).AddTo(this.Disposer).AddTo(lobbyComponent.Disposer);
 
-            NetworkSystem.Receive<string>(RequestCode.JoinRoom).Subscribe(data =>
+            NetworkSystem.Receive(RequestCode.JoinRoom).Subscribe(data =>
             {
-                string[] str1s = data.Split(VerticalBar);
+                string[] str1s = data.StringValue.Split(VerticalBar);
                 ReturnCode returnCode = (ReturnCode)int.Parse(str1s[0]);
                 if (returnCode == ReturnCode.Success)
                 {
