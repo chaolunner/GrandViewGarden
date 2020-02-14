@@ -8,6 +8,7 @@ public class ThridPersonCameraSystem : NetworkSystemBehaviour
     private IGroup ThridPersonCameraComponents;
     private IGroup PlayerControlComponents;
     private const float SmoothTime = 1f;
+    private const float AimDownSightSmooth = 10f;
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -67,10 +68,13 @@ public class ThridPersonCameraSystem : NetworkSystemBehaviour
                         else if (mode == AimMode.AimDownSight && entity1.HasComponent<ShootComponent>())
                         {
                             var shootComponent = entity1.GetComponent<ShootComponent>();
+                            var targetPosition = virtualCamera.Follow.InverseTransformDirection(shootComponent.weapon.transform.position - virtualCamera.Follow.position) + shootComponent.adsPosition;
 
+                            transposer.m_FollowOffset = targetPosition;
                             Observable.EveryUpdate().Subscribe(_ =>
                             {
-                                transposer.m_FollowOffset = virtualCamera.Follow.InverseTransformDirection(shootComponent.weapon.transform.position - virtualCamera.Follow.position) + shootComponent.adsPosition;
+                                targetPosition = virtualCamera.Follow.InverseTransformDirection(shootComponent.weapon.transform.position - virtualCamera.Follow.position) + shootComponent.adsPosition;
+                                transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, targetPosition, AimDownSightSmooth * Time.deltaTime);
                             }).AddTo(this.Disposer).AddTo(playerControlComponent.Disposer).AddTo(thridPersonCameraComponent.smoothDisposer);
                         }
                         else

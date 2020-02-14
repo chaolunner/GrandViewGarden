@@ -6,16 +6,28 @@ using Common;
 
 public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
 {
+    public IGroup Group;
+    public bool UsePhysics;
+    public bool UseForecast;
+    public int Priority;
+    public int MaxForecastSteps;
+    public float FixedDeltaTime;
+
     public event Action OnUpdate;
 
-    private NetworkGroupData networkGroupData;
     private Dictionary<Type[], INetworkTimeline> timelineDict;
     private Dictionary<NetworkId, Dictionary<INetworkTimeline, TimePointWithLerp>> timePointWithLerpDict;
     private Dictionary<INetworkTimeline, TimePointWithLerp> defaultTimePointWithLerpDict;
 
-    public NetworkGroup(NetworkGroupData data)
+    public NetworkGroup(IGroup group, bool usePhysics = LockstepSettings.UsePhysics, bool useForecast = LockstepSettings.UseForecast, int priority = (int)LockstepSettings.Priority.Middle, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
     {
-        networkGroupData = data;
+        Group = group;
+        UsePhysics = usePhysics;
+        UseForecast = useForecast;
+        Priority = priority;
+        MaxForecastSteps = maxForecastSteps;
+        FixedDeltaTime = fixedDeltaTime;
+
         timelineDict = new Dictionary<Type[], INetworkTimeline>();
         timePointWithLerpDict = new Dictionary<NetworkId, Dictionary<INetworkTimeline, TimePointWithLerp>>();
         defaultTimePointWithLerpDict = new Dictionary<INetworkTimeline, TimePointWithLerp>();
@@ -25,12 +37,12 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
 
     public void Update()
     {
-        if (networkGroupData.Group != null)
+        if (Group != null)
         {
-            for (int i = 0; i < networkGroupData.Group.Entities.Count; i++)
+            for (int i = 0; i < Group.Entities.Count; i++)
             {
-                if (networkGroupData.Group.Entities[i] == null) { continue; }
-                var entity = networkGroupData.Group.Entities[i];
+                if (Group.Entities[i] == null) { continue; }
+                var entity = Group.Entities[i];
                 if (!entity.HasComponent<NetworkIdentityComponent>()) { continue; }
                 var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
                 if (networkIdentityComponent.IsLocalPlayer)
@@ -78,7 +90,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
         }
         var timePointWithLerp = timePointWithLerpDict[identity][timeline];
 
-        timePointWithLerp.Begin(Time.deltaTime, networkGroupData.FixedDeltaTime);
+        timePointWithLerp.Begin(Time.deltaTime, FixedDeltaTime);
 
         PushUntilLastStep(entity, inputTypes, timeline);
 
@@ -99,7 +111,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
         }
         var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
 
-        timePointWithLerp.Begin(Time.deltaTime, networkGroupData.FixedDeltaTime);
+        timePointWithLerp.Begin(Time.deltaTime, FixedDeltaTime);
 
         PushUntilLastStep(inputTypes, timeline);
 
@@ -280,7 +292,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
         var networkIdentityComponent = entity.GetComponent<NetworkIdentityComponent>();
         var identity = networkIdentityComponent.Identity;
         var timePointWithLerp = timePointWithLerpDict[identity][timeline];
-        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
+        if (UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
         {
             for (int i = timePointWithLerp.RollbackData.Count - 1; i >= 0; i--)
             {
@@ -293,7 +305,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
     private void Rollback(INetworkTimeline timeline)
     {
         var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
-        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
+        if (UseForecast && !timePointWithLerp.IsPlaying && timePointWithLerp.ForecastData.Count > 0 && timePointWithLerp.RealtimeData.Count > 0)
         {
             for (int i = timePointWithLerp.RollbackData.Count - 1; i >= 0; i--)
             {
@@ -306,7 +318,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
     private void Forecast(NetworkId identity, Type[] inputTypes, INetworkTimeline timeline)
     {
         var timePointWithLerp = timePointWithLerpDict[identity][timeline];
-        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying)
+        if (UseForecast && !timePointWithLerp.IsPlaying)
         {
             var tickId = timePointWithLerp.TickId - 1;
             if (LockstepUtility.HasTickId(tickId))
@@ -315,7 +327,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
                 var userInputData = GetUserInputDataByInputTypes(tickId, identity.UserId, inputTypes);
                 for (int i = 0; i < userInputData.Length; i++)
                 {
-                    timePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), networkGroupData.MaxForecastSteps);
+                    timePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), MaxForecastSteps);
                 }
             }
         }
@@ -324,7 +336,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
     private void Forecast(Type[] inputTypes, INetworkTimeline timeline)
     {
         var timePointWithLerp = defaultTimePointWithLerpDict[timeline];
-        if (networkGroupData.UseForecast && !timePointWithLerp.IsPlaying)
+        if (UseForecast && !timePointWithLerp.IsPlaying)
         {
             var tickId = timePointWithLerp.TickId - 1;
             if (LockstepUtility.HasTickId(tickId))
@@ -333,7 +345,7 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
                 var userInputData = GetUserInputDataByInputTypes(tickId, inputTypes);
                 for (int i = 0; i < userInputData.Length; i++)
                 {
-                    timePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), networkGroupData.MaxForecastSteps);
+                    timePointWithLerp.Forecast(new TimePointData(tickId, deltaTime, userInputData[i]), MaxForecastSteps);
                 }
             }
         }
@@ -346,8 +358,43 @@ public class NetworkGroup : IDisposable, IComparable<NetworkGroup>
 
     public int CompareTo(NetworkGroup other)
     {
-        if (networkGroupData.Priority > other.networkGroupData.Priority) { return 1; }
-        else if (networkGroupData.Priority < other.networkGroupData.Priority) { return -1; }
+        if (Priority > other.Priority) { return 1; }
+        else if (Priority < other.Priority) { return -1; }
         return 0;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hashCode = 17;
+
+            if (Group != null) { hashCode = (hashCode * 23) + Group.GetHashCode(); }
+
+            hashCode = (hashCode * 23) + (UseForecast ? 1 : 0);
+
+            hashCode = (hashCode * 23) + Priority;
+
+            hashCode = (hashCode * 23) + MaxForecastSteps;
+
+            hashCode = (hashCode * 23) + FixedDeltaTime.GetHashCode();
+
+            return hashCode;
+        }
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is NetworkGroup && ((NetworkGroup)obj) == this;
+    }
+
+    public static bool operator ==(NetworkGroup lhs, NetworkGroup rhs)
+    {
+        return lhs.Group == rhs.Group && lhs.UseForecast == rhs.UseForecast && lhs.Priority == rhs.Priority && lhs.MaxForecastSteps == rhs.MaxForecastSteps && lhs.FixedDeltaTime == rhs.FixedDeltaTime;
+    }
+
+    public static bool operator !=(NetworkGroup lhs, NetworkGroup rhs)
+    {
+        return lhs.Group != rhs.Group || lhs.UseForecast != rhs.UseForecast || lhs.Priority != rhs.Priority || lhs.MaxForecastSteps != rhs.MaxForecastSteps || lhs.FixedDeltaTime != rhs.FixedDeltaTime;
     }
 }

@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UniEasy.ECS;
-using UniEasy.Net;
 using Common;
 using UniRx;
 
 public class UserSystem : NetworkSystemBehaviour
 {
+    [SerializeField]
+    private bool offline;
     [SerializeField]
     private GameObject UserPrefab;
     private IGroup UserComponents;
@@ -32,17 +33,7 @@ public class UserSystem : NetworkSystemBehaviour
                     return;
                 }
             }
-            PrefabFactory.Instantiate(UserPrefab, null, false, go =>
-            {
-                var userComponent = go.GetComponent<UserComponent>();
-
-                userComponent.IsLocalPlayer = evt.IsLocalPlayer;
-                userComponent.IsRoomOwner.Value = evt.IsRoomOwner;
-                userComponent.UserId = evt.UserId;
-                userComponent.UserName.Value = evt.Username;
-                userComponent.TotalCount.Value = evt.TotalCount;
-                userComponent.WinCount.Value = evt.WinCount;
-            });
+            CreateUser(evt.IsLocalPlayer, evt.IsRoomOwner, evt.UserId, evt.Username, evt.TotalCount, evt.WinCount);
         }).AddTo(this.Disposer);
 
         NetworkSystem.Receive(RequestCode.QuitRoom).Subscribe(data =>
@@ -66,6 +57,13 @@ public class UserSystem : NetworkSystemBehaviour
                 }
             }
         }).AddTo(this.Disposer);
+
+        if (offline)
+        {
+            CreateUser(true, true, 0, "Offline Player", 0, 0);
+            NetworkSystem.Mode = SessionMode.Offline;
+            LockstepUtility.AddInput(new EventInput(EventCode.GameStart, "True"));
+        }
     }
 
     private void ClearOtherPlayers()
@@ -84,5 +82,20 @@ public class UserSystem : NetworkSystemBehaviour
                 Destroy(viewComponent.Transforms[0].gameObject);
             }
         }
+    }
+
+    private GameObject CreateUser(bool isLocalPlayer, bool isRoomOwner, int userId, string userName, int totalCount, int winCount)
+    {
+        return PrefabFactory.Instantiate(UserPrefab, null, false, go =>
+        {
+            var userComponent = go.GetComponent<UserComponent>();
+
+            userComponent.IsLocalPlayer = isLocalPlayer;
+            userComponent.IsRoomOwner.Value = isRoomOwner;
+            userComponent.UserId = userId;
+            userComponent.UserName.Value = userName;
+            userComponent.TotalCount.Value = totalCount;
+            userComponent.WinCount.Value = winCount;
+        });
     }
 }

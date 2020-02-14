@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3445377553623635591}
   - component: {fileID: 3445377553623635588}
-  - component: {fileID: 4668899991749941938}
   - component: {fileID: 3121376643890584295}
   - component: {fileID: 95076471870661808}
   m_Layer: 0
@@ -52,22 +51,6 @@ MonoBehaviour:
   RuntimeComponents: []
   ScriptableComponents: []
   AutoUpdate: 0
---- !u!54 &4668899991749941938
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3445377553623635594}
-  serializedVersion: 2
-  m_Mass: 0.016
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!136 &3121376643890584295
 CapsuleCollider:
   m_ObjectHideFlags: 0

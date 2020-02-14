@@ -3,19 +3,38 @@ using UniEasy.ECS;
 
 public class LockstepFactory
 {
-    private Dictionary<NetworkGroupData, NetworkGroup> groupDict = new Dictionary<NetworkGroupData, NetworkGroup>();
     private List<NetworkGroup> groups = new List<NetworkGroup>();
+    private List<NetworkGroup> physicsGroups = new List<NetworkGroup>();
 
-    public NetworkGroup Create(IGroup group = null, bool useForecast = LockstepSettings.UseForecast, int priority = (int)LockstepSettings.Priority.Middle, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
+    public NetworkGroup Create(IGroup group = null, bool usePhysics = LockstepSettings.UsePhysics, bool useForecast = LockstepSettings.UseForecast, int priority = (int)LockstepSettings.Priority.Middle, int maxForecastSteps = LockstepSettings.MaxForecastSteps, float fixedDeltaTime = LockstepSettings.FixedDeltaTime)
     {
-        var data = new NetworkGroupData(group, useForecast, priority, maxForecastSteps, fixedDeltaTime);
-        if (!groupDict.ContainsKey(data))
+        var networkGroup = new NetworkGroup(group, usePhysics, useForecast, priority, maxForecastSteps, fixedDeltaTime);
+        if (usePhysics)
         {
-            groupDict.Add(data, new NetworkGroup(data));
-            groups.Add(groupDict[data]);
-            groups.Sort();
+            if (!physicsGroups.Contains(networkGroup))
+            {
+                physicsGroups.Add(networkGroup);
+                physicsGroups.Sort();
+            }
+            return physicsGroups.Find(g => g.Equals(networkGroup));
         }
-        return groupDict[data];
+        else
+        {
+            if (!groups.Contains(networkGroup))
+            {
+                groups.Add(networkGroup);
+                groups.Sort();
+            }
+            return groups.Find(g => g.Equals(networkGroup));
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        for (int i = 0; i < physicsGroups.Count; i++)
+        {
+            physicsGroups[i].Update();
+        }
     }
 
     public void Update()
@@ -26,12 +45,16 @@ public class LockstepFactory
         }
     }
 
-    public void Destroy(NetworkGroupData data)
+    public void Destroy(NetworkGroup networkGroup)
     {
-        if (groupDict.ContainsKey(data))
+        networkGroup.Dispose();
+        if (physicsGroups.Contains(networkGroup))
         {
-            groupDict[data].Dispose();
-            groupDict.Remove(data);
+            physicsGroups.Remove(networkGroup);
+        }
+        if (groups.Contains(networkGroup))
+        {
+            groups.Remove(networkGroup);
         }
     }
 }

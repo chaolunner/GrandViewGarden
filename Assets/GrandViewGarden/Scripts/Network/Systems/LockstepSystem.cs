@@ -33,4 +33,9 @@ public class LockstepSystem : NetworkSystemBehaviour
         byte[] dataBytes = MessagePackUtility.Serialize(userInputs);
         NetworkSystem.Publish(RequestCode.Input, dataBytes);
     }
+
+    private void FixedUpdate()
+    {
+        LockstepFactory.FixedUpdate();
+    }
 }

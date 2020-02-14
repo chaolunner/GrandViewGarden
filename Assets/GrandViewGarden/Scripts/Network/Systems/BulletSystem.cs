@@ -1,5 +1,4 @@
-﻿using UniRx.Triggers;
-using UnityEngine;
+﻿using UnityEngine;
 using UniEasy.ECS;
 using UniEasy.DI;
 using Common;
@@ -16,8 +15,8 @@ public class BulletSystem : NetworkSystemBehaviour
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
-        BulletComponents = this.Create(typeof(BulletComponent), typeof(NetworkIdentityComponent), typeof(ViewComponent), typeof(Rigidbody));
-        Network = LockstepFactory.Create(BulletComponents);
+        BulletComponents = this.Create(typeof(BulletComponent), typeof(NetworkIdentityComponent), typeof(ViewComponent), typeof(CapsuleCollider));
+        Network = LockstepFactory.Create(BulletComponents, usePhysics: true);
         NetwrokTimeline = Network.CreateTimeline(typeof(EventInput));
     }
 
@@ -27,44 +26,35 @@ public class BulletSystem : NetworkSystemBehaviour
         BulletComponents.OnAdd().Subscribe(entity =>
         {
             var bulletComponent = entity.GetComponent<BulletComponent>();
-            var rigidbody = entity.GetComponent<Rigidbody>();
+            var viewComponent = entity.GetComponent<ViewComponent>();
+            var capsuleCollider = entity.GetComponent<CapsuleCollider>();
 
-            bulletComponent.OnEnableAsObservable().Subscribe(_ =>
-            {
-                rigidbody.WakeUp();
-            }).AddTo(this.Disposer).AddTo(bulletComponent.Disposer);
-
-            bulletComponent.OnDisableAsObservable().Subscribe(_ =>
-            {
-                bulletComponent.Collision = null;
-                rigidbody.isKinematic = false;
-                rigidbody.Sleep();
-            }).AddTo(this.Disposer).AddTo(bulletComponent.Disposer);
-
-            bulletComponent.OnCollisionEnterAsObservable().Subscribe(col =>
-            {
-                bulletComponent.Collision = col;
-                rigidbody.isKinematic = true;
-            }).AddTo(this.Disposer).AddTo(bulletComponent.Disposer);
+            bulletComponent.Radius = 0.5f * Mathf.Max(2 * capsuleCollider.radius, capsuleCollider.height);
         }).AddTo(this.Disposer);
 
         NetwrokTimeline.OnForward(data =>
         {
             var bulletComponent = data.Entity.GetComponent<BulletComponent>();
             var viewComponent = data.Entity.GetComponent<ViewComponent>();
-            var rigidbody = data.Entity.GetComponent<Rigidbody>();
+            var capsuleCollider = data.Entity.GetComponent<CapsuleCollider>();
 
-            if (bulletComponent.Collision != null)
+            if (bulletComponent.Velocity == FixVector3.zero) { return null; }
+
+            var direction = (FixVector3)viewComponent.Transforms[0].forward;
+            var offset = (FixVector3)capsuleCollider.center + bulletComponent.Radius * direction;
+            var origin = (FixVector3)viewComponent.Transforms[0].position + offset;
+            var maxDistance = bulletComponent.Velocity.magnitude * data.DeltaTime;
+
+            RaycastHit hit;
+
+            if (Physics.Raycast((Vector3)origin, (Vector3)direction, out hit, (float)maxDistance))
             {
-                //if (data.Start == 0)
-                //{
-                //    PoolFactory.Push(data.Entity);
-                //}
+                viewComponent.Transforms[0].position = (Vector3)(origin + hit.distance * direction - offset);
+                bulletComponent.Velocity = FixVector3.zero;
             }
             else
             {
-                var position = (FixVector3)viewComponent.Transforms[0].position + bulletComponent.Velocity * data.DeltaTime;
-                rigidbody.MovePosition((Vector3)position);
+                viewComponent.Transforms[0].position = (Vector3)(origin + maxDistance * direction - offset);
             }
             return null;
         }).AddTo(this.Disposer);

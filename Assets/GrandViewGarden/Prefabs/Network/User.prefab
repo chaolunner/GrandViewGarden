@@ -65,7 +65,7 @@ MonoBehaviour:
   IsRoomOwner:
     value: 0
   UserId: 0
-  Username:
+  UserName:
     value: 
   TotalCount:
     value: 0

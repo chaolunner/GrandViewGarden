@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 929763981}
-  m_IndirectSpecularColor: {r: 0.16788326, g: 0.21073548, b: 0.28994012, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571336, b: 0.3069219, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2868,9 +2868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb09ea6f74cf24f689baa0cad7ac07ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UserPrefab: {fileID: 2038528521536375709, guid: d5acd1dc8bcd8c144b45fb6dfe9b9a92,
-    type: 3}
-  UserName: Player
 --- !u!4 &201526788
 Transform:
   m_ObjectHideFlags: 0
@@ -10354,6 +10351,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 2c8706389afa9a94ca8a1d20cb0f0d31, type: 3}
       propertyPath: m_LocalRotation.w
       value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 2c8706389afa9a94ca8a1d20cb0f0d31, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 2c8706389afa9a94ca8a1d20cb0f0d31, type: 3}
       propertyPath: m_LightProbeUsage
@@ -20095,7 +20096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4ecc12d95635e46488911d48b5d12415, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 4ecc12d95635e46488911d48b5d12415, type: 3}
       propertyPath: m_LightProbeUsage
@@ -20802,8 +20803,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1420643768}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.2164396, y: -0, z: -0, w: 0.97629607}
+  m_LocalPosition: {x: -0.8935547, y: 5.8447266, z: -6.0036817}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 228252061}
@@ -23367,7 +23368,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ba72f6c7e5e524845bfee8c064f6f966, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: ba72f6c7e5e524845bfee8c064f6f966, type: 3}
       propertyPath: m_LightProbeUsage
@@ -26254,6 +26255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b817ae0d135ee2e49a373e7d050ed4d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offline: 1
   UserPrefab: {fileID: 2038528521536375709, guid: d5acd1dc8bcd8c144b45fb6dfe9b9a92,
     type: 3}
 --- !u!1001 &1753950864
@@ -29993,7 +29995,6 @@ MonoBehaviour:
   - {fileID: 1123854135}
   - {fileID: 596264999}
   - {fileID: 1789547060}
-  - {fileID: 201526787}
   BindingSystems: []
   AutoUpdate: 1
 --- !u!114 &2008367849
@@ -32108,7 +32109,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5f317b3975fbda64b926a629213f8d07, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5f317b3975fbda64b926a629213f8d07, type: 3}
       propertyPath: m_LightProbeUsage
@@ -32708,12 +32709,12 @@ PrefabInstance:
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000012459573
+      value: 0.0000350215
       objectReference: {fileID: 0}
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000059734753
+      value: -0.0000677416
       objectReference: {fileID: 0}
     - target: {fileID: 4829313832240750887, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
