@@ -115,7 +115,7 @@ PlayerSettings:
   switchNVNDefaultPoolsGranularity: 16777216
   switchNVNOtherPoolsGranularity: 16777216
   vulkanEnableSetSRGBWrite: 0
-  useSecurityBuild: 0
+  useSecurityBuild: 1
   m_SupportedAspectRatios:
     4:3: 1
     5:4: 1

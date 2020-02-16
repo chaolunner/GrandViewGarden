@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Toggle@WeChatPanel
+  m_Controller: {fileID: 9100000, guid: 68078bed1d0417041bc33d00c260a874, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c271aa7000f97344fa42564fbd905c76, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 776c1b1e269ba4b089a279f12da72708, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0991b3e6acca124429f1db3bbcc5f0e5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 43ffa4b88618a46e3891f8d6af6a940d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a419d4d034eb8814aaeb68873ca06b41, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 93aec84f9d0e644da82f7c6bf6ffeeec, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: ef3a904df3b12314ea4e9b076d49a0ca, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f0224e6387f5d4fb480f09127cba6dfb, type: 2}
