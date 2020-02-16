@@ -28,6 +28,7 @@ public class CenterOnChildSystem : RuntimeSystem
             var centerOnChild = entity.GetComponent<CenterOnChild>();
             var viewComponent = entity.GetComponent<ViewComponent>();
             var childsChangeDisposer = new CompositeDisposable();
+            var isInitilized = false;
 
             Tweener centeringTweener = null;
 
@@ -53,8 +54,16 @@ public class CenterOnChildSystem : RuntimeSystem
                 var distance = viewComponent.Transforms[0].position - target.position;
                 var duration = distance.magnitude / centerOnChild.Speed;
 
-                centeringTweener = centerOnChild.Content.DOLocalMove(-target.localPosition, duration);
-                centeringTweener.SetEase(centerOnChild.SpeedCurve);
+                if (isInitilized)
+                {
+                    centeringTweener = centerOnChild.Content.DOLocalMove(-target.localPosition, duration);
+                    centeringTweener.SetEase(centerOnChild.SpeedCurve);
+                }
+                else
+                {
+                    centerOnChild.Content.localPosition = -target.localPosition;
+                    isInitilized = true;
+                }
             }).AddTo(this.Disposer).AddTo(centerOnChild.Disposer);
         }).AddTo(this.Disposer);
     }
