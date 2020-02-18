@@ -172,9 +172,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u767B\u5F55"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8e8f95079e226cf45a9c2abfb5fb81c0, type: 2}
-  m_sharedMaterial: {fileID: 21352580829388642, guid: 8e8f95079e226cf45a9c2abfb5fb81c0,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 979389c5d67264d6584309d2155b435c, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 00abdc2317a3b46148c32bcc334a27e8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

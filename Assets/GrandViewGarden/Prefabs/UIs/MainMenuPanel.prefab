@@ -411,8 +411,7 @@ MonoBehaviour:
   m_text: <color=#FFB900>Grand <color=#EA0043>View</color> Garden</color>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f3c9ba1deae01a1408f589c3944549bf, type: 2}
-  m_sharedMaterial: {fileID: 21191090323810780, guid: f3c9ba1deae01a1408f589c3944549bf,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 8e38ee1361d6f484eb8895009c6fa031, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -840,6 +839,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224194023051777302}
+  - component: {fileID: 5531270728401567408}
   - component: {fileID: 114918328551067384}
   - component: {fileID: 95842870094212928}
   - component: {fileID: 114864988595344978}
@@ -875,6 +875,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -1080}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &5531270728401567408
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723644298293702}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &114918328551067384
 MonoBehaviour:
   m_ObjectHideFlags: 0
