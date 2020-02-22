@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ch.sycoforge.Decal;
+using UnityEngine;
 using UniEasy.ECS;
 using UniEasy.DI;
 using Common;
@@ -6,6 +7,8 @@ using UniRx;
 
 public class BulletSystem : NetworkSystemBehaviour
 {
+    public GameObject BulletHolePrefab;
+
     [Inject]
     private IPoolFactory PoolFactory;
     private IGroup BulletComponents;
@@ -50,7 +53,9 @@ public class BulletSystem : NetworkSystemBehaviour
             if (Physics.Raycast((Vector3)origin, (Vector3)direction, out hit, (float)maxDistance))
             {
                 viewComponent.Transforms[0].position = (Vector3)(origin + hit.distance * direction - offset);
+                EasyDecal.ProjectAt(BulletHolePrefab, hit.collider.gameObject, hit.point, hit.normal);
                 bulletComponent.Velocity = FixVector3.zero;
+                PoolFactory.Push(data.Entity);
             }
             else
             {
