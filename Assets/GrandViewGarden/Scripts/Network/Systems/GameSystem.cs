@@ -40,17 +40,10 @@ public class GameSystem : NetworkSystemBehaviour
                         var isRoomOwner = bool.Parse(eventInput.Message);
                         if (!HasUser(userId))
                         {
-                            var go = NetworkPrefabFactory.Instantiate(userId, data.TickId, NetworkPlayerPrefab, true);
-                            if (isRoomOwner)
-                            {
-                                go.transform.position += new Vector3(2, 0, -5);
-                                go.transform.rotation = Quaternion.Euler(0, -90, 0);
-                            }
-                            else
-                            {
-                                go.transform.position += new Vector3(-2, 0, -5);
-                                go.transform.rotation = Quaternion.Euler(0, 90, 0);
-                            }
+                            var pos = isRoomOwner ? NetworkPlayerPrefab.transform.position + new Vector3(2, 0, -5) : NetworkPlayerPrefab.transform.position += new Vector3(-2, 0, -5);
+                            var rot = isRoomOwner ? Quaternion.Euler(0, -90, 0) : Quaternion.Euler(0, 90, 0);
+
+                            NetworkPrefabFactory.Instantiate(userId, data.TickId, NetworkPlayerPrefab, pos, rot);
                         }
                     }
                 }

@@ -64,7 +64,7 @@ public class ShootSystem : NetworkSystemBehaviour
                 var prefab = Resources.Load<GameObject>(path);
                 for (int j = 0; j < 3; j++)
                 {
-                    PoolFactory.Create(prefab, networkIdentityComponent.Identity.UserId);
+                    PoolFactory.Spawn(prefab, networkIdentityComponent.Identity.UserId, 0);
                 }
             }
         }).AddTo(this.Disposer);
@@ -84,7 +84,7 @@ public class ShootSystem : NetworkSystemBehaviour
                 animator.SetBool(Shoot_b, mouseInput.MouseButtons.Contains(0));
                 if (mouseInput.MouseButtons.Contains(0) && shootComponent.cooldownTime <= 0)
                 {
-                    var entity = PoolFactory.Pop(shootComponent.bulletPrefab, data.TickId);
+                    var entity = PoolFactory.Spawn(shootComponent.bulletPrefab, networkIdentityComponent.Identity.UserId, data.TickId);
                     var bulletComponent = entity.GetComponent<BulletComponent>();
                     var viewComponent = entity.GetComponent<ViewComponent>();
 

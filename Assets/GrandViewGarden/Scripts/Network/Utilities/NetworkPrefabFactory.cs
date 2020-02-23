@@ -28,7 +28,17 @@ public class NetworkPrefabFactory
         UserComponents = GroupFactory.Create(typeof(UserComponent), typeof(ViewComponent));
     }
 
-    public GameObject Instantiate(int userId, int tickId, int instanceId, GameObject prefab, bool worldPositionStays = false)
+    public GameObject Instantiate(int userId, int tickId, GameObject prefab, Transform parent = null, bool worldPositionStays = false)
+    {
+        return Instantiate(userId, tickId, GenerateId(userId), prefab, Vector3.zero, Quaternion.identity, parent, worldPositionStays);
+    }
+
+    public GameObject Instantiate(int userId, int tickId, GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
+    {
+        return Instantiate(userId, tickId, GenerateId(userId), prefab, position, rotation, parent, false);
+    }
+
+    private GameObject Instantiate(int userId, int tickId, int instanceId, GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, bool worldPositionStays)
     {
         foreach (var entity in UserComponents.Entities)
         {
@@ -37,7 +47,10 @@ public class NetworkPrefabFactory
 
             if (userId == userComponent.UserId)
             {
-                return PrefabFactory.Instantiate(prefab, viewComponent.Transforms[0], worldPositionStays, go =>
+                var pos = worldPositionStays ? prefab.transform.position : position;
+                var rot = worldPositionStays ? prefab.transform.rotation : rotation;
+
+                return PrefabFactory.Instantiate(prefab, pos, rot, parent ?? viewComponent.Transforms[0], go =>
                 {
                     var networkIdentityComponent = go.GetComponent<NetworkIdentityComponent>() ?? go.AddComponent<NetworkIdentityComponent>();
 
@@ -48,10 +61,5 @@ public class NetworkPrefabFactory
             }
         }
         return null;
-    }
-
-    public GameObject Instantiate(int userId, int tickId, GameObject prefab, bool worldPositionStays = false)
-    {
-        return Instantiate(userId, tickId, GenerateId(userId), prefab, worldPositionStays);
     }
 }

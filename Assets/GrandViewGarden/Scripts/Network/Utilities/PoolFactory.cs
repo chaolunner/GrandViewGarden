@@ -5,12 +5,11 @@ using UniEasy.DI;
 
 public interface IPoolFactory
 {
-    void Create(PoolData id);
-    PoolData Create(GameObject prefab, Transform parent, bool worldPositionStays = false);
-    PoolData Create(GameObject prefab, int userId, bool worldPositionStays = false);
-    IEntity Pop(GameObject prefab, bool autoCreate = true);
-    IEntity Pop(GameObject prefab, int tickId, bool autoCreate = true);
-    void Push(IEntity entity);
+    IEntity Spawn(GameObject prefab, Transform parent = null, bool worldPositionStays = false);
+    IEntity Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null);
+    IEntity Spawn(GameObject prefab, int userId, int tickId, Transform parent = null, bool worldPositionStays = false);
+    IEntity Spawn(GameObject prefab, int userId, int tickId, Vector3 position, Quaternion rotation, Transform parent = null);
+    void Despawn(IEntity entity);
     /// <param name="force">Whether to destroy unrecycled game objects.</param>
     void Destroy(GameObject prefab, bool force = false);
 }
@@ -23,60 +22,64 @@ public class PoolFactory : IPoolFactory
     private NetworkPrefabFactory NetworkPrefabFactory;
 
     private Dictionary<GameObject, IPool> poolDict = new Dictionary<GameObject, IPool>();
-    private Dictionary<GameObject, PoolData> dataDict = new Dictionary<GameObject, PoolData>();
     private Dictionary<IEntity, GameObject> prefabDict = new Dictionary<IEntity, GameObject>();
 
-    public void Create(PoolData data)
+    private void Create(GameObject prefab, int userId, int tickId, Vector3 position, Quaternion rotation, Transform parent, bool worldPositionStays)
     {
-        if (!poolDict.ContainsKey(data.Prefab))
+        if (!poolDict.ContainsKey(prefab))
         {
-            var pool = new Pool(data.Prefab, PrefabFactory, NetworkPrefabFactory);
-            poolDict.Add(data.Prefab, pool);
+            var pool = new Pool(prefab, PrefabFactory, NetworkPrefabFactory);
+            poolDict.Add(prefab, pool);
         }
-        if (!dataDict.ContainsKey(data.Prefab))
+        if (worldPositionStays)
         {
-            dataDict.Add(data.Prefab, data);
-        }
-        if (data.UserId >= 0)
-        {
-            poolDict[data.Prefab].Create(data.UserId, data.WorldPositionStays);
+            poolDict[prefab].Create(userId, tickId, parent, true);
         }
         else
         {
-            poolDict[data.Prefab].Create(data.Parent, data.WorldPositionStays);
+            poolDict[prefab].Create(userId, tickId, position, rotation, parent);
         }
     }
 
-    public PoolData Create(GameObject prefab, Transform parent, bool worldPositionStays = false)
+    public IEntity Spawn(GameObject prefab, Transform parent = null, bool worldPositionStays = false)
     {
-        var id = new PoolData(prefab, parent, worldPositionStays);
-        Create(id);
-        return id;
+        return Spawn(prefab, -1, -1, Vector3.zero, Quaternion.identity, parent, worldPositionStays);
     }
 
-    public PoolData Create(GameObject prefab, int userId, bool worldPositionStays = false)
+    public IEntity Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
     {
-        var id = new PoolData(prefab, userId, worldPositionStays);
-        Create(id);
-        return id;
+        return Spawn(prefab, -1, -1, position, rotation, parent, false);
     }
 
-    public IEntity Pop(GameObject prefab, bool autoCreate = true)
+    public IEntity Spawn(GameObject prefab, int userId, int tickId, Transform parent = null, bool worldPositionStays = false)
     {
-        return Pop(prefab, -1, autoCreate);
+        return Spawn(prefab, userId, tickId, Vector3.zero, Quaternion.identity, parent, worldPositionStays);
     }
 
-    public IEntity Pop(GameObject prefab, int tickId, bool autoCreate = true)
+    public IEntity Spawn(GameObject prefab, int userId, int tickId, Vector3 position, Quaternion rotation, Transform parent = null)
+    {
+        return Spawn(prefab, userId, tickId, position, rotation, parent, false);
+    }
+
+    private IEntity Spawn(GameObject prefab, int userId, int tickId, Vector3 position, Quaternion rotation, Transform parent, bool worldPositionStays)
     {
         IEntity entity = null;
         if (poolDict.ContainsKey(prefab))
         {
-            entity = poolDict[prefab].Pop(tickId);
+            entity = poolDict[prefab].Spawn(tickId);
         }
-        if (entity == null && autoCreate && dataDict.ContainsKey(prefab))
+        if (entity == null)
         {
-            Create(dataDict[prefab]);
-            entity = poolDict[prefab].Pop(tickId);
+            Create(prefab, userId, tickId, position, rotation, parent, worldPositionStays);
+            entity = poolDict[prefab].Spawn(tickId);
+        }
+        else
+        {
+            var viewComponent = entity.GetComponent<ViewComponent>();
+
+            viewComponent.Transforms[0].SetParent(parent);
+            viewComponent.Transforms[0].position = position;
+            viewComponent.Transforms[0].rotation = rotation;
         }
         if (entity != null)
         {
@@ -85,7 +88,7 @@ public class PoolFactory : IPoolFactory
         return entity;
     }
 
-    public void Push(IEntity entity)
+    public void Despawn(IEntity entity)
     {
         if (prefabDict.ContainsKey(entity))
         {
@@ -95,7 +98,7 @@ public class PoolFactory : IPoolFactory
 
             if (poolDict.ContainsKey(prefab))
             {
-                poolDict[prefab].Push(entity);
+                poolDict[prefab].Despawn(entity);
             }
         }
     }

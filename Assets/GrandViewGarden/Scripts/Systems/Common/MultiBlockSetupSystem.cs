@@ -76,7 +76,7 @@ public class MultiBlockSetupSystem : SystemBehaviour
                 {
                     for (int i = 0; i < blockSetuper.MaxVisibleCount * maximum[prefab]; i++)
                     {
-                        PoolFactory.Create(prefab, transform);
+                        PoolFactory.Spawn(prefab, transform);
                     }
                 }
 
@@ -120,7 +120,7 @@ public class MultiBlockSetupSystem : SystemBehaviour
         blockDict.Add(block, new Dictionary<GameObject, List<IEntity>>());
         foreach (var kvp in easyBlock.ToDictionary())
         {
-            var entity = PoolFactory.Pop(kvp.Value.GameObject);
+            var entity = PoolFactory.Spawn(kvp.Value.GameObject);
             var viewComponent = entity.GetComponent<ViewComponent>();
 
             viewComponent.Transforms[0].SetParent(block.transform, false);
@@ -146,7 +146,7 @@ public class MultiBlockSetupSystem : SystemBehaviour
             {
                 foreach (var entity in kvp.Value)
                 {
-                    PoolFactory.Push(entity);
+                    PoolFactory.Despawn(entity);
                 }
             }
 

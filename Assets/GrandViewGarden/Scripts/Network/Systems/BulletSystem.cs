@@ -55,7 +55,7 @@ public class BulletSystem : NetworkSystemBehaviour
                 viewComponent.Transforms[0].position = (Vector3)(origin + hit.distance * direction - offset);
                 EasyDecal.ProjectAt(BulletHolePrefab, hit.collider.gameObject, hit.point, hit.normal);
                 bulletComponent.Velocity = FixVector3.zero;
-                PoolFactory.Push(data.Entity);
+                PoolFactory.Despawn(data.Entity);
             }
             else
             {

@@ -6,10 +6,10 @@ public interface IPool
 {
     IEnumerable<IEntity> Entities { get; }
     GameObject Prefab { get; }
-    void Create(Transform parent, bool worldPositionStays);
-    void Create(int userId, bool worldPositionStays);
-    IEntity Pop(int tickId);
-    void Push(IEntity entity);
+    void Create(int userId, int tickId, Transform parent, bool worldPositionStays);
+    void Create(int userId, int tickId, Vector3 position, Quaternion rotation, Transform parent);
+    IEntity Spawn(int tickId = -1);
+    void Despawn(IEntity entity);
     /// <param name="force">Whether to destroy unrecycled game objects.</param>
     void Destroy(bool force);
 }
@@ -48,21 +48,24 @@ public class Pool : IPool
         NetworkPrefabFactory = networkPrefabFactory;
     }
 
-    public void Create(Transform parent, bool worldPositionStays)
+    public void Create(int userId, int tickId, Transform parent, bool worldPositionStays)
     {
-        var go = PrefabFactory.Instantiate(prefab, parent, worldPositionStays);
-        var eb = go.GetComponent<EntityBehaviour>() ?? go.AddComponent<EntityBehaviour>();
-        Push(eb.Entity, true);
+        Create(userId, tickId, Vector3.zero, Quaternion.identity, parent, worldPositionStays);
     }
 
-    public void Create(int userId, bool worldPositionStays)
+    public void Create(int userId, int tickId, Vector3 position, Quaternion rotation, Transform parent)
     {
-        var go = NetworkPrefabFactory.Instantiate(userId, -1, prefab, worldPositionStays);
-        var eb = go.GetComponent<EntityBehaviour>() ?? go.AddComponent<EntityBehaviour>();
-        Push(eb.Entity, true);
+        Create(userId, tickId, position, rotation, parent, false);
     }
 
-    public IEntity Pop(int tickId)
+    private void Create(int userId, int tickId, Vector3 position, Quaternion rotation, Transform parent, bool worldPositionStays)
+    {
+        var go = userId >= 0 ? (worldPositionStays ? NetworkPrefabFactory.Instantiate(userId, tickId, prefab, parent, worldPositionStays) : NetworkPrefabFactory.Instantiate(userId, tickId, prefab, position, rotation, parent)) : (worldPositionStays ? PrefabFactory.Instantiate(prefab, parent, worldPositionStays) : PrefabFactory.Instantiate(prefab, position, rotation, parent));
+        var eb = go.GetComponent<EntityBehaviour>() ?? go.AddComponent<EntityBehaviour>();
+        Despawn(eb.Entity, true);
+    }
+
+    public IEntity Spawn(int tickId = -1)
     {
         if (inactiveParts.Count > 0)
         {
@@ -81,7 +84,7 @@ public class Pool : IPool
         return null;
     }
 
-    private void Push(IEntity entity, bool unlimited)
+    private void Despawn(IEntity entity, bool unlimited)
     {
         var viewComponent = entity.GetComponent<ViewComponent>();
         if (entity.HasComponent<NetworkIdentityComponent>())
@@ -100,9 +103,9 @@ public class Pool : IPool
         }
     }
 
-    public void Push(IEntity entity)
+    public void Despawn(IEntity entity)
     {
-        Push(entity, false);
+        Despawn(entity, false);
     }
 
     public void Destroy(bool force)
