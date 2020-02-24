@@ -68,14 +68,19 @@ public class ThridPersonCameraSystem : NetworkSystemBehaviour
                         else if (mode == AimMode.AimDownSight && entity1.HasComponent<ShootComponent>())
                         {
                             var shootComponent = entity1.GetComponent<ShootComponent>();
-                            var targetPosition = virtualCamera.Follow.InverseTransformDirection(shootComponent.weapon.transform.position - virtualCamera.Follow.position) + shootComponent.adsPosition;
 
-                            transposer.m_FollowOffset = targetPosition;
-                            Observable.EveryUpdate().Subscribe(_ =>
+                            if (shootComponent.weapon != null)
                             {
-                                targetPosition = virtualCamera.Follow.InverseTransformDirection(shootComponent.weapon.transform.position - virtualCamera.Follow.position) + shootComponent.adsPosition;
-                                transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, targetPosition, AimDownSightSmooth * Time.deltaTime);
-                            }).AddTo(this.Disposer).AddTo(playerControlComponent.Disposer).AddTo(thridPersonCameraComponent.smoothDisposer);
+                                var viewComponent = shootComponent.weapon.GetComponent<ViewComponent>();
+                                var targetPosition = virtualCamera.Follow.InverseTransformDirection(viewComponent.Transforms[0].position - virtualCamera.Follow.position) + shootComponent.adsPosition;
+
+                                transposer.m_FollowOffset = targetPosition;
+                                Observable.EveryUpdate().Subscribe(_ =>
+                                {
+                                    targetPosition = virtualCamera.Follow.InverseTransformDirection(viewComponent.Transforms[0].position - virtualCamera.Follow.position) + shootComponent.adsPosition;
+                                    transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, targetPosition, AimDownSightSmooth * Time.deltaTime);
+                                }).AddTo(this.Disposer).AddTo(playerControlComponent.Disposer).AddTo(thridPersonCameraComponent.smoothDisposer);
+                            }
                         }
                         else
                         {

@@ -12,6 +12,8 @@ public class ShootSystem : NetworkSystemBehaviour
 
     public TextAsset Bullet;
     public TextAsset Weapon;
+    [Range(0, 100)]
+    public int WarmupBullets = 10;
 
     private IGroup ShootComponents;
     private NetworkGroup Network;
@@ -47,12 +49,26 @@ public class ShootSystem : NetworkSystemBehaviour
                     var name = shootComponent.Weapons[index];
                     var path = WeaponDAO.GetPath(name);
                     var prefab = Resources.Load<GameObject>(path);
-                    shootComponent.weapon = PrefabFactory.Instantiate(prefab, shootComponent.Parent);
-                    shootComponent.weapon.transform.localPosition = WeaponDAO.GetPosition(name);
-                    shootComponent.bulletPrefab = Resources.Load<GameObject>(BulletDAO.GetPath(WeaponDAO.GetBullet(name)));
+                    var bullet = WeaponDAO.GetBullet(name);
+
+                    if (shootComponent.weapon != null)
+                    {
+                        PoolFactory.Despawn(shootComponent.weapon);
+                    }
+
+                    shootComponent.weapon = PoolFactory.Spawn(prefab, shootComponent.Parent);
+
+                    if (shootComponent.weapon != null)
+                    {
+                        shootComponent.weapon.GetComponent<ViewComponent>().Transforms[0].localPosition = WeaponDAO.GetPosition(name);
+                    }
+
+                    shootComponent.bulletPrefab = Resources.Load<GameObject>(BulletDAO.GetPath(bullet));
                     shootComponent.muzzleFlashesPrefab = Resources.Load<GameObject>(WeaponDAO.GetMuzzleFlashesEffectPath(name));
                     shootComponent.adsPosition = WeaponDAO.GetADSPosition(name);
+                    shootComponent.bulletPosition = WeaponDAO.GetBulletSpawnPosition(name);
                     shootComponent.muzzlePosition = WeaponDAO.GetMuzzlePosition(name);
+                    shootComponent.holeSize = BulletDAO.GetHoleSize(bullet);
                     shootComponent.speed = WeaponDAO.GetSpeed(name);
                     shootComponent.cooldown = WeaponDAO.GetCooldown(name);
                 }
@@ -66,9 +82,9 @@ public class ShootSystem : NetworkSystemBehaviour
             {
                 var path = BulletDAO.GetPath(WeaponDAO.GetBullet(shootComponent.Weapons[i]));
                 var prefab = Resources.Load<GameObject>(path);
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < WarmupBullets; j++)
                 {
-                    PoolFactory.Spawn(prefab, networkIdentityComponent.Identity.UserId, 0);
+                    PoolFactory.Despawn(PoolFactory.Spawn(prefab, networkIdentityComponent.Identity.UserId, 0));
                 }
             }
         }).AddTo(this.Disposer);
@@ -83,6 +99,12 @@ public class ShootSystem : NetworkSystemBehaviour
             var mouseInput = userInputData[0].GetInput<MouseInput>();
             var keyInput = userInputData[1].GetInput<KeyInput>();
 
+            ViewComponent weaponViewComponent = null;
+            if (shootComponent.weapon != null)
+            {
+                weaponViewComponent = shootComponent.weapon.GetComponent<ViewComponent>();
+            }
+
             if (mouseInput != null && keyInput != null)
             {
                 animator.SetBool(Shoot_b, mouseInput.MouseButtons.Contains(0));
@@ -90,17 +112,28 @@ public class ShootSystem : NetworkSystemBehaviour
                 {
                     var entity = PoolFactory.Spawn(shootComponent.bulletPrefab, networkIdentityComponent.Identity.UserId, data.TickId);
                     var bulletComponent = entity.GetComponent<BulletComponent>();
-                    var viewComponent = entity.GetComponent<ViewComponent>();
+                    var bulletViewComponent = entity.GetComponent<ViewComponent>();
 
-                    viewComponent.Transforms[0].position = shootComponent.weapon.transform.position;
-                    viewComponent.Transforms[0].rotation = Quaternion.LookRotation(shootComponent.weapon.transform.forward, shootComponent.weapon.transform.up);
-                    bulletComponent.Velocity = shootComponent.speed * (FixVector3)viewComponent.Transforms[0].forward;
+                    if (weaponViewComponent != null)
+                    {
+                        bulletViewComponent.Transforms[0].position = weaponViewComponent.Transforms[0].TransformPoint(shootComponent.bulletPosition);
+                        bulletViewComponent.Transforms[0].rotation = Quaternion.LookRotation(weaponViewComponent.Transforms[0].forward, weaponViewComponent.Transforms[0].up);
+                        bulletComponent.velocity = shootComponent.speed * (FixVector3)bulletViewComponent.Transforms[0].forward;
+                        bulletComponent.holeSize = shootComponent.holeSize;
+
+                        StartCoroutine(AsyncMuzzleFlashes(shootComponent.muzzleFlashesPrefab, weaponViewComponent.Transforms[0].TransformPoint(shootComponent.muzzlePosition), weaponViewComponent.Transforms[0].rotation));
+                    }
+
                     shootComponent.cooldownTime = shootComponent.cooldown;
-
-                    StartCoroutine(AsyncMuzzleFlashes(shootComponent.muzzleFlashesPrefab, shootComponent.weapon.transform.TransformPoint(shootComponent.muzzlePosition), shootComponent.weapon.transform.rotation));
                 }
                 if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }
-                else { shootComponent.weapon.transform.LookAt(playerControlComponent.LookAt, Vector3.up); }
+                else
+                {
+                    if (weaponViewComponent != null)
+                    {
+                        weaponViewComponent.Transforms[0].LookAt(playerControlComponent.LookAt, Vector3.up);
+                    }
+                }
             }
             shootComponent.cooldownTime -= data.DeltaTime;
 

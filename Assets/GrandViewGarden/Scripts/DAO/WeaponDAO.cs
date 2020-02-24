@@ -6,6 +6,7 @@ public class WeaponDAO : CsvDAO
     private const string PositionStr = "Position";
     private const string ADSStr = "ADS";
     private const string BulletStr = "Bullet";
+    private const string BulletSpawnPositionStr = "BulletSpawnPosition";
     private const string SpeedStr = "Speed";
     private const string CooldownStr = "Cooldown";
     private const string MuzzleFlashesStr = "MuzzleFlashes";
@@ -31,6 +32,11 @@ public class WeaponDAO : CsvDAO
     public string GetBullet(string name)
     {
         return GetString(name, BulletStr);
+    }
+
+    public Vector3 GetBulletSpawnPosition(string name)
+    {
+        return GetVector3(name, BulletSpawnPositionStr);
     }
 
     public float GetSpeed(string name)

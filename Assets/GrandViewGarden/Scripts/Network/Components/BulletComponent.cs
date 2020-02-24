@@ -4,6 +4,8 @@ using Common;
 
 public class BulletComponent : ComponentBehaviour
 {
-    public Fix64 Radius;
-    public FixVector3 Velocity;
+    public Fix64 radius;
+    public FixVector3 velocity;
+
+    [HideInInspector] public float holeSize = 1;
 }

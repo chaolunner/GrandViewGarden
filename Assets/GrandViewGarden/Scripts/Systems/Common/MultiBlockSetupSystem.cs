@@ -76,7 +76,7 @@ public class MultiBlockSetupSystem : SystemBehaviour
                 {
                     for (int i = 0; i < blockSetuper.MaxVisibleCount * maximum[prefab]; i++)
                     {
-                        PoolFactory.Spawn(prefab, transform);
+                        PoolFactory.Despawn(PoolFactory.Spawn(prefab, transform));
                     }
                 }
 

@@ -77,6 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 439c04c835c061543811c29bb7014f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  holeSize: 0
 --- !u!1 &4566436635365401449
 GameObject:
   m_ObjectHideFlags: 0

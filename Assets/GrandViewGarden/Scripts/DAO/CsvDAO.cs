@@ -18,6 +18,34 @@ public class CsvDAO
         header = name;
     }
 
+    public string[] GetRow(string name)
+    {
+        var dict = reader.GetRow(name);
+        var array = new string[dict.Count];
+        var e = dict.GetEnumerator();
+        var i = 0;
+        while (e.MoveNext())
+        {
+            array[i] = e.Current.Key;
+            i++;
+        }
+        return array;
+    }
+
+    public string[] GetColunm(string name)
+    {
+        var dict = reader.GetColumn(name);
+        var array = new string[dict.Count];
+        var e = dict.GetEnumerator();
+        var i = 0;
+        while (e.MoveNext())
+        {
+            array[i] = e.Current.Key;
+            i++;
+        }
+        return array;
+    }
+
     public string GetString(string rowName, string columnName)
     {
         return GetString(header, rowName, columnName);

@@ -8970,8 +8970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f222f669a1265d43bcfcebe98d4185b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletHolePrefab: {fileID: 6071693690965029256, guid: fc90a10d4ba354e35b1c1e1b39f0d522,
-    type: 3}
+  Material: {fileID: 4900000, guid: e6cc241034eb44b45a6495df26f5dcce, type: 3}
 --- !u!4 &596265000
 Transform:
   m_ObjectHideFlags: 0
@@ -16058,6 +16057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Bullet: {fileID: 4900000, guid: 6123cdcfda4ca534691484fde5b2dc0e, type: 3}
   Weapon: {fileID: 4900000, guid: 1a6a56265e3559449aaaed2ee4711980, type: 3}
+  WarmupBullets: 3
 --- !u!4 &1123854136
 Transform:
   m_ObjectHideFlags: 0
@@ -32781,12 +32781,12 @@ PrefabInstance:
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000006178409
+      value: 0.000010599702
       objectReference: {fileID: 0}
     - target: {fileID: 4688658326863477466, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000011381876
+      value: 0.000015136027
       objectReference: {fileID: 0}
     - target: {fileID: 4829313832240750887, guid: 8aedaf1b535074c4ba758da99ddea8de,
         type: 3}
