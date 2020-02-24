@@ -1,19 +1,13 @@
 ﻿using UnityEngine;
-using UniEasy;
 
-public class BulletDAO
+public class BulletDAO : CsvDAO
 {
-    private EasyCsv reader;
-    private const string NameStr = "Name";
     private const string PathStr = "Path";
 
-    public BulletDAO(TextAsset textAsset)
-    {
-        reader = new EasyCsv(textAsset);
-    }
+    public BulletDAO(TextAsset textAsset, string name) : base(textAsset, name) { }
 
     public string GetPath(string name)
     {
-        return reader.GetValue(NameStr, name, PathStr);
+        return GetString(name, PathStr);
     }
 }

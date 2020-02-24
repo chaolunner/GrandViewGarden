@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UniEasy.ECS;
 using UniEasy.DI;
 using Common;
@@ -19,6 +20,7 @@ public class ShootSystem : NetworkSystemBehaviour
     private WeaponDAO WeaponDAO;
 
     private readonly int Shoot_b = Animator.StringToHash("Shoot_b");
+    private const string NameStr = "Name";
 
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
@@ -26,8 +28,8 @@ public class ShootSystem : NetworkSystemBehaviour
         ShootComponents = this.Create(typeof(PlayerControlComponent), typeof(NetworkIdentityComponent), typeof(ShootComponent), typeof(Animator));
         Network = LockstepFactory.Create(ShootComponents);
         NetwrokTimeline = Network.CreateTimeline(typeof(MouseInput), typeof(KeyInput));
-        BulletDAO = new BulletDAO(Bullet);
-        WeaponDAO = new WeaponDAO(Weapon);
+        BulletDAO = new BulletDAO(Bullet, NameStr);
+        WeaponDAO = new WeaponDAO(Weapon, NameStr);
     }
 
     public override void OnEnable()
@@ -46,9 +48,11 @@ public class ShootSystem : NetworkSystemBehaviour
                     var path = WeaponDAO.GetPath(name);
                     var prefab = Resources.Load<GameObject>(path);
                     shootComponent.weapon = PrefabFactory.Instantiate(prefab, shootComponent.Parent);
-                    shootComponent.weapon.transform.localPosition = WeaponDAO.GetLocalPosition(name);
+                    shootComponent.weapon.transform.localPosition = WeaponDAO.GetPosition(name);
                     shootComponent.bulletPrefab = Resources.Load<GameObject>(BulletDAO.GetPath(WeaponDAO.GetBullet(name)));
+                    shootComponent.muzzleFlashesPrefab = Resources.Load<GameObject>(WeaponDAO.GetMuzzleFlashesEffectPath(name));
                     shootComponent.adsPosition = WeaponDAO.GetADSPosition(name);
+                    shootComponent.muzzlePosition = WeaponDAO.GetMuzzlePosition(name);
                     shootComponent.speed = WeaponDAO.GetSpeed(name);
                     shootComponent.cooldown = WeaponDAO.GetCooldown(name);
                 }
@@ -92,6 +96,8 @@ public class ShootSystem : NetworkSystemBehaviour
                     viewComponent.Transforms[0].rotation = Quaternion.LookRotation(shootComponent.weapon.transform.forward, shootComponent.weapon.transform.up);
                     bulletComponent.Velocity = shootComponent.speed * (FixVector3)viewComponent.Transforms[0].forward;
                     shootComponent.cooldownTime = shootComponent.cooldown;
+
+                    StartCoroutine(AsyncMuzzleFlashes(shootComponent.muzzleFlashesPrefab, shootComponent.weapon.transform.TransformPoint(shootComponent.muzzlePosition), shootComponent.weapon.transform.rotation));
                 }
                 if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }
                 else { shootComponent.weapon.transform.LookAt(playerControlComponent.LookAt, Vector3.up); }
@@ -100,5 +106,12 @@ public class ShootSystem : NetworkSystemBehaviour
 
             return null;
         }).AddTo(this.Disposer);
+    }
+
+    private IEnumerator AsyncMuzzleFlashes(GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        var entity = PoolFactory.Spawn(prefab, position, rotation);
+        yield return new WaitForSeconds(0.1f);
+        PoolFactory.Despawn(entity);
     }
 }

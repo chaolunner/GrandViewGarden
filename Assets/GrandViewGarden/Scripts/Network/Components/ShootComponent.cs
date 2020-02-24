@@ -14,7 +14,9 @@ public class ShootComponent : ComponentBehaviour
 
     [HideInInspector] public GameObject weapon;
     [HideInInspector] public GameObject bulletPrefab;
+    [HideInInspector] public GameObject muzzleFlashesPrefab;
     [HideInInspector] public Vector3 adsPosition;
+    [HideInInspector] public Vector3 muzzlePosition;
     [HideInInspector] public float speed;
     [HideInInspector] public float cooldown;
     [HideInInspector] public Fix64 cooldownTime;

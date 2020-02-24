@@ -171,7 +171,9 @@ MonoBehaviour:
   - Pistol
   weapon: {fileID: 0}
   bulletPrefab: {fileID: 0}
+  muzzleFlashesPrefab: {fileID: 0}
   adsPosition: {x: 0, y: 0, z: 0}
+  muzzlePosition: {x: 0, y: 0, z: 0}
   speed: 0
   cooldown: 0
 --- !u!1 &2119355278167736499
