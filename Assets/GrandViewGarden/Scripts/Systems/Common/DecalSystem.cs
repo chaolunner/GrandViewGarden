@@ -24,7 +24,7 @@ public class DecalSystem : SystemBehaviour
 
     private EasyDecal PoolInstantiation(GameObject decalPrefab, GameObject parent, Vector3 position, Quaternion rotation)
     {
-        var entity = PoolFactory.Spawn(decalPrefab, position, rotation, parent.transform);
+        var entity = PoolFactory.Spawn(decalPrefab, position, rotation, parent ? parent.transform : null);
         var decal = entity.GetComponent<EasyDecal>();
 
         decalDict.Add(decal, entity);

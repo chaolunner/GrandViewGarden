@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7780703061940592912}
   - component: {fileID: 114649358116475250}
   - component: {fileID: 6046258769048195094}
+  - component: {fileID: 4439995970300664812}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Player
@@ -58,6 +59,7 @@ MonoBehaviour:
   - {fileID: 7780703061940592912}
   - {fileID: 114649358116475250}
   - {fileID: 6046258769048195094}
+  - {fileID: 4439995970300664812}
   RuntimeComponents: []
   ScriptableComponents: []
   AutoUpdate: 1
@@ -177,6 +179,21 @@ MonoBehaviour:
   holeSize: 0
   speed: 0
   cooldown: 0
+--- !u!114 &4439995970300664812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859950253946076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27fa49b90660444049a7660eba27f48e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Foots:
+  - {fileID: 2119355278168034683}
+  - {fileID: 2119355278168093891}
 --- !u!1 &2119355278167736499
 GameObject:
   m_ObjectHideFlags: 0

@@ -64,7 +64,7 @@ public class BulletSystem : NetworkSystemBehaviour
                 // Here we cannot directly use hit.normal as the direction,
                 // because our collider may be simplified and does not match the model,
                 // our scaling on the y-axis is relatively large to ensure that the decal can be printed on the model.
-                EasyDecal.ProjectAt(GetMaterial(hit.collider.name).BulletHole, hit.collider.gameObject, hit.point, viewComponent.Transforms[0].forward, 0, new Vector3(bulletComponent.holeSize, GetMaterial(hit.collider.name).DetectionDepth, bulletComponent.holeSize));
+                EasyDecal.ProjectAt(GetMaterial(hit.collider.name).BulletHole, null, hit.point, viewComponent.Transforms[0].forward, 0, new Vector3(bulletComponent.holeSize, GetMaterial(hit.collider.name).DetectionDepth, bulletComponent.holeSize));
                 StartCoroutine(AsyncImpectEffect(hit.collider.name, hit.point, Quaternion.identity));
                 bulletComponent.velocity = FixVector3.zero;
                 PoolFactory.Despawn(data.Entity);

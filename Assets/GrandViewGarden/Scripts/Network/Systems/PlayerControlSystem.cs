@@ -103,7 +103,7 @@ public class PlayerControlSystem : NetworkSystemBehaviour
             playerControlResult.Follow = playerControlComponent.Follow.rotation;
             playerControlResult.Position = viewComponent.Transforms[0].position;
 
-            if (mouseInput != null && keyInput != null)
+            if (mouseInput != null && keyInput != null && axisInput != null)
             {
                 var rotLeftRight = mouseInput.Delta.x * playerControlComponent.MouseSensivity.x * deltaTime;
                 var rotUpDown = mouseInput.Delta.y * playerControlComponent.MouseSensivity.y * deltaTime;
@@ -160,11 +160,8 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                         playerControlComponent.Follow.localEulerAngles = (Vector3)new FixVector3(yAngle, 0, 0);
                     }
                 }
-            }
 
-            if (characterController.isGrounded)
-            {
-                if (axisInput != null)
+                if (characterController.isGrounded)
                 {
                     playerControlComponent.motion = new FixVector3((float)axisInput.Horizontal, 0, (float)axisInput.Vertical);
                     playerControlComponent.motion = (FixVector3)viewComponent.Transforms[0].TransformDirection((Vector3)playerControlComponent.motion);
@@ -188,10 +185,7 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                         speed = playerControlComponent.Run;
                     }
 
-                    if (keyInput != null)
-                    {
-                        playerControlComponent.Crouched = keyInput.KeyCodes.Contains((int)KeyCode.LeftControl);
-                    }
+                    playerControlComponent.Crouched = keyInput.KeyCodes.Contains((int)KeyCode.LeftControl);
                     animator.SetBool(Crouch_b, playerControlComponent.Crouched);
                     if (playerControlComponent.Crouched)
                     {
@@ -204,7 +198,7 @@ public class PlayerControlSystem : NetworkSystemBehaviour
                     animator.SetFloat(Body_Horizontal_f, 0.35f * (float)horizontal);
                 }
 
-                if (keyInput != null && keyInput.KeyCodes.Contains((int)KeyCode.Space) && !playerControlComponent.Crouched)
+                if (keyInput.KeyCodes.Contains((int)KeyCode.Space) && !playerControlComponent.Crouched)
                 {
                     playerControlComponent.motion.y = playerControlComponent.Jump;
                 }
@@ -215,8 +209,7 @@ public class PlayerControlSystem : NetworkSystemBehaviour
             characterController.Move((Vector3)(playerControlComponent.motion * deltaTime));
 
             animator.SetBool(Jump_b, playerControlComponent.motion.y > 0);
-            playerControlComponent.Velocity = (FixVector3)characterController.velocity;
-            animator.SetBool(Grounded, !IsDrop(playerControlComponent, viewComponent, animator));
+            animator.SetBool(Grounded, characterController.isGrounded && playerControlComponent.motion.y <= 0);
 
             return new IUserInputResult[] { playerControlResult };
         }).AddTo(this.Disposer);
@@ -229,12 +222,5 @@ public class PlayerControlSystem : NetworkSystemBehaviour
         if (angle > max && angle - 360 >= min) { return angle - 360; }
         if (angle < min && angle + 360 <= max) { return angle + 360; }
         return FixMath.Clamp(angle, -max, -min);
-    }
-
-    private bool IsDrop(PlayerControlComponent playerControlComponent, ViewComponent viewComponent, Animator animator)
-    {
-        var stateInfo = animator.GetCurrentAnimatorStateInfo(3);
-        var grounded = stateInfo.shortNameHash == Idle;
-        return playerControlComponent.Velocity.y < 0 && !Physics.Raycast(viewComponent.Transforms[0].position, Vector3.down, 0.1f) && (grounded || stateInfo.normalizedTime > 0.7f);
     }
 }

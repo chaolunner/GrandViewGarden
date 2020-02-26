@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UniEasy.ECS;
+using Cinemachine;
 using UniEasy.DI;
 using Common;
 using UniRx;
@@ -16,6 +17,7 @@ public class ShootSystem : NetworkSystemBehaviour
     public int WarmupBullets = 10;
 
     private IGroup ShootComponents;
+    private IGroup ThridPersonCameraComponents;
     private NetworkGroup Network;
     private INetworkTimeline NetwrokTimeline;
     private BulletDAO BulletDAO;
@@ -28,6 +30,7 @@ public class ShootSystem : NetworkSystemBehaviour
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
         ShootComponents = this.Create(typeof(PlayerControlComponent), typeof(NetworkIdentityComponent), typeof(ShootComponent), typeof(Animator));
+        ThridPersonCameraComponents = this.Create(typeof(ThridPersonCameraComponent), typeof(CinemachineVirtualCamera), typeof(ViewComponent));
         Network = LockstepFactory.Create(ShootComponents);
         NetwrokTimeline = Network.CreateTimeline(typeof(MouseInput), typeof(KeyInput));
         BulletDAO = new BulletDAO(Bullet, NameStr);
@@ -51,16 +54,16 @@ public class ShootSystem : NetworkSystemBehaviour
                     var prefab = Resources.Load<GameObject>(path);
                     var bullet = WeaponDAO.GetBullet(name);
 
-                    if (shootComponent.weapon != null)
+                    if (shootComponent.CurrentWeaponEntity != null)
                     {
-                        PoolFactory.Despawn(shootComponent.weapon);
+                        PoolFactory.Despawn(shootComponent.CurrentWeaponEntity);
                     }
 
-                    shootComponent.weapon = PoolFactory.Spawn(prefab, shootComponent.Parent);
+                    shootComponent.CurrentWeaponEntity = PoolFactory.Spawn(prefab, shootComponent.Parent);
 
-                    if (shootComponent.weapon != null)
+                    if (shootComponent.CurrentWeaponEntity != null)
                     {
-                        shootComponent.weapon.GetComponent<ViewComponent>().Transforms[0].localPosition = WeaponDAO.GetPosition(name);
+                        shootComponent.CurrentWeaponEntity.GetComponent<ViewComponent>().Transforms[0].localPosition = WeaponDAO.GetPosition(name);
                     }
 
                     shootComponent.bulletPrefab = Resources.Load<GameObject>(BulletDAO.GetPath(bullet));
@@ -95,15 +98,10 @@ public class ShootSystem : NetworkSystemBehaviour
             var playerControlComponent = data.Entity.GetComponent<PlayerControlComponent>();
             var shootComponent = data.Entity.GetComponent<ShootComponent>();
             var animator = data.Entity.GetComponent<Animator>();
+            var viewComponent = shootComponent.CurrentWeaponEntity != null ? shootComponent.CurrentWeaponEntity.GetComponent<ViewComponent>() : null;
             var userInputData = data.UserInputData[0];
             var mouseInput = userInputData[0].GetInput<MouseInput>();
             var keyInput = userInputData[1].GetInput<KeyInput>();
-
-            ViewComponent weaponViewComponent = null;
-            if (shootComponent.weapon != null)
-            {
-                weaponViewComponent = shootComponent.weapon.GetComponent<ViewComponent>();
-            }
 
             if (mouseInput != null && keyInput != null)
             {
@@ -114,24 +112,34 @@ public class ShootSystem : NetworkSystemBehaviour
                     var bulletComponent = entity.GetComponent<BulletComponent>();
                     var bulletViewComponent = entity.GetComponent<ViewComponent>();
 
-                    if (weaponViewComponent != null)
+                    if (viewComponent != null)
                     {
-                        bulletViewComponent.Transforms[0].position = weaponViewComponent.Transforms[0].TransformPoint(shootComponent.bulletPosition);
-                        bulletViewComponent.Transforms[0].rotation = Quaternion.LookRotation(weaponViewComponent.Transforms[0].forward, weaponViewComponent.Transforms[0].up);
+                        bulletViewComponent.Transforms[0].position = viewComponent.Transforms[0].TransformPoint(shootComponent.bulletPosition);
+                        bulletViewComponent.Transforms[0].rotation = Quaternion.LookRotation(viewComponent.Transforms[0].forward, viewComponent.Transforms[0].up);
                         bulletComponent.velocity = shootComponent.speed * (FixVector3)bulletViewComponent.Transforms[0].forward;
                         bulletComponent.holeSize = shootComponent.holeSize;
 
-                        StartCoroutine(AsyncMuzzleFlashes(shootComponent.muzzleFlashesPrefab, weaponViewComponent.Transforms[0].TransformPoint(shootComponent.muzzlePosition), weaponViewComponent.Transforms[0].rotation));
+                        StartCoroutine(AsyncMuzzleFlashes(shootComponent.muzzleFlashesPrefab, viewComponent.Transforms[0].TransformPoint(shootComponent.muzzlePosition), viewComponent.Transforms[0].rotation));
                     }
 
                     shootComponent.cooldownTime = shootComponent.cooldown;
                 }
                 if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }
-                else
+                else if (viewComponent != null && ThridPersonCameraComponents.Entities.Count > 0)
                 {
-                    if (weaponViewComponent != null)
+                    var virtualCamera = ThridPersonCameraComponents.Entities[0].GetComponent<CinemachineVirtualCamera>();
+                    var cameraTransform = ThridPersonCameraComponents.Entities[0].GetComponent<ViewComponent>().Transforms[0];
+
+                    Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, virtualCamera.m_Lens.FarClipPlane))
                     {
-                        weaponViewComponent.Transforms[0].LookAt(playerControlComponent.LookAt, Vector3.up);
+                        viewComponent.Transforms[0].LookAt(hit.point);
+                    }
+                    else
+                    {
+                        viewComponent.Transforms[0].LookAt(ray.origin + virtualCamera.m_Lens.FarClipPlane * ray.direction);
                     }
                 }
             }

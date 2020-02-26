@@ -11,8 +11,8 @@ public class ShootComponent : ComponentBehaviour
     public IntReactiveProperty WeaponIndex;
     [Reorderable]
     public List<string> Weapons;
+    public IEntity CurrentWeaponEntity;
 
-    [HideInInspector] public IEntity weapon;
     [HideInInspector] public GameObject bulletPrefab;
     [HideInInspector] public GameObject muzzleFlashesPrefab;
     [HideInInspector] public Vector3 adsPosition;
