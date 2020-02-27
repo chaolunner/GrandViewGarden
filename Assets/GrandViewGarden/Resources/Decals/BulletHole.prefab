@@ -177,8 +177,8 @@ MonoBehaviour:
   opacityMode: 0
   fadeOnly: 0
   useLightProbes: 0
-  lifetime: 0
-  fadeoutTime: 5
+  lifetime: 1
+  fadeoutTime: 4
   fadeinTime: 1
   fadeoutCurve:
     serializedVersion: 2

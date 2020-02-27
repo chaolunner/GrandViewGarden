@@ -41,6 +41,7 @@ namespace MessagePack.Formatters.Common
                 throw new InvalidOperationException("typecode is null, struct not supported");
             }
 
+            options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __Index__ = default(int);
@@ -77,6 +78,7 @@ namespace MessagePack.Formatters.Common
             ____result.TickId = __TickId__;
             ____result.UserId = __UserId__;
             ____result.InputData = __InputData__;
+            reader.Depth--;
             return ____result;
         }
     }

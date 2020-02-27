@@ -5,6 +5,4 @@ public class CrosshairComponent : ComponentBehaviour
 {
     public float Free = 100;
     public float Shoulder = 50;
-
-    [HideInInspector] public float smoothTime;
 }

@@ -27,21 +27,27 @@ public class DecalSystem : SystemBehaviour
         var entity = PoolFactory.Spawn(decalPrefab, position, rotation, parent ? parent.transform : null);
         var decal = entity.GetComponent<EasyDecal>();
 
-        decalDict.Add(decal, entity);
+#if UNITY_EDITOR
+        if (decal.Lifetime < 1)
+        {
+            Debug.LogWarning("Do not set the life time too short, this may affect the fade out !");
+        }
+#endif
 
         decal.DontDestroy = true;
         decal.Reset(true);
-
+        decal.LateBake();
         decal.OnFadedOut += OnFadedOut;
 
+        decalDict.Add(decal, entity);
         return decal;
     }
 
     private void OnFadedOut(EasyDecal decal)
     {
         decal.transform.SetParent(null);
+        decal.OnFadedOut -= OnFadedOut;
         PoolFactory.Despawn(decalDict[decal]);
         decalDict.Remove(decal);
-        decal.OnFadedOut -= OnFadedOut;
     }
 }

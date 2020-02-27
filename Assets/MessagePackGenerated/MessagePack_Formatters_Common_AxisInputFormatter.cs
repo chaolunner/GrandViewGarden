@@ -45,6 +45,7 @@ namespace MessagePack.Formatters.Common
                 return null;
             }
 
+            options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __Horizontal__ = default(global::Common.Fix64);
@@ -71,6 +72,7 @@ namespace MessagePack.Formatters.Common
             var ____result = new global::Common.AxisInput();
             ____result.Horizontal = __Horizontal__;
             ____result.Vertical = __Vertical__;
+            reader.Depth--;
             return ____result;
         }
     }

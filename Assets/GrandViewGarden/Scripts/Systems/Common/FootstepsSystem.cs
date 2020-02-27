@@ -18,6 +18,7 @@ public class FootstepsSystem : SystemBehaviour
     public override void OnEnable()
     {
         base.OnEnable();
+
         FootstepsComponents.OnAdd().Subscribe(entity =>
         {
             var footstepsComponent = entity.GetComponent<FootstepsComponent>();

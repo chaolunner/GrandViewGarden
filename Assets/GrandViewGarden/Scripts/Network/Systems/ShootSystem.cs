@@ -17,7 +17,6 @@ public class ShootSystem : NetworkSystemBehaviour
     public int WarmupBullets = 10;
 
     private IGroup ShootComponents;
-    private IGroup ThridPersonCameraComponents;
     private NetworkGroup Network;
     private INetworkTimeline NetwrokTimeline;
     private BulletDAO BulletDAO;
@@ -29,10 +28,9 @@ public class ShootSystem : NetworkSystemBehaviour
     public override void Initialize(IEventSystem eventSystem, IPoolManager poolManager, GroupFactory groupFactory, PrefabFactory prefabFactory)
     {
         base.Initialize(eventSystem, poolManager, groupFactory, prefabFactory);
-        ShootComponents = this.Create(typeof(PlayerControlComponent), typeof(NetworkIdentityComponent), typeof(ShootComponent), typeof(Animator));
-        ThridPersonCameraComponents = this.Create(typeof(ThridPersonCameraComponent), typeof(CinemachineVirtualCamera), typeof(ViewComponent));
+        ShootComponents = this.Create(typeof(PlayerControlComponent), typeof(NetworkIdentityComponent), typeof(ShootComponent), typeof(Animator), typeof(ViewComponent));
         Network = LockstepFactory.Create(ShootComponents);
-        NetwrokTimeline = Network.CreateTimeline(typeof(MouseInput), typeof(KeyInput));
+        NetwrokTimeline = Network.CreateTimeline(typeof(MouseInput), typeof(KeyInput), typeof(EventInput));
         BulletDAO = new BulletDAO(Bullet, NameStr);
         WeaponDAO = new WeaponDAO(Weapon, NameStr);
     }
@@ -60,20 +58,23 @@ public class ShootSystem : NetworkSystemBehaviour
                     }
 
                     shootComponent.CurrentWeaponEntity = PoolFactory.Spawn(prefab, shootComponent.Parent);
-
-                    if (shootComponent.CurrentWeaponEntity != null)
-                    {
-                        shootComponent.CurrentWeaponEntity.GetComponent<ViewComponent>().Transforms[0].localPosition = WeaponDAO.GetPosition(name);
-                    }
-
                     shootComponent.bulletPrefab = Resources.Load<GameObject>(BulletDAO.GetPath(bullet));
                     shootComponent.muzzleFlashesPrefab = Resources.Load<GameObject>(WeaponDAO.GetMuzzleFlashesEffectPath(name));
                     shootComponent.adsPosition = WeaponDAO.GetADSPosition(name);
-                    shootComponent.bulletPosition = WeaponDAO.GetBulletSpawnPosition(name);
-                    shootComponent.muzzlePosition = WeaponDAO.GetMuzzlePosition(name);
+                    shootComponent.bulletLocalPosition = WeaponDAO.GetBulletSpawnPosition(name);
+                    shootComponent.muzzleFlashesPosition = WeaponDAO.GetMuzzleFlashesPosition(name);
                     shootComponent.holeSize = BulletDAO.GetHoleSize(bullet);
                     shootComponent.speed = WeaponDAO.GetSpeed(name);
                     shootComponent.cooldown = WeaponDAO.GetCooldown(name);
+
+                    if (shootComponent.CurrentWeaponEntity != null)
+                    {
+                        var weaponViewComponent = shootComponent.CurrentWeaponEntity.GetComponent<ViewComponent>();
+
+                        weaponViewComponent.Transforms[0].localPosition = WeaponDAO.GetPosition(name);
+                        shootComponent.weaponLocalRotation = Quaternion.Euler(new Vector3(0, 90, 90));
+                        weaponViewComponent.Transforms[0].localRotation = shootComponent.weaponLocalRotation;
+                    }
                 }
                 else
                 {
@@ -98,49 +99,72 @@ public class ShootSystem : NetworkSystemBehaviour
             var playerControlComponent = data.Entity.GetComponent<PlayerControlComponent>();
             var shootComponent = data.Entity.GetComponent<ShootComponent>();
             var animator = data.Entity.GetComponent<Animator>();
-            var viewComponent = shootComponent.CurrentWeaponEntity != null ? shootComponent.CurrentWeaponEntity.GetComponent<ViewComponent>() : null;
+            var weaponViewComponent = shootComponent.CurrentWeaponEntity != null ? shootComponent.CurrentWeaponEntity.GetComponent<ViewComponent>() : null;
             var userInputData = data.UserInputData[0];
             var mouseInput = userInputData[0].GetInput<MouseInput>();
             var keyInput = userInputData[1].GetInput<KeyInput>();
+            var eventInputs = userInputData[2].GetInputs<EventInput>();
+
+            EventInput eventInput = null;
+
+            for (int i = 0; i < eventInputs.Length; i++)
+            {
+                if (eventInputs[i].Type == EventCode.PlayerCamera)
+                {
+                    eventInput = eventInputs[i];
+                    break;
+                }
+            }
 
             if (mouseInput != null && keyInput != null)
             {
+                if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }
+                else if (weaponViewComponent != null && eventInput != null)
+                {
+                    // The point hit by the muzzle is different from the point hit in the center of the screen.
+                    // So how to solve this problem, my solution is like this:
+
+                    // First, get the hit point in the center of the screen.
+                    // 0 - camera position, 1 - camera dirstion, 2 - camera far clip plane.
+                    RaycastHit hit;
+                    var ray = new Ray((Vector3)eventInput.Get<FixVector3>(0), (Vector3)eventInput.Get<FixVector3>(1));
+                    var point = Physics.Raycast(ray, out hit, (float)eventInput.Get<Fix64>(2)) ? hit.point : ray.origin + (float)eventInput.Get<Fix64>(2) * ray.direction;
+
+                    // Reset rotation to default rotation
+                    weaponViewComponent.Transforms[0].localRotation = shootComponent.weaponLocalRotation;
+
+                    // If not in aim down sight mode, then I can fine-tune the angle of the gun to make the direction of
+                    // the bullet closer to the point at the center of the screen 
+                    if (playerControlComponent.Aim.Value != AimMode.AimDownSight)
+                    {
+                        var targetDirection = (point - weaponViewComponent.Transforms[0].TransformPoint(shootComponent.bulletLocalPosition)).normalized;
+                        var angle = Vector3.Angle(weaponViewComponent.Transforms[0].forward, targetDirection);
+                        var t = angle == 0 ? 1 : Mathf.Clamp01(shootComponent.LimitAngle / angle);
+                        var rotation = Quaternion.LookRotation(Vector3.Lerp(weaponViewComponent.Transforms[0].forward, targetDirection, t));
+
+                        weaponViewComponent.Transforms[0].rotation = rotation;
+                    }
+                }
+
                 animator.SetBool(Shoot_b, mouseInput.MouseButtons.Contains(0));
+
                 if (mouseInput.MouseButtons.Contains(0) && shootComponent.cooldownTime <= 0)
                 {
                     var entity = PoolFactory.Spawn(shootComponent.bulletPrefab, networkIdentityComponent.Identity.UserId, data.TickId);
                     var bulletComponent = entity.GetComponent<BulletComponent>();
                     var bulletViewComponent = entity.GetComponent<ViewComponent>();
 
-                    if (viewComponent != null)
+                    if (weaponViewComponent != null)
                     {
-                        bulletViewComponent.Transforms[0].position = viewComponent.Transforms[0].TransformPoint(shootComponent.bulletPosition);
-                        bulletViewComponent.Transforms[0].rotation = Quaternion.LookRotation(viewComponent.Transforms[0].forward, viewComponent.Transforms[0].up);
+                        bulletViewComponent.Transforms[0].position = weaponViewComponent.Transforms[0].TransformPoint(shootComponent.bulletLocalPosition);
+                        bulletViewComponent.Transforms[0].rotation = Quaternion.LookRotation(weaponViewComponent.Transforms[0].forward, weaponViewComponent.Transforms[0].up);
                         bulletComponent.velocity = shootComponent.speed * (FixVector3)bulletViewComponent.Transforms[0].forward;
                         bulletComponent.holeSize = shootComponent.holeSize;
 
-                        StartCoroutine(AsyncMuzzleFlashes(shootComponent.muzzleFlashesPrefab, viewComponent.Transforms[0].TransformPoint(shootComponent.muzzlePosition), viewComponent.Transforms[0].rotation));
+                        StartCoroutine(AsyncMuzzleFlashes(shootComponent.muzzleFlashesPrefab, weaponViewComponent.Transforms[0].TransformPoint(shootComponent.muzzleFlashesPosition), weaponViewComponent.Transforms[0].rotation));
                     }
 
                     shootComponent.cooldownTime = shootComponent.cooldown;
-                }
-                if (playerControlComponent.Aim.Value == AimMode.Free && keyInput.KeyCodes.Contains((int)KeyCode.LeftAlt)) { }
-                else if (viewComponent != null && ThridPersonCameraComponents.Entities.Count > 0)
-                {
-                    var virtualCamera = ThridPersonCameraComponents.Entities[0].GetComponent<CinemachineVirtualCamera>();
-                    var cameraTransform = ThridPersonCameraComponents.Entities[0].GetComponent<ViewComponent>().Transforms[0];
-
-                    Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-                    RaycastHit hit;
-
-                    if (Physics.Raycast(ray, out hit, virtualCamera.m_Lens.FarClipPlane))
-                    {
-                        viewComponent.Transforms[0].LookAt(hit.point);
-                    }
-                    else
-                    {
-                        viewComponent.Transforms[0].LookAt(ray.origin + virtualCamera.m_Lens.FarClipPlane * ray.direction);
-                    }
                 }
             }
             shootComponent.cooldownTime -= data.DeltaTime;

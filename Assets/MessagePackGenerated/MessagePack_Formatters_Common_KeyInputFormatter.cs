@@ -44,6 +44,7 @@ namespace MessagePack.Formatters.Common
                 return null;
             }
 
+            options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __KeyCodes__ = default(global::System.Collections.Generic.List<int>);
@@ -65,6 +66,7 @@ namespace MessagePack.Formatters.Common
 
             var ____result = new global::Common.KeyInput();
             ____result.KeyCodes = __KeyCodes__;
+            reader.Depth--;
             return ____result;
         }
     }

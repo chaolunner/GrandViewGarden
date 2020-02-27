@@ -47,6 +47,7 @@ namespace MessagePack.Formatters.Common
                 return null;
             }
 
+            options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
             var __MouseButtons__ = default(global::System.Collections.Generic.List<int>);
@@ -83,6 +84,7 @@ namespace MessagePack.Formatters.Common
             ____result.ScrollDelta = __ScrollDelta__;
             ____result.Delta = __Delta__;
             ____result.Position = __Position__;
+            reader.Depth--;
             return ____result;
         }
     }

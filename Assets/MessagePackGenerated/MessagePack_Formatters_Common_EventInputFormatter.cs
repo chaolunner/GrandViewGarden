@@ -34,8 +34,8 @@ namespace MessagePack.Formatters.Common
 
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(2);
-            formatterResolver.GetFormatterWithVerify<global::Common.EventCode>().Serialize(ref writer, value.Type, options);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Message, options);
+            writer.Write(value.Index);
+            formatterResolver.GetFormatterWithVerify<global::System.Collections.Generic.List<byte[]>>().Serialize(ref writer, value.Data, options);
         }
 
         public global::Common.EventInput Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -45,10 +45,11 @@ namespace MessagePack.Formatters.Common
                 return null;
             }
 
+            options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Type__ = default(global::Common.EventCode);
-            var __Message__ = default(string);
+            var __Index__ = default(int);
+            var __Data__ = default(global::System.Collections.Generic.List<byte[]>);
 
             for (int i = 0; i < length; i++)
             {
@@ -57,10 +58,10 @@ namespace MessagePack.Formatters.Common
                 switch (key)
                 {
                     case 0:
-                        __Type__ = formatterResolver.GetFormatterWithVerify<global::Common.EventCode>().Deserialize(ref reader, options);
+                        __Index__ = reader.ReadInt32();
                         break;
                     case 1:
-                        __Message__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        __Data__ = formatterResolver.GetFormatterWithVerify<global::System.Collections.Generic.List<byte[]>>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -68,9 +69,10 @@ namespace MessagePack.Formatters.Common
                 }
             }
 
-            var ____result = new global::Common.EventInput(__Type__, __Message__);
-            ____result.Type = __Type__;
-            ____result.Message = __Message__;
+            var ____result = new global::Common.EventInput();
+            ____result.Index = __Index__;
+            ____result.Data = __Data__;
+            reader.Depth--;
             return ____result;
         }
     }

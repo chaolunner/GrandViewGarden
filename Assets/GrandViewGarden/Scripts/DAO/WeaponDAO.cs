@@ -10,7 +10,7 @@ public class WeaponDAO : CsvDAO
     private const string SpeedStr = "Speed";
     private const string CooldownStr = "Cooldown";
     private const string MuzzleFlashesStr = "MuzzleFlashes";
-    private const string MuzzlePositionStr = "MuzzlePosition";
+    private const string MuzzleFlashesPositionStr = "MuzzleFlashesPosition";
 
     public WeaponDAO(TextAsset textAsset, string name) : base(textAsset, name) { }
 
@@ -54,8 +54,8 @@ public class WeaponDAO : CsvDAO
         return GetString(name, MuzzleFlashesStr);
     }
 
-    public Vector3 GetMuzzlePosition(string name)
+    public Vector3 GetMuzzleFlashesPosition(string name)
     {
-        return GetVector3(name, MuzzlePositionStr);
+        return GetVector3(name, MuzzleFlashesPositionStr);
     }
 }

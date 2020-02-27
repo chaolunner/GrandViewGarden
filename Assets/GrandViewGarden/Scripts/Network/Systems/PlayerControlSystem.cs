@@ -14,7 +14,6 @@ public class PlayerControlSystem : NetworkSystemBehaviour
     private INetworkTimeline NetwrokTimeline;
     private Camera mainCamera;
 
-    private readonly int Idle = Animator.StringToHash("Idle");
     private readonly int Speed_f = Animator.StringToHash("Speed_f");
     private readonly int Grounded = Animator.StringToHash("Grounded");
     private readonly int Jump_b = Animator.StringToHash("Jump_b");

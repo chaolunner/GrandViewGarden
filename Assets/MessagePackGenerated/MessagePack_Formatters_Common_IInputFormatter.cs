@@ -84,6 +84,7 @@ namespace MessagePack.Formatters.Common
                 throw new InvalidOperationException("Invalid Union data was detected. Type:global::Common.IInput");
             }
 
+            options.Security.DepthStep(ref reader);
             var key = reader.ReadInt32();
 
             if (!this.keyToJumpMap.TryGetValue(key, out key))
@@ -111,6 +112,7 @@ namespace MessagePack.Formatters.Common
                     break;
             }
 
+            reader.Depth--;
             return result;
         }
     }

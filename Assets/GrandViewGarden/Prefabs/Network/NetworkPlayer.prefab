@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Run: 8
   Walk: 4
-  Jump: 12
+  Jump: 6
   Gravity: 20
   MouseSensivity: {x: 200, y: 100}
   YAngleLimit:
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parent: {fileID: 2119355278168062953}
+  LimitAngle: 25
   WeaponIndex:
     value: 0
   Weapons:
@@ -174,8 +175,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   muzzleFlashesPrefab: {fileID: 0}
   adsPosition: {x: 0, y: 0, z: 0}
-  bulletPosition: {x: 0, y: 0, z: 0}
-  muzzlePosition: {x: 0, y: 0, z: 0}
+  bulletLocalPosition: {x: 0, y: 0, z: 0}
+  muzzleFlashesPosition: {x: 0, y: 0, z: 0}
+  weaponLocalRotation: {x: 0, y: 0, z: 0, w: 0}
   holeSize: 0
   speed: 0
   cooldown: 0

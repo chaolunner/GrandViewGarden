@@ -37,7 +37,7 @@ public class GameSystem : NetworkSystemBehaviour
                     var eventInput = data.UserInputData[0][i].GetInput<EventInput>(j);
                     if (eventInput.Type == EventCode.GameStart)
                     {
-                        var isRoomOwner = bool.Parse(eventInput.Message);
+                        var isRoomOwner = eventInput.Get<bool>(0);
                         if (!HasUser(userId))
                         {
                             var pos = isRoomOwner ? NetworkPlayerPrefab.transform.position + new Vector3(2, 0, -5) : NetworkPlayerPrefab.transform.position += new Vector3(-2, 0, -5);

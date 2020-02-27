@@ -62,7 +62,7 @@ public class UserSystem : NetworkSystemBehaviour
         {
             CreateUser(true, true, 0, "Offline Player", 0, 0);
             NetworkSystem.Mode = SessionMode.Offline;
-            LockstepUtility.AddInput(new EventInput(EventCode.GameStart, "True"));
+            LockstepUtility.AddInput(new EventInput().WithType(EventCode.GameStart).Add(true));
         }
     }
 
